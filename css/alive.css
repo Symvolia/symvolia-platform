@@ -1,0 +1,430 @@
+/* ─── Living symbol — centered mandala composition ─── */
+
+.stage__living {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2.2s var(--ease-open), visibility 2.2s;
+}
+
+.stage--alive .stage__living {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Cross — ouroboros */
+.living__cross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--living-cross);
+  height: var(--living-cross);
+  transform: translate(-50%, -50%);
+}
+
+.living__axis {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+}
+
+.living__axis--h {
+  top: 50%;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  transform: translateY(-50%);
+  animation: livingAxisIn 2s var(--ease-open) 0.8s forwards;
+}
+
+.living__axis--v {
+  left: 50%;
+  top: 8%;
+  bottom: 8%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  animation: livingAxisIn 2s var(--ease-open) 0.8s forwards;
+}
+
+@keyframes livingAxisIn {
+  from { opacity: 0; }
+  to   { opacity: 0.55; }
+}
+
+.living__ouroboros {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: livingCrossAlign 2.8s var(--ease-open) 0.3s forwards,
+             livingCrossBreathe 18s var(--ease-sub) 3s infinite;
+}
+
+@keyframes livingCrossAlign {
+  from { opacity: 0; transform: scale(0.9) rotate(18deg); }
+  to   { opacity: 0.92; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes livingCrossBreathe {
+  0%, 100% { opacity: 0.85; transform: scale(1) rotate(0deg); }
+  50%      { opacity: 0.98; transform: scale(1.01) rotate(0deg); }
+}
+
+.living__ouroboros .glyph__snake {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: snakeCrawl 20s linear infinite;
+}
+
+.living__ouroboros .glyph__snake--b {
+  animation-direction: reverse;
+  animation-duration: 24s;
+}
+
+@keyframes snakeCrawl {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Inscriptions — orbit around sigil */
+.stage__inscriptions {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2s var(--ease-open), visibility 2s;
+}
+
+.stage--alive .stage__inscriptions {
+  opacity: 1;
+  visibility: visible;
+}
+
+.stage.is-diving .stage__inscriptions {
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-open);
+}
+
+.living__script {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  animation: livingScriptIn 2.2s var(--ease-open) forwards;
+}
+
+.living__script--codes {
+  width: 100%;
+  height: 100%;
+  animation-delay: 0.5s;
+}
+
+.living__script--runes {
+  width: var(--living-runes);
+  height: var(--living-runes);
+  animation-delay: 0.85s;
+}
+
+@keyframes livingScriptIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.living__code {
+  position: absolute;
+  font-family: var(--font-elegant);
+  font-size: clamp(0.56rem, 1.15vw, 0.74rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: rgba(165, 152, 138, 0.55);
+  text-shadow: 0 0 20px rgba(80, 70, 60, 0.2);
+  transition: color 1.8s var(--ease-open), font-weight 1.8s, text-shadow 1.8s;
+  max-width: 34%;
+}
+
+.living__code--n {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  max-width: 70%;
+}
+
+.living__code--ne {
+  top: 10%;
+  right: 0;
+  text-align: right;
+}
+
+.living__code--e {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: right;
+  max-width: 28%;
+}
+
+.living__code--link {
+  pointer-events: auto;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.stage--alive .living__code--link:hover,
+.stage--alive .living__code--link:focus-visible {
+  color: rgba(255, 255, 255, 1);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55), 0 0 32px rgba(255, 255, 255, 0.28);
+  outline: none;
+}
+
+.living__code--se {
+  bottom: 10%;
+  right: 0;
+  text-align: right;
+}
+
+.living__code--s {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  text-align: left;
+  max-width: 28%;
+}
+
+.living__code--sw {
+  bottom: 10%;
+  left: 0;
+  text-align: left;
+}
+
+.living__code--nw {
+  top: 10%;
+  left: 0;
+  text-align: left;
+}
+
+.living__rune {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: -0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+  font-weight: 400;
+  color: rgba(180, 168, 155, 0.42);
+  text-shadow: 0 0 16px rgba(100, 88, 75, 0.15);
+  transform: rotate(var(--a)) translateY(calc(-1 * var(--living-runes-r))) rotate(calc(-1 * var(--a)));
+  transition: color 1.8s var(--ease-open), font-weight 1.8s, text-shadow 1.8s;
+}
+
+/* ─── Alive: eye dissolves, sigil remains centered ─── */
+
+.stage--alive .eye__halo,
+.stage--alive .eye__orbit,
+.stage--alive .eye__iris,
+.stage--alive .eye__iris-ring,
+.stage--alive .eye__iris-depth,
+.stage--alive .eye__iris-base,
+.stage--alive .eye__shine,
+.stage--alive .eye__cornea,
+.stage--alive .eye__iris-rays,
+.stage--alive .eye__sclera,
+.stage--alive .eye__sclera-depth,
+.stage--alive .eye__shutter {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.6s var(--ease-open), visibility 1.6s;
+  animation: none;
+}
+
+.stage--alive .stage__composition .eye--requiem {
+  width: var(--sigil-alive);
+  height: var(--sigil-alive);
+  max-width: var(--sigil-alive);
+  max-height: var(--sigil-alive);
+  transition: width 2s var(--ease-open), height 2s var(--ease-open),
+              max-width 2s var(--ease-open), max-height 2s var(--ease-open);
+}
+
+.stage--alive .eye__socket {
+  border-radius: 50%;
+  overflow: hidden;
+  background: #010101;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: border-radius 1.8s var(--ease-open), box-shadow 1.8s, background 1.8s;
+}
+
+.stage--alive .eye__socket::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background-color: #010101;
+  background-image: var(--texture-stone);
+  background-size: 130px 130px;
+  mix-blend-mode: overlay;
+  opacity: 0;
+  animation: sigilDiscTexture 2.2s var(--ease-open) 0.2s forwards;
+}
+
+.stage--alive .eye__socket::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background-color: #010101;
+  background-image: var(--texture-grain);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  animation: sigilDiscGrain 2.4s var(--ease-open) 0.4s forwards;
+}
+
+@keyframes sigilDiscTexture {
+  to { opacity: 0.06; }
+}
+
+@keyframes sigilDiscGrain {
+  to { opacity: 0.05; }
+}
+
+.stage--alive .eye__ball {
+  clip-path: none;
+  -webkit-clip-path: none;
+  animation: none;
+  background: #010101;
+}
+
+.stage--alive .stage__sigil {
+  width: 100%;
+  height: 100%;
+  background: #010101;
+  transition: width 1.8s var(--ease-open), height 1.8s var(--ease-open), background 1.8s;
+}
+
+.stage--alive .stage__sigil::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  background: #010101;
+  pointer-events: none;
+}
+
+.stage--alive .stage__sigil-reveal {
+  clip-path: circle(100% at 50% 50%);
+  -webkit-clip-path: circle(100% at 50% 50%);
+  background: #010101;
+}
+
+.stage--alive .stage__sigil-glow {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s var(--ease-open), visibility 1.2s;
+}
+
+.stage--alive .stage__sigil-img {
+  position: relative;
+  z-index: 2;
+  background: #010101;
+}
+
+.stage--alive .living__code {
+  color: rgba(255, 255, 255, 0.94);
+  font-weight: 600;
+  font-style: normal;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55), 0 0 24px rgba(255, 255, 255, 0.14);
+}
+
+.stage--alive .living__rune {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 255, 255, 0.12);
+}
+
+.stage--alive .stage__vignette {
+  background: radial-gradient(ellipse 88% 78% at 50% 50%, transparent 24%, rgba(2, 1, 1, 0.32) 58%, var(--void) 96%);
+  transition: background 2s var(--ease-open);
+}
+
+@media (max-width: 640px) {
+  :root {
+    --living-cross: min(72vmin, 640px);
+    --living-script: min(94vmin, 100%);
+    --living-runes: min(56vmin, 500px);
+    --sigil-alive: min(42vmin, 380px);
+  }
+
+  .living__code {
+    font-size: 0.5rem;
+    letter-spacing: 0.07em;
+    max-width: 38%;
+  }
+
+  .living__code--n {
+    max-width: 88%;
+  }
+
+  .living__code--e,
+  .living__code--s {
+    max-width: 34%;
+  }
+
+  .stage__composition {
+    width: min(94vmin, 100%);
+    height: min(94vmin, 100%);
+  }
+
+  .stage__footer {
+    margin-top: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .living__ouroboros {
+    animation: none;
+    opacity: 0.85;
+  }
+
+  .living__ouroboros .glyph__snake {
+    animation: none;
+  }
+
+  .living__axis {
+    opacity: 0.45;
+    animation: none;
+  }
+
+  .living__script--codes,
+  .living__script--runes {
+    animation: none;
+    opacity: 1;
+  }
+
+  .stage--alive .eye__socket::before,
+  .stage--alive .eye__socket::after,
+  .stage--alive .stage__sigil-reveal::after {
+    animation: none;
+    opacity: 0.04;
+  }
+}

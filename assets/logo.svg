@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 736" fill="none" aria-label="Symvolia  Sigillo Alchemico dell'Equilibrio">
+  <defs>
+    <linearGradient id="sigil" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4ccc4"/>
+      <stop offset="50%" stop-color="#a09890"/>
+      <stop offset="100%" stop-color="#787068"/>
+    </linearGradient>
+    <linearGradient id="dim" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#908880" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#605850" stop-opacity="0.15"/>
+    </linearGradient>
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a09890" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#020101" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Alone concentrico  figura incappucciata / etere -->
+  <g stroke="url(#dim)" stroke-width="0.6" opacity="0.4">
+    <circle cx="368" cy="368" r="352"/>
+    <circle cx="368" cy="368" r="340"/>
+    <circle cx="368" cy="368" r="328"/>
+    <circle cx="368" cy="368" r="316"/>
+  </g>
+
+  <!-- Ouroboros esterno  sigillo rosso -->
+  <circle cx="368" cy="368" r="358" stroke="url(#sigil)" stroke-width="1.8" opacity="0.85"/>
+  <path d="M 368 18 C 300 18 248 48 222 98" stroke="url(#sigil)" stroke-width="1.2" opacity="0.55" fill="none"/>
+  <path d="M 368 18 C 436 18 488 48 514 98" stroke="url(#sigil)" stroke-width="1.2" opacity="0.55" fill="none"/>
+  <circle cx="358" cy="22" r="4" fill="#a09890" opacity="0.7"/>
+  <circle cx="378" cy="22" r="4" fill="#a09890" opacity="0.7"/>
+
+  <!-- Anelli alchemici originali -->
+  <circle cx="368" cy="368" r="318" stroke="url(#sigil)" stroke-width="2" opacity="0.9"/>
+  <circle cx="368" cy="368" r="302" stroke="url(#sigil)" stroke-width="0.8" opacity="0.45"/>
+  <circle cx="368" cy="368" r="248" stroke="url(#sigil)" stroke-width="0.7" opacity="0.35"/>
+
+  <!-- Stella 8 punte  sigillo rosso -->
+  <g stroke="url(#dim)" stroke-width="0.55" opacity="0.28">
+    <line x1="368" y1="58" x2="368" y2="678"/>
+    <line x1="58" y1="368" x2="678" y2="368"/>
+    <line x1="139" y1="139" x2="597" y2="597"/>
+    <line x1="597" y1="139" x2="139" y2="597"/>
+  </g>
+
+  <!-- Esagramma  sigillo alchemico -->
+  <g stroke="url(#dim)" stroke-width="0.6" opacity="0.32">
+    <polygon points="368,118 558,228 558,508 368,618 178,508 178,228"/>
+    <polygon points="368,618 178,228 558,228 368,118 178,508 558,508"/>
+  </g>
+
+  <!-- Fiamme sottili  Buddha fiammeggiante -->
+  <g stroke="url(#sigil)" stroke-width="0.75" fill="none" opacity="0.35" stroke-linecap="round">
+    <path d="M 248 52 Q 236 32 248 18 Q 260 32 248 52"/>
+    <path d="M 368 42 Q 356 18 368 8 Q 380 18 368 42"/>
+    <path d="M 488 52 Q 476 32 488 18 Q 500 32 488 52"/>
+  </g>
+
+  <!-- Lettere periferiche  sigillo originale -->
+  <g fill="#908880" font-family="serif" font-size="14" font-style="italic" letter-spacing="0.15em" opacity="0.55">
+    <text x="248" y="108" text-anchor="middle">FR</text>
+    <text x="488" y="108" text-anchor="middle">VR</text>
+    <text x="128" y="378" text-anchor="middle">AR</text>
+    <text x="608" y="378" text-anchor="middle">EH</text>
+    <text x="368" y="648" text-anchor="middle">AE</text>
+  </g>
+
+  <!-- Quattro elementi  posizioni originali -->
+  <g stroke="url(#sigil)" stroke-width="1.1" fill="none" opacity="0.82">
+    <!-- Fuoco -->
+    <circle cx="248" cy="198" r="28"/>
+    <path d="M 248 184 L 260 208 L 236 208 Z"/>
+    <!-- Acqua -->
+    <circle cx="488" cy="198" r="28"/>
+    <path d="M 488 212 L 500 188 L 476 188 Z"/>
+    <!-- Aria -->
+    <circle cx="248" cy="468" r="28"/>
+    <path d="M 248 454 L 260 478 L 236 478 Z"/>
+    <line x1="234" y1="466" x2="262" y2="466"/>
+    <!-- Terra -->
+    <circle cx="488" cy="468" r="28"/>
+    <path d="M 488 482 L 500 458 L 476 458 Z"/>
+    <line x1="474" y1="470" x2="502" y2="470"/>
+  </g>
+
+  <!-- Etere  quinto elemento -->
+  <g transform="translate(368,598)" stroke="url(#sigil)" opacity="0.75">
+    <circle r="18" fill="none" stroke-width="0.9"/>
+    <circle r="4" fill="#a09890"/>
+  </g>
+
+  <!-- Asse verticale centrale  pilastro -->
+  <line x1="368" y1="88" x2="368" y2="628" stroke="url(#sigil)" stroke-width="1.6" opacity="0.8"/>
+
+  <!-- Mani in preghiera  figura multi-braccia -->
+  <g stroke="url(#sigil)" stroke-width="1" fill="none" opacity="0.55" stroke-linejoin="round">
+    <path d="M 368 72 L 356 92 L 368 102 L 380 92 Z"/>
+    <line x1="356" y1="92" x2="380" y2="92"/>
+  </g>
+
+  <!-- Croce doppia  sigillo originale -->
+  <g stroke="url(#sigil)" stroke-width="1.6" stroke-linecap="round" opacity="0.9">
+    <line x1="352" y1="118" x2="384" y2="118"/>
+    <line x1="348" y1="132" x2="388" y2="132"/>
+  </g>
+
+  <!-- Infinito  sigillo originale -->
+  <path d="M 332 228 C 332 208 352 202 368 218 C 384 202 404 208 404 228 C 404 248 384 254 368 238 C 352 254 332 248 332 228 Z
+           M 332 252 C 332 232 352 226 368 242 C 384 226 404 232 404 252 C 404 272 384 278 368 262 C 352 278 332 272 332 252 Z"
+        stroke="url(#sigil)" stroke-width="1.4" fill="none" opacity="0.85"/>
+
+  <!-- Occhio al centro  sigillo rosso + void del pilastro -->
+  <circle cx="368" cy="348" r="52" fill="url(#eyeGlow)"/>
+  <ellipse cx="368" cy="348" rx="42" ry="24" stroke="url(#sigil)" stroke-width="1.5" opacity="0.92"/>
+  <circle cx="368" cy="348" r="14" stroke="url(#sigil)" stroke-width="1.2" opacity="0.88"/>
+  <circle cx="368" cy="348" r="5" fill="#a09890"/>
+
+  <!-- Serpenti intorno all'occhio -->
+  <g stroke="url(#sigil)" stroke-width="0.7" fill="none" opacity="0.4" stroke-linecap="round">
+    <path d="M 368 318 Q 388 326 394 348 Q 388 370 368 378"/>
+    <path d="M 368 318 Q 348 326 342 348 Q 348 370 368 378"/>
+  </g>
+
+  <!-- Curva G  sigillo originale -->
+  <path d="M 368 398 C 420 398 448 430 448 468 C 448 506 420 528 368 528 C 316 528 288 506 288 468"
+        stroke="url(#sigil)" stroke-width="1.5" fill="none" opacity="0.85"/>
+  <line x1="368" y1="398" x2="368" y2="528" stroke="url(#sigil)" stroke-width="1.2" opacity="0.7"/>
+
+  <!-- Giove  sigillo originale -->
+  <g transform="translate(368,558)" stroke="url(#sigil)" stroke-width="1.2" fill="none" opacity="0.8">
+    <circle r="16"/>
+    <path d="M -6 4 L 6 4 L 6 -8"/>
+  </g>
+
+  <!-- Incensiere  figura incappucciata -->
+  <g transform="translate(368,628)" stroke="url(#sigil)" stroke-width="0.85" fill="none" opacity="0.6">
+    <ellipse cx="0" cy="6" rx="12" ry="4"/>
+    <path d="M -10 6 L -8 -6 Q 0 -12 8 -6 L 10 6"/>
+    <path d="M -4 -10 Q 0 -18 4 -10" opacity="0.5"/>
+    <circle cx="0" cy="-14" r="1.5" fill="#908880"/>
+  </g>
+
+  <!-- Loto  Buddha -->
+  <g stroke="url(#sigil)" stroke-width="0.9" fill="none" opacity="0.55" stroke-linecap="round">
+    <path d="M 368 652 Q 348 662 332 678 Q 354 672 368 668 Q 382 672 404 678 Q 388 662 368 652"/>
+    <path d="M 368 668 Q 352 682 342 692 Q 360 686 368 684 Q 376 686 394 692 Q 384 682 368 668"/>
+  </g>
+
+  <!-- Cinque custodi  figure incappucciate -->
+  <g stroke="url(#dim)" stroke-width="0.65" fill="none" opacity="0.32">
+    <path d="M 188 658 Q 188 646 196 638 L 200 658 Z"/>
+    <path d="M 268 668 Q 268 656 276 648 L 280 668 Z"/>
+    <path d="M 368 674 Q 368 662 376 654 L 380 674 Z"/>
+    <path d="M 468 668 Q 468 656 476 648 L 480 668 Z"/>
+    <path d="M 548 658 Q 548 646 556 638 L 560 658 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,318 @@
+/* ─── Living glyph — ancient codex / hieroglyph composition ─── */
+
+.glyph {
+  position: relative;
+  width: min(720px, 94vw);
+  height: min(720px, 94vw);
+  margin: 0 auto;
+  animation: glyphAwaken 3s var(--ease-open) 0.2s forwards;
+  opacity: 0;
+}
+
+@keyframes glyphAwaken {
+  from { opacity: 0; transform: scale(0.96); filter: blur(3px); }
+  to   { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+.glyph__rings {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.glyph__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(140, 125, 110, 0.12);
+  animation: ringPulse 12s var(--ease-sub) infinite;
+}
+
+.glyph__ring:nth-child(1) { inset: 0; animation-delay: 0s; }
+.glyph__ring:nth-child(2) { inset: 4%; opacity: 0.7; animation-delay: -3s; }
+.glyph__ring:nth-child(3) { inset: 8%; opacity: 0.45; animation-delay: -6s; }
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%      { opacity: 0.65; transform: scale(1.008); }
+}
+
+/* Hieroglyph cross axes */
+.glyph__axis {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, rgba(120, 105, 92, 0.18), transparent);
+  pointer-events: none;
+}
+
+.glyph__axis--h {
+  top: 50%;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.glyph__axis--v {
+  left: 50%;
+  top: 6%;
+  bottom: 6%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, transparent, rgba(120, 105, 92, 0.18), transparent);
+}
+
+/* Ouroboros — looping serpents */
+.glyph__ouroboros {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.75;
+  animation: ouroborosBreathe 16s var(--ease-sub) infinite;
+}
+
+@keyframes ouroborosBreathe {
+  0%, 100% { opacity: 0.65; transform: scale(1) rotate(0deg); }
+  50%      { opacity: 0.85; transform: scale(1.015) rotate(1deg); }
+}
+
+.glyph__snake {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: snakeCrawl 18s linear infinite;
+}
+
+.glyph__snake--b {
+  animation-direction: reverse;
+  animation-duration: 20s;
+}
+
+@keyframes snakeCrawl {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Four priests — cross formation */
+.glyph__priest {
+  position: absolute;
+  width: 36px;
+  height: 42px;
+  z-index: 2;
+  color: rgba(150, 138, 125, 0.55);
+  transform: translate(-50%, -50%);
+  animation: priestPulse 8s var(--ease-sub) infinite;
+}
+
+.glyph__priest svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.glyph__priest--north { top: 4%; left: 50%; animation-delay: 0s; }
+.glyph__priest--east  { top: 50%; left: 96%; animation-delay: -2s; }
+.glyph__priest--south { top: 96%; left: 50%; animation-delay: -4s; }
+.glyph__priest--west  { top: 50%; left: 4%; animation-delay: -6s; }
+
+@keyframes priestPulse {
+  0%, 100% { opacity: 0.45; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.75; transform: translate(-50%, -50%) scale(1.04); }
+}
+
+/* Five elements — ancient Greek symbols */
+.glyph__element {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(130, 115, 100, 0.35);
+  background: radial-gradient(circle at 40% 35%, rgba(40, 34, 28, 0.9) 0%, rgba(8, 6, 5, 0.95) 100%);
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.5),
+    inset 0 0 12px rgba(0, 0, 0, 0.4);
+  animation: elementGlow 10s var(--ease-sub) infinite;
+}
+
+.glyph__element span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(200, 190, 178, 0.82);
+  text-shadow: 0 0 12px rgba(160, 145, 130, 0.25);
+  line-height: 1;
+}
+
+.glyph__element small {
+  position: absolute;
+  bottom: 6px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.45rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(130, 118, 105, 0.45);
+}
+
+.glyph__element--fire  { top: 22%; left: 50%; animation-delay: 0s; }
+.glyph__element--air   { top: 42%; left: 80%; animation-delay: -2s; }
+.glyph__element--water { top: 42%; left: 20%; animation-delay: -4s; }
+.glyph__element--earth { top: 78%; left: 50%; animation-delay: -6s; }
+.glyph__element--ether { top: 11%; left: 50%; animation-delay: -8s; width: 40px; height: 40px; }
+
+@keyframes elementGlow {
+  0%, 100% { box-shadow: 0 0 16px rgba(0, 0, 0, 0.45), inset 0 0 10px rgba(0, 0, 0, 0.35); }
+  50%      { box-shadow: 0 0 28px rgba(120, 100, 80, 0.15), inset 0 0 14px rgba(80, 65, 50, 0.2); }
+}
+
+/* Central seal */
+.glyph__seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52%;
+  height: 52%;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: sealBreath 14s var(--ease-breathe) infinite;
+}
+
+@keyframes sealBreath {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.012); }
+}
+
+.glyph__seal-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  opacity: 0.88;
+  filter: contrast(1.05) brightness(0.92);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 20% 11% at 50% 46%, transparent 88%, #000 100%);
+  mask-image: radial-gradient(ellipse 20% 11% at 50% 46%, transparent 88%, #000 100%);
+}
+
+.glyph__seal-glow {
+  position: absolute;
+  inset: -8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(140, 125, 110, 0.12) 0%, transparent 68%);
+  pointer-events: none;
+  animation: sealGlow 10s var(--ease-sub) infinite;
+}
+
+@keyframes sealGlow {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+
+/* Eye nested at seal center */
+.glyph__eye {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  width: 28%;
+  height: 14%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  --eye-w: 100%;
+  --eye-h: 100%;
+}
+
+.glyph__eye .eye {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  filter: none;
+  animation: none;
+}
+
+.glyph__eye .eye__halo {
+  display: none;
+}
+
+/* Stage layout with glyph */
+.stage__glyph-wrap {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+}
+
+/* Main — ambient glyph watermark */
+.main__glyph-ambient {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(900px, 120vw);
+  height: min(900px, 120vw);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.07;
+  filter: blur(1px);
+}
+
+.main__glyph-ambient .glyph {
+  width: 100%;
+  height: 100%;
+}
+
+.main__glyph-ambient .glyph__seal-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52%;
+  height: 52%;
+  transform: translate(-50%, -50%);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.stage.is-diving .glyph {
+  animation: diveGlyphAmbient 2.5s var(--ease-open) forwards;
+}
+
+.stage.is-diving .glyph__eye {
+  animation: diveIntoEye 2.5s var(--ease-open) forwards;
+  z-index: 6;
+}
+
+@keyframes diveGlyphAmbient {
+  0%   { opacity: 1; filter: blur(0); }
+  100% { opacity: 0; filter: blur(4px); }
+}
+
+@media (max-height: 740px) {
+  .glyph {
+    width: min(580px, 86vw);
+    height: min(580px, 86vw);
+  }
+
+  .stage__tagline {
+    margin-top: 0.5rem;
+  }
+
+  .stage__enter {
+    margin-top: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph__snake { animation: none; }
+  .glyph__ouroboros { animation: none; opacity: 0.7; }
+  .glyph__priest { animation: none; opacity: 0.55; }
+  .glyph__element { animation: none; }
+  .glyph__seal { animation: none; }
+  .glyph__ring { animation: none; }
+}
