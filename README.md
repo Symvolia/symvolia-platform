@@ -1,44 +1,35 @@
-# Symvolia — public site
+# Symvolia Platform
 
-Static site (HTML/CSS/JS). No build step.
+Permanent site: **https://symvolia.github.io/symvolia-platform/**
 
-## Live preview (local)
+Static HTML/CSS/JS — no build step.
+
+## Local preview
 
 ```bash
 python3 -m http.server 8765
 ```
 
-Open http://localhost:8765
-
-## Publish on GitHub Pages (permanent)
-
-1. Create a new public repository on GitHub (e.g. `symvolia-site`).
-2. From this folder:
+## Publish (permanent link)
 
 ```bash
-git init
-git add .
-git commit -m "Publish Symvolia site"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/symvolia-site.git
-git push -u origin main
+./scripts/publish-platform.sh
 ```
 
-3. On GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-4. After the workflow runs, the site is at:
+1. Create public repo `symvolia-platform` on GitHub (if missing): https://github.com/new?name=symvolia-platform
+2. Run the script above (PAT as password when prompted)
+3. Enable Pages: **Settings → Pages → GitHub Actions**
 
-`https://YOUR_USERNAME.github.io/symvolia-site/`
-
-## Quick public link (temporary)
-
-With a local server on port 8765:
+## Temporary public link (tunnel)
 
 ```bash
-/tmp/cloudflared tunnel --url http://localhost:8765
+./scripts/show-url.sh
+./scripts/refresh-service.sh
 ```
 
-Cloudflare prints a `https://….trycloudflare.com` URL — public until you stop the tunnel.
+## Local service (runs without Cursor)
 
-## Netlify Drop (no CLI)
-
-Drag this folder onto https://app.netlify.com/drop for an instant public URL.
+```bash
+./scripts/install-service.sh
+./scripts/stop-site.sh
+```

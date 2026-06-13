@@ -1,0 +1,64 @@
+/* ─── Responsive — same layout as desktop, scaled + safe areas ─── */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+.stage {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: max(1.25rem, env(safe-area-inset-top, 0));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0));
+  padding-left: max(1rem, env(safe-area-inset-left, 0));
+  padding-right: max(1rem, env(safe-area-inset-right, 0));
+}
+
+.stage__composition {
+  max-height: min(var(--mandala-size), calc(100dvh - 12rem));
+}
+
+.main__header {
+  padding-left: max(2rem, env(safe-area-inset-left, 0));
+  padding-right: max(2rem, env(safe-area-inset-right, 0));
+  padding-top: max(1.5rem, env(safe-area-inset-top, 0));
+}
+
+.main__back,
+.main__nav a,
+.stage__enter-btn,
+.living__code--link,
+.share__copy,
+.share__open {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Archive grid: same auto-fit rule as desktop at all widths */
+.archive-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+@media (min-width: 1024px) {
+  .main__hero {
+    padding: 6rem 2rem 5rem;
+  }
+
+  .archive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .archive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .main__archive {
+    max-width: 72rem;
+  }
+}

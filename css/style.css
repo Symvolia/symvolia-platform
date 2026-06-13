@@ -1295,18 +1295,6 @@ body.is-entered .main {
   transition-delay: var(--reveal-delay, 0s);
 }
 
-@media (max-width: 600px) {
-  .main__header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .main__nav {
-    gap: 1rem;
-  }
-}
-
 /* ─── Reduced motion ─── */
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#020101">
+  <link rel="canonical" href="https://symvolia.github.io/symvolia-platform/">
+  <meta name="description" content="Symvolia — shareable link. Responsive on phone and desktop.">
+  <title>Symvolia — Share</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/share.css">
+</head>
+<body class="esoteric-surface share-page">
+
+  <main class="share">
+    <a href="index.html" class="share__back">← Symvolia</a>
+
+    <div class="share__inner">
+      <p class="share__eyebrow">Adaptable · Phone &amp; Desktop</p>
+      <h1 class="share__title">Public Link</h1>
+      <p class="share__lead">
+        Open on any device. Layout adapts to screen size.
+      </p>
+
+      <div class="share__card">
+        <a class="share__url" id="publicLink" href="#" target="_blank" rel="noopener noreferrer">
+          Loading…
+        </a>
+        <button type="button" class="share__copy" id="copyBtn" disabled>Copy link</button>
+      </div>
+
+      <p class="share__hint" id="copyHint" hidden>Link copied.</p>
+
+      <div class="share__actions">
+        <a class="share__open" id="openBtn" href="#" target="_blank" rel="noopener noreferrer">Open site</a>
+        <a class="share__open share__open--ghost" href="index.html">Homepage</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/share.js"></script>
+</body>
+</html>

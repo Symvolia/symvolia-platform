@@ -367,39 +367,6 @@
   transition: background 2s var(--ease-open);
 }
 
-@media (max-width: 640px) {
-  :root {
-    --living-cross: min(72vmin, 640px);
-    --living-script: min(94vmin, 100%);
-    --living-runes: min(56vmin, 500px);
-    --sigil-alive: min(42vmin, 380px);
-  }
-
-  .living__code {
-    font-size: 0.5rem;
-    letter-spacing: 0.07em;
-    max-width: 38%;
-  }
-
-  .living__code--n {
-    max-width: 88%;
-  }
-
-  .living__code--e,
-  .living__code--s {
-    max-width: 34%;
-  }
-
-  .stage__composition {
-    width: min(94vmin, 100%);
-    height: min(94vmin, 100%);
-  }
-
-  .stage__footer {
-    margin-top: 0.25rem;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .living__ouroboros {
     animation: none;

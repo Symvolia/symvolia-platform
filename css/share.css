@@ -1,0 +1,203 @@
+/* Share page — responsive public link */
+
+.share-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: auto;
+}
+
+.share {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(1.5rem, env(safe-area-inset-top, 0))
+    max(1.25rem, env(safe-area-inset-right, 0))
+    max(1.5rem, env(safe-area-inset-bottom, 0))
+    max(1.25rem, env(safe-area-inset-left, 0));
+}
+
+.share__back {
+  position: absolute;
+  top: max(1.25rem, env(safe-area-inset-top, 0));
+  left: max(1.25rem, env(safe-area-inset-left, 0));
+  font-family: var(--font-elegant);
+  font-size: 0.72rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--silver-dim);
+  text-decoration: none;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s var(--ease-open);
+}
+
+.share__back:hover {
+  color: var(--silver);
+}
+
+.share__inner {
+  width: 100%;
+  max-width: 32rem;
+  text-align: center;
+}
+
+.share__eyebrow {
+  font-family: var(--font-elegant);
+  font-size: clamp(0.62rem, 2.5vw, 0.75rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: clamp(0.14em, 2vw, 0.28em);
+  text-transform: uppercase;
+  color: var(--silver-dim);
+  margin-bottom: 1rem;
+}
+
+.share__title {
+  font-family: var(--font-elegant);
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: var(--silver);
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.share__lead {
+  font-family: var(--font-elegant);
+  font-size: clamp(0.95rem, 2.8vw, 1.05rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.55;
+  color: rgba(110, 100, 90, 0.58);
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.share__card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--line);
+  background: rgba(5, 4, 3, 0.92);
+}
+
+.share__url {
+  flex: 1;
+  text-align: left;
+  font-family: var(--font-elegant);
+  font-size: clamp(0.78rem, 2.4vw, 0.9rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  color: var(--silver);
+  text-decoration: none;
+  word-break: break-all;
+  padding: 0.35rem 0.25rem;
+  transition: color 0.3s var(--ease-open);
+}
+
+.share__url:hover {
+  color: #c8beb2;
+}
+
+.share__copy {
+  font-family: var(--font-elegant);
+  font-size: 0.72rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--silver);
+  background: transparent;
+  border: 1px solid rgba(90, 78, 68, 0.38);
+  padding: 0.7rem 1.25rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  width: auto;
+  flex-shrink: 0;
+  transition:
+    color 0.3s var(--ease-open),
+    border-color 0.3s var(--ease-open),
+    background 0.3s var(--ease-open);
+}
+
+.share__copy:hover:not(:disabled),
+.share__copy:focus-visible:not(:disabled) {
+  color: #c8beb2;
+  border-color: rgba(110, 95, 82, 0.55);
+  background: rgba(30, 24, 20, 0.45);
+  outline: none;
+}
+
+.share__copy:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.share__hint {
+  font-family: var(--font-elegant);
+  font-size: 0.68rem;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  color: rgba(130, 118, 105, 0.65);
+  margin-top: 0.75rem;
+}
+
+.share__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-top: 2rem;
+}
+
+.share__open {
+  font-family: var(--font-elegant);
+  font-size: 0.72rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(115, 102, 90, 0.85);
+  text-decoration: none;
+  border: 1px solid rgba(90, 78, 68, 0.35);
+  padding: 0.65rem 1.35rem;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    color 0.3s var(--ease-open),
+    border-color 0.3s var(--ease-open),
+    background 0.3s var(--ease-open);
+}
+
+.share__open:hover {
+  color: var(--silver);
+  border-color: rgba(110, 95, 82, 0.5);
+  background: rgba(20, 16, 14, 0.5);
+}
+
+.share__open--ghost {
+  border-color: transparent;
+  color: var(--silver-dim);
+}
+
+.share__open--ghost:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--silver);
+}
