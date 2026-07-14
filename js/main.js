@@ -6,7 +6,6 @@
   const enterCta = document.getElementById('enterCta');
   const enterBtn = document.getElementById('enterBtn');
   const backBtn = document.getElementById('backBtn');
-  const podcastLink = document.getElementById('podcastLink');
   const tunnel = document.getElementById('tunnel');
   const eyeOpenSound = document.getElementById('eyeOpenSound');
 
@@ -205,13 +204,6 @@
 
   if (backBtn) {
     backBtn.addEventListener('click', returnToStage);
-  }
-
-  if (podcastLink) {
-    podcastLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      enterSite('podcast');
-    });
   }
 
   document.addEventListener('keydown', (e) => {
