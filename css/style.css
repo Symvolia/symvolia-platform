@@ -951,6 +951,64 @@ section#stage.stage {
   text-transform: lowercase;
 }
 
+/* ─── Social icons — below the sigil ─── */
+
+.stage__social {
+  position: relative;
+  z-index: 4;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  opacity: 0;
+  animation: socialIn 1.6s var(--ease-open) calc(var(--t-enter) + 0.3s) forwards;
+}
+
+@keyframes socialIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stage__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  color: var(--silver-dim);
+  background: rgba(6, 5, 4, 0.72);
+  border: 1px solid rgba(90, 78, 68, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 0 12px rgba(0, 0, 0, 0.55);
+  transition:
+    color 0.35s var(--ease-open),
+    border-color 0.35s var(--ease-open),
+    background 0.35s var(--ease-open),
+    box-shadow 0.35s var(--ease-open),
+    transform 0.35s var(--ease-open);
+}
+
+.stage__social-link svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  display: block;
+}
+
+.stage__social-link:hover,
+.stage__social-link:focus-visible {
+  color: #c8beb2;
+  border-color: rgba(120, 102, 84, 0.6);
+  background: rgba(20, 16, 13, 0.85);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 22px rgba(60, 48, 38, 0.28);
+  transform: translateY(-2px);
+  outline: none;
+}
+
 /* ─── Main — inner realm after the dive ─── */
 
 .main {
