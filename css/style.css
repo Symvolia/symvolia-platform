@@ -1057,11 +1057,11 @@ body.is-entered .main {
   color: var(--silver);
 }
 
-.main__nav-link--share {
+.main__nav a.main__nav-link--share {
   color: rgba(170, 148, 120, 0.85);
 }
 
-.main__nav-link--share:hover {
+.main__nav a.main__nav-link--share:hover {
   color: rgba(196, 172, 140, 1);
 }
 
