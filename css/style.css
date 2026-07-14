@@ -1194,6 +1194,42 @@ body.is-entered .main {
   color: rgba(100, 92, 84, 0.48);
 }
 
+.main__bio {
+  position: relative;
+  z-index: 1;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 5rem 1.5rem 2rem;
+  scroll-margin-top: 5rem;
+}
+
+.main__bio-inner {
+  margin: 0 auto;
+}
+
+.main__bio-body {
+  max-width: 38rem;
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.main__bio-body p {
+  font-family: var(--font-elegant);
+  font-size: clamp(1rem, 2.2vw, 1.1rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.85;
+  color: rgba(120, 110, 100, 0.7);
+  margin-bottom: 1.35rem;
+}
+
+.main__bio-body p:last-child {
+  margin-bottom: 0;
+  color: rgba(150, 138, 126, 0.82);
+}
+
 .main__archive {
   position: relative;
   z-index: 1;
