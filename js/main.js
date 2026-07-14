@@ -212,4 +212,113 @@
       enterSite();
     }
   });
+
+  setupMailMenu();
+
+  function setupMailMenu() {
+    const triggers = document.querySelectorAll('.mail-trigger');
+    if (!triggers.length) return;
+
+    const menu = document.createElement('div');
+    menu.className = 'mail-menu';
+    menu.setAttribute('role', 'menu');
+    menu.hidden = true;
+    document.body.appendChild(menu);
+
+    let activeTrigger = null;
+
+    function buildOptions(email) {
+      const enc = encodeURIComponent(email);
+      return [
+        { label: 'Gmail', href: `https://mail.google.com/mail/?view=cm&fs=1&to=${enc}`, external: true },
+        { label: 'Outlook', href: `https://outlook.live.com/mail/0/deeplink/compose?to=${enc}`, external: true },
+        { label: 'App Mail', href: `mailto:${email}`, external: false },
+        { label: 'Copia indirizzo', action: 'copy' },
+      ];
+    }
+
+    function closeMenu() {
+      menu.hidden = true;
+      if (activeTrigger) {
+        activeTrigger.setAttribute('aria-expanded', 'false');
+        activeTrigger = null;
+      }
+    }
+
+    function positionMenu(trigger) {
+      const rect = trigger.getBoundingClientRect();
+      menu.style.visibility = 'hidden';
+      menu.hidden = false;
+      const menuRect = menu.getBoundingClientRect();
+      let left = rect.left + rect.width / 2 - menuRect.width / 2;
+      left = Math.max(12, Math.min(left, window.innerWidth - menuRect.width - 12));
+      let top = rect.bottom + 10;
+      if (top + menuRect.height > window.innerHeight - 12) {
+        top = rect.top - menuRect.height - 10;
+      }
+      menu.style.left = `${Math.round(left + window.scrollX)}px`;
+      menu.style.top = `${Math.round(top + window.scrollY)}px`;
+      menu.style.visibility = '';
+    }
+
+    function openMenu(trigger) {
+      const email = trigger.getAttribute('data-email');
+      menu.innerHTML = '';
+
+      buildOptions(email).forEach((opt) => {
+        let item;
+        if (opt.action === 'copy') {
+          item = document.createElement('button');
+          item.type = 'button';
+          item.textContent = opt.label;
+          item.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(email);
+              item.textContent = 'Copiato ✓';
+              window.setTimeout(closeMenu, 700);
+            } catch (err) {
+              item.textContent = email;
+            }
+          });
+        } else {
+          item = document.createElement('a');
+          item.href = opt.href;
+          item.textContent = opt.label;
+          if (opt.external) {
+            item.target = '_blank';
+            item.rel = 'noopener noreferrer';
+          }
+          item.addEventListener('click', () => window.setTimeout(closeMenu, 0));
+        }
+        item.className = 'mail-menu__item';
+        item.setAttribute('role', 'menuitem');
+        menu.appendChild(item);
+      });
+
+      activeTrigger = trigger;
+      trigger.setAttribute('aria-expanded', 'true');
+      positionMenu(trigger);
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (activeTrigger === trigger) {
+          closeMenu();
+        } else {
+          openMenu(trigger);
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menu.hidden && !menu.contains(e.target)) closeMenu();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+    window.addEventListener('resize', closeMenu);
+    window.addEventListener('scroll', closeMenu, true);
+  }
 })();

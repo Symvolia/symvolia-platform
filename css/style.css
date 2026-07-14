@@ -1074,6 +1074,45 @@ body.is-entered .main {
   backdrop-filter: blur(8px);
 }
 
+.mail-menu {
+  position: absolute;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  min-width: 12rem;
+  padding: 0.4rem;
+  background: rgba(8, 6, 5, 0.96);
+  border: 1px solid rgba(90, 78, 68, 0.4);
+  border-radius: 0.6rem;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+}
+
+.mail-menu__item {
+  font-family: var(--font-elegant);
+  font-size: 0.78rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: left;
+  color: rgba(150, 138, 126, 0.82);
+  background: none;
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.65rem 0.8rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.25s var(--ease-open), background 0.25s var(--ease-open);
+}
+
+.mail-menu__item:hover,
+.mail-menu__item:focus-visible {
+  color: #d8cec2;
+  background: rgba(30, 24, 20, 0.85);
+  outline: none;
+}
+
 .main__back {
   display: inline-flex;
   align-items: center;
