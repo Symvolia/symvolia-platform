@@ -11,12 +11,10 @@
   --brutal-fill-deep: rgba(6, 5, 4, 0.88);
 }
 
-/* Global body texture */
+/* Global body — sigil black */
 .esoteric-surface {
-  background-color: var(--void);
-  background-image:
-    radial-gradient(ellipse 120% 80% at 50% 0%, rgba(28, 22, 18, 0.14) 0%, transparent 55%),
-    linear-gradient(180deg, #030202 0%, var(--void) 40%, #010101 100%);
+  background-color: #010101;
+  background-image: none;
 }
 
 .esoteric-surface::before {
@@ -43,7 +41,7 @@
 }
 
 /* Panel-level ancient stone wash */
-.esoteric-panel {
+.main.esoteric-panel {
   position: relative;
 }
 

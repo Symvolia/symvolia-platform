@@ -362,9 +362,61 @@
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 255, 255, 0.12);
 }
 
+/* Sigil black — entire site after homepage transformation */
+html.is-stage-alive,
+body.is-stage-alive.esoteric-surface {
+  background: #010101 !important;
+  background-image: none !important;
+}
+
+body.is-stage-alive.esoteric-surface::before,
+body.is-stage-alive.esoteric-surface::after {
+  display: none !important;
+}
+
+.stage--alive {
+  background: #010101 !important;
+}
+
+.stage--alive::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: #010101;
+  pointer-events: none;
+}
+
+.stage--alive .stage__depth,
+.stage--alive .stage__pulse,
+.stage--alive .stage__haze,
+.stage--alive .stage__grain,
+.stage--alive .stage__sub,
+.stage--alive .stage__waveform,
+.stage--alive .stage__tunnel,
+.stage--alive .stage__vignette,
+.stage--alive .stage__void-fill,
+.stage--alive.esoteric-panel::before {
+  display: none !important;
+}
+
+.stage--alive .stage__composition,
+.stage--alive .stage__footer {
+  position: relative;
+  z-index: 2;
+}
+
+.stage--alive .stage__living,
+.stage--alive .stage__inscriptions,
+.stage--alive .living__cross,
+.stage--alive .living__script,
+.stage--alive .stage__composition .eye--requiem {
+  background: transparent;
+}
+
 .stage--alive .stage__vignette {
-  background: radial-gradient(ellipse 88% 78% at 50% 50%, transparent 24%, rgba(2, 1, 1, 0.32) 58%, var(--void) 96%);
-  transition: background 2s var(--ease-open);
+  opacity: 0;
+  visibility: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {

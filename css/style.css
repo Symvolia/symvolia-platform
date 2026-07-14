@@ -1,7 +1,7 @@
 /* ─── Symvolia — Memoirs / Can't Sleep mood · murky · sub · hypnotic ─── */
 
 :root {
-  --void: #020101;
+  --void: #010101;
   --void-deep: #010101;
   --murk: #0a0908;
   --rim: #1c1814;
@@ -78,6 +78,11 @@ body.is-entered {
   transition: opacity 1.2s var(--ease-open), visibility 1.2s;
 }
 
+/* Beats .esoteric-panel { position: relative } in textures.css */
+section#stage.stage {
+  position: fixed;
+}
+
 .stage--requiem {
   justify-content: center;
   padding: 1.25rem 1rem 1.5rem;
@@ -126,6 +131,10 @@ body.is-entered {
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.5s var(--ease-open), visibility 0.5s;
+}
+
+.stage[hidden] {
+  display: none !important;
 }
 
 /* Dive into eye — zoom through the pupil */
@@ -659,7 +668,7 @@ body.is-entered {
     #1c1814 32%,
     #100e0c 62%,
     #050403 88%,
-    #020101 100%
+    #010101 100%
   );
   animation: irisBaseFade var(--t-iris-fill-dur) var(--ease-open) var(--t-iris-fill) forwards;
 }

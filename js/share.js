@@ -1,9 +1,12 @@
 (function () {
   'use strict';
 
+  const PERMANENT_URL = 'https://symvolia.github.io/symvolia-platform/';
   const linkEl = document.getElementById('publicLink');
+  const permanentLink = document.getElementById('permanentLink');
   const openBtn = document.getElementById('openBtn');
   const copyBtn = document.getElementById('copyBtn');
+  const copyPermanentBtn = document.getElementById('copyPermanentBtn');
   const copyHint = document.getElementById('copyHint');
 
   if (!linkEl || !openBtn || !copyBtn) return;
@@ -14,8 +17,26 @@
 
     linkEl.textContent = trimmed;
     linkEl.href = trimmed;
-    openBtn.href = trimmed;
     copyBtn.disabled = false;
+  }
+
+  function showCopyHint() {
+    if (!copyHint) return;
+    copyHint.hidden = false;
+    window.setTimeout(() => {
+      copyHint.hidden = true;
+    }, 2200);
+  }
+
+  async function copyUrl(url) {
+    if (!url || url === '#') return;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      showCopyHint();
+    } catch {
+      window.prompt('Copy link:', url);
+    }
   }
 
   function loadLink() {
@@ -26,32 +47,31 @@
       })
       .then(applyUrl)
       .catch(() => {
-        const fallback = window.location.origin + window.location.pathname.replace(/share\.html$/, 'index.html');
-        if (window.location.protocol.startsWith('http')) {
+        if (window.location.protocol.startsWith('http') &&
+            window.location.hostname.endsWith('.trycloudflare.com')) {
           applyUrl(window.location.origin);
-        } else {
-          linkEl.textContent = 'Link not available — open from the live server.';
+          return;
         }
-        openBtn.href = fallback;
+
+        linkEl.textContent = 'Tunnel not ready — refresh in a moment.';
+        linkEl.removeAttribute('href');
       });
   }
 
-  copyBtn.addEventListener('click', async () => {
-    const url = linkEl.href;
-    if (!url || url === '#') return;
+  if (permanentLink) {
+    permanentLink.href = PERMANENT_URL;
+    permanentLink.textContent = PERMANENT_URL;
+  }
 
-    try {
-      await navigator.clipboard.writeText(url);
-      if (copyHint) {
-        copyHint.hidden = false;
-        window.setTimeout(() => {
-          copyHint.hidden = true;
-        }, 2200);
-      }
-    } catch {
-      window.prompt('Copy link:', url);
-    }
-  });
+  if (openBtn) {
+    openBtn.href = PERMANENT_URL;
+  }
+
+  copyBtn.addEventListener('click', () => copyUrl(linkEl.href));
+
+  if (copyPermanentBtn) {
+    copyPermanentBtn.addEventListener('click', () => copyUrl(PERMANENT_URL));
+  }
 
   loadLink();
 })();

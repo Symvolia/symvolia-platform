@@ -50,6 +50,8 @@
 
   function awakenLivingSymbol() {
     stage.classList.add('stage--alive');
+    document.documentElement.classList.add('is-stage-alive');
+    document.body.classList.add('is-stage-alive');
     const living = document.getElementById('stageLiving');
     const sigil = document.getElementById('sigilCore');
     const inscriptions = document.querySelector('.stage__inscriptions');
@@ -110,6 +112,8 @@
 
     if (enterBtn) enterBtn.disabled = false;
 
+    document.documentElement.classList.remove('is-stage-alive');
+    document.body.classList.remove('is-stage-alive');
     document.body.classList.remove('is-entered');
     main.classList.remove('is-visible');
     main.hidden = true;
@@ -165,6 +169,8 @@
       document.body.classList.add('is-entered');
       main.classList.add('is-visible');
       revealMainContent();
+
+      window.scrollTo(0, 0);
 
       if (history.replaceState) {
         history.replaceState(null, '', `#${targetId}`);
