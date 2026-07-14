@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=8">
-  <link rel="stylesheet" href="css/textures.css?v=8">
-  <link rel="stylesheet" href="css/alive.css?v=8">
-  <link rel="stylesheet" href="css/responsive.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/textures.css?v=9">
+  <link rel="stylesheet" href="css/alive.css?v=9">
+  <link rel="stylesheet" href="css/responsive.css?v=9">
 </head>
 <body class="esoteric-surface">
 
@@ -162,7 +162,11 @@
     </div>
 
     <header class="main__header reveal" data-reveal>
-      <button type="button" class="main__back" id="backBtn" aria-label="Torna indietro">Torna indietro</button>
+      <button type="button" class="main__back" id="backBtn" aria-label="Torna indietro" title="Torna indietro">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/>
+        </svg>
+      </button>
       <nav class="main__nav" aria-label="Primary">
         <a href="#bio">Bio</a>
         <a href="#vision">Vision</a>
