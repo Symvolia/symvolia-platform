@@ -98,6 +98,16 @@
   margin-bottom: 0;
 }
 
+.share__card--primary {
+  border-color: rgba(150, 130, 105, 0.4);
+  background: rgba(14, 11, 8, 0.95);
+  box-shadow: inset 0 0 40px rgba(90, 72, 52, 0.08);
+}
+
+.share__card--primary .share__label {
+  color: rgba(170, 148, 120, 0.85);
+}
+
 .share__label {
   font-family: var(--font-elegant);
   font-size: 0.62rem;
