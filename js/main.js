@@ -132,7 +132,7 @@
     }
   }
 
-  function enterSite(targetId = 'vision') {
+  function enterSite(targetId = 'bio') {
     if (entered) {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       scrollToSection(targetId, reducedMotion ? 'auto' : 'smooth');
@@ -199,7 +199,7 @@
   window.setTimeout(showEnterCta, ENTER_CTA_MS);
 
   if (enterBtn) {
-    enterBtn.addEventListener('click', enterSite);
+    enterBtn.addEventListener('click', () => enterSite('bio'));
   }
 
   if (backBtn) {

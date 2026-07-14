@@ -1197,7 +1197,7 @@ body.is-entered .main {
 .main__bio {
   position: relative;
   z-index: 1;
-  max-width: 42rem;
+  max-width: 56rem;
   margin: 0 auto;
   padding: 5rem 1.5rem 2rem;
   scroll-margin-top: 5rem;
@@ -1208,7 +1208,7 @@ body.is-entered .main {
 }
 
 .main__bio-body {
-  max-width: 38rem;
+  max-width: 48rem;
   margin: 0 auto;
   border-top: 1px solid var(--line);
   padding-top: 2rem;
