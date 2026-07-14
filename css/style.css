@@ -1331,6 +1331,12 @@ body.is-entered .main {
   gap: 1rem 1.5rem;
 }
 
+.archive-card__links + .archive-card__desc {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
 .main__contact {
   position: relative;
   z-index: 1;
