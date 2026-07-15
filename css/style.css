@@ -28,8 +28,8 @@
   --t-open: 4s;
   --t-iris-fill: 0.2s;
   --t-iris-fill-dur: 3.8s;
-  --t-tagline: 6.8s;
-  --t-enter: 7.5s;
+  --t-tagline: 4.1s;
+  --t-enter: 4.4s;
   --eye-w: min(100vw, calc(100vh * 1.92));
   --eye-h: min(54vh, calc(100vw * 0.54));
   --pupil-size: 36%;
@@ -977,7 +977,10 @@ section#stage.stage {
   justify-content: center;
   gap: 0.85rem;
   opacity: 0;
-  animation: socialIn 1.6s var(--ease-open) calc(var(--t-enter) + 0.3s) forwards;
+}
+
+.stage--alive .stage__social {
+  animation: socialIn 1.6s var(--ease-open) 0.4s forwards;
 }
 
 @keyframes socialIn {

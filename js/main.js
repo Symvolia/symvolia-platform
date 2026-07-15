@@ -15,8 +15,7 @@
 
   const DIVE_MS = 2600;
   const REVEAL_START_MS = 1600;
-  const ALIVE_MS = 4000;
-  const ENTER_CTA_MS = 4900;
+  const ENTER_CTA_MS = 4300;
 
   const STAGE_VOLUME = 0.55;
   const MAIN_VOLUME = 0.5;
@@ -24,6 +23,7 @@
   const FADE_MS = 1400;
 
   let entered = false;
+  let livingAwake = false;
   let revealObserver = null;
   const fadeTimers = new WeakMap();
 
@@ -131,6 +131,21 @@
     window.addEventListener('online', resumeAmbient);
 
     window.addEventListener('pagehide', suspendAmbient);
+  }
+
+  function awaken() {
+    if (livingAwake) return;
+    livingAwake = true;
+    playEnterSound();
+    awakenLivingSymbol();
+  }
+
+  function handleEnter() {
+    if (!livingAwake) {
+      awaken();
+      return;
+    }
+    enterSite('bio');
   }
 
   function awakenLivingSymbol() {
@@ -277,8 +292,6 @@
 
     if (enterBtn) enterBtn.disabled = true;
 
-    playEnterSound();
-
     fadeAudio(stageAmbient, 0, FADE_MS);
     if (mainAmbient) {
       mainAmbient.volume = 0;
@@ -332,11 +345,10 @@
   bindAmbientFallback();
   bindAmbientLifecycle();
   bindSectionNavigation();
-  window.setTimeout(awakenLivingSymbol, ALIVE_MS);
   window.setTimeout(showEnterCta, ENTER_CTA_MS);
 
   if (enterBtn) {
-    enterBtn.addEventListener('click', () => enterSite('bio'));
+    enterBtn.addEventListener('click', handleEnter);
   }
 
   if (backBtn) {
@@ -346,7 +358,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !entered && enterCta?.classList.contains('is-active')) {
       e.preventDefault();
-      enterSite();
+      handleEnter();
     }
   });
 

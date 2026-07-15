@@ -432,13 +432,14 @@ body.is-stage-alive.esoteric-surface::after {
   z-index: 8;
 }
 
-/* Desktop: lift the symbol group toward the top, separated from the footer */
+/* Desktop: lift the symbol group toward the top, separated from the footer
+   (applied in both the eye-opening and awakened phases to avoid a jump) */
 @media (min-width: 768px) {
-  .stage--alive {
+  .stage {
     justify-content: flex-start;
   }
 
-  .stage--alive .stage__composition {
+  .stage .stage__composition {
     margin-top: -1.5rem;
   }
 }
