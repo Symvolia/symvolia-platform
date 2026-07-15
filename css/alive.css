@@ -78,13 +78,13 @@
 
 .living__ouroboros-img {
   position: absolute;
-  top: -7%;
-  left: -7%;
-  width: 114%;
-  height: 114%;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
   transform-origin: 50% 50%;
-  animation: ouroborosSpin 90s linear infinite;
+  animation: ouroborosSpin 72s linear infinite;
   filter:
     drop-shadow(0 0 14px rgba(0, 0, 0, 0.65))
     drop-shadow(0 0 26px rgba(190, 180, 165, 0.12))
