@@ -19,6 +19,7 @@
 
   let entered = false;
   let eyeSoundPlayed = false;
+  let revealObserver = null;
 
   function playEyeOpenSound() {
     if (eyeSoundPlayed) return;
@@ -65,9 +66,41 @@
 
   function revealMainContent() {
     const items = main.querySelectorAll('[data-reveal]');
-    items.forEach((el, i) => {
-      el.style.setProperty('--reveal-delay', `${i * 0.09}s`);
-      el.classList.add('is-revealed');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      items.forEach((el) => el.classList.add('is-revealed'));
+      return;
+    }
+
+    if (revealObserver) revealObserver.disconnect();
+
+    revealObserver = new IntersectionObserver((entries, observer) => {
+      const appearing = entries.filter((entry) => entry.isIntersecting);
+      appearing
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        .forEach((entry, i) => {
+          const el = entry.target;
+          el.style.setProperty('--reveal-delay', `${i * 0.1}s`);
+          el.classList.add('is-revealed');
+          observer.unobserve(el);
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+    items.forEach((el) => {
+      el.classList.remove('is-revealed');
+      revealObserver.observe(el);
+    });
+  }
+
+  function resetReveals() {
+    if (revealObserver) {
+      revealObserver.disconnect();
+      revealObserver = null;
+    }
+    main.querySelectorAll('[data-reveal]').forEach((el) => {
+      el.classList.remove('is-revealed');
+      el.style.removeProperty('--reveal-delay');
     });
   }
 
@@ -116,6 +149,8 @@
     document.body.classList.remove('is-entered');
     main.classList.remove('is-visible');
     main.hidden = true;
+
+    resetReveals();
 
     stage.hidden = false;
     stage.setAttribute('aria-hidden', 'false');
