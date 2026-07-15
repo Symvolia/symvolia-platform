@@ -1103,6 +1103,10 @@ body.is-entered .main {
   backdrop-filter: blur(6px);
 }
 
+.mail-menu[hidden] {
+  display: none;
+}
+
 .mail-menu__item {
   font-family: var(--font-elegant);
   font-size: 0.78rem;
