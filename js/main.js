@@ -8,7 +8,6 @@
   const backBtn = document.getElementById('backBtn');
   const tunnel = document.getElementById('tunnel');
   const ambientAncient = document.getElementById('ambientAncient');
-  const ambientAtmos = document.getElementById('ambientAtmos');
   const ambientChants = document.getElementById('ambientChants');
   const audioToggle = document.getElementById('audioToggle');
 
@@ -19,7 +18,7 @@
   const ALIVE_MS = 4000;
   const ENTER_CTA_MS = 7500;
 
-  const INTRO_TRACKS = [ambientAncient, ambientAtmos].filter(Boolean);
+  const INTRO_TRACKS = [ambientAncient].filter(Boolean);
   const INTRO_VOL = 0.3;
   const CHANTS_VOL = 0.42;
   const AUDIO_FADE_MS = 1600;
