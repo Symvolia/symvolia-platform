@@ -10,6 +10,7 @@
   const ambientAncient = document.getElementById('ambientAncient');
   const ambientAtmos = document.getElementById('ambientAtmos');
   const ambientChants = document.getElementById('ambientChants');
+  const audioToggle = document.getElementById('audioToggle');
 
   if (!stage || !main) return;
 
@@ -26,6 +27,7 @@
   let entered = false;
   let revealObserver = null;
   let audioPhase = 'intro';
+  let userMuted = false;
   const audioFades = new Map();
 
   function audioAllowed() {
@@ -60,16 +62,16 @@
     audioFades.set(el, requestAnimationFrame(step));
   }
 
-  function startIntroAudio() {
+  function startIntroAudio(force) {
     audioPhase = 'intro';
-    if (!audioAllowed()) return;
+    if (userMuted || (!audioAllowed() && !force)) return;
     INTRO_TRACKS.forEach((el) => fadeAudio(el, INTRO_VOL, AUDIO_FADE_MS));
     fadeAudio(ambientChants, 0, AUDIO_FADE_MS);
   }
 
-  function switchToMainAudio() {
+  function switchToMainAudio(force) {
     audioPhase = 'main';
-    if (!audioAllowed()) return;
+    if (userMuted || (!audioAllowed() && !force)) return;
     INTRO_TRACKS.forEach((el) => fadeAudio(el, 0, AUDIO_FADE_MS));
     fadeAudio(ambientChants, CHANTS_VOL, AUDIO_FADE_MS);
   }
@@ -78,12 +80,40 @@
     return audioPhase === 'intro' ? INTRO_TRACKS : [ambientChants].filter(Boolean);
   }
 
-  function play() {
-    if (audioPhase === 'intro') startIntroAudio();
-    else switchToMainAudio();
+  function allTracks() {
+    return INTRO_TRACKS.concat([ambientChants]).filter(Boolean);
+  }
+
+  function play(force) {
+    if (userMuted) return;
+    if (audioPhase === 'intro') startIntroAudio(force);
+    else switchToMainAudio(force);
+  }
+
+  function updateAudioToggle() {
+    if (!audioToggle) return;
+    audioToggle.classList.toggle('is-muted', userMuted);
+    audioToggle.setAttribute('aria-pressed', String(!userMuted));
+    audioToggle.setAttribute('aria-label', userMuted ? 'Attiva audio' : 'Disattiva audio');
+  }
+
+  function setMuted(muted) {
+    userMuted = muted;
+    if (muted) {
+      allTracks().forEach((el) => { el.muted = true; });
+    } else {
+      allTracks().forEach((el) => { el.muted = false; });
+      play(true);
+    }
+    updateAudioToggle();
   }
 
   function initAudio() {
+    if (audioToggle) {
+      audioToggle.addEventListener('click', () => setMuted(!userMuted));
+    }
+    updateAudioToggle();
+
     if (!audioAllowed()) return;
 
     // 1) Best-effort unmuted autoplay.
@@ -93,12 +123,13 @@
     //    unmute as soon as it begins. Works outright on browsers that allow
     //    it (and instantly on the first gesture on the others).
     const bootstrap = () => {
+      if (userMuted) return;
       currentTracks().forEach((el) => {
         el.muted = true;
         const p = el.play();
         if (p !== undefined) {
           p.then(() => {
-            el.muted = false;
+            if (!userMuted) el.muted = false;
           }).catch(() => {});
         }
       });
@@ -111,8 +142,10 @@
 
     // 3) Guarantee sound at the first real user gesture (harmless if already playing).
     const onInteract = () => {
-      currentTracks().forEach((el) => { el.muted = false; });
-      play();
+      if (!userMuted) {
+        currentTracks().forEach((el) => { el.muted = false; });
+        play();
+      }
       ['pointerdown', 'keydown', 'touchstart', 'wheel', 'mousemove'].forEach((ev) =>
         document.removeEventListener(ev, onInteract)
       );

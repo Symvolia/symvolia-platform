@@ -10,16 +10,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=11">
-  <link rel="stylesheet" href="css/textures.css?v=11">
-  <link rel="stylesheet" href="css/alive.css?v=11">
-  <link rel="stylesheet" href="css/responsive.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/textures.css?v=12">
+  <link rel="stylesheet" href="css/alive.css?v=12">
+  <link rel="stylesheet" href="css/responsive.css?v=12">
 </head>
 <body class="esoteric-surface">
 
   <audio id="ambientAncient" preload="auto" loop src="assets/audio/ancient-01.m4a" aria-hidden="true"></audio>
   <audio id="ambientAtmos" preload="auto" loop src="assets/audio/atmos-dark.m4a" aria-hidden="true"></audio>
   <audio id="ambientChants" preload="auto" loop src="assets/audio/ancient-chants.m4a" aria-hidden="true"></audio>
+
+  <button type="button" id="audioToggle" class="audio-toggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio">
+    <svg class="audio-toggle__icon audio-toggle__on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 9v6h3.5L12 18.5v-13L7.5 9H4z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M15.5 9a4 4 0 0 1 0 6M17.8 6.7a7.2 7.2 0 0 1 0 10.6"/>
+    </svg>
+    <svg class="audio-toggle__icon audio-toggle__off" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 9v6h3.5L12 18.5v-13L7.5 9H4z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M16 9.5l5 5M21 9.5l-5 5"/>
+    </svg>
+  </button>
 
   <section class="stage stage--requiem esoteric-panel" id="stage" aria-label="Opening eye">
     <div class="stage__depth" aria-hidden="true"></div>
@@ -310,6 +321,6 @@
     </footer>
   </main>
 
-  <script src="js/main.js?v=8"></script>
+  <script src="js/main.js?v=9"></script>
 </body>
 </html>
