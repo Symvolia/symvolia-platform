@@ -10,7 +10,7 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 APP_SUPPORT="$HOME/Library/Application Support/Symvolia"
 SITE_DIR="$APP_SUPPORT/site"
-PERMANENT_URL="https://symvoliaplatform.com/"
+PERMANENT_URL="https://symvolia.github.io/symvolia-platform/"
 
 cd "$PROJECT_DIR"
 

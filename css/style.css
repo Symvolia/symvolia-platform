@@ -609,19 +609,21 @@ section#stage.stage {
   border-radius: 50%;
   overflow: hidden;
   background: #010101;
-  clip-path: circle(0% at 50% 50%);
-  -webkit-clip-path: circle(0% at 50% 50%);
-  animation: sigilReveal var(--t-iris-fill-dur) var(--ease-open) var(--t-iris-fill) forwards;
-  will-change: clip-path;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, rgba(0, 0, 0, 0.6) 52%, rgba(0, 0, 0, 0) 74%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 30%, rgba(0, 0, 0, 0.6) 52%, rgba(0, 0, 0, 0) 74%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 0% 0%;
+  mask-size: 0% 0%;
+  animation: sigilReveal var(--t-iris-fill-dur) var(--ease-flow) var(--t-iris-fill) forwards;
+  will-change: mask-size, -webkit-mask-size;
 }
 
 @keyframes sigilReveal {
-  0%   { clip-path: circle(0% at 50% 50%); -webkit-clip-path: circle(0% at 50% 50%); }
-  18%  { clip-path: circle(22% at 50% 50%); -webkit-clip-path: circle(22% at 50% 50%); }
-  38%  { clip-path: circle(48% at 50% 50%); -webkit-clip-path: circle(48% at 50% 50%); }
-  58%  { clip-path: circle(68% at 50% 50%); -webkit-clip-path: circle(68% at 50% 50%); }
-  78%  { clip-path: circle(86% at 50% 50%); -webkit-clip-path: circle(86% at 50% 50%); }
-  100% { clip-path: circle(98% at 50% 50%); -webkit-clip-path: circle(98% at 50% 50%); }
+  0%   { -webkit-mask-size: 0% 0%; mask-size: 0% 0%; }
+  100% { -webkit-mask-size: 340% 340%; mask-size: 340% 340%; }
 }
 
 .stage__sigil-img {
@@ -632,14 +634,15 @@ section#stage.stage {
   object-position: center;
   background: #010101;
   opacity: 0;
-  filter: blur(14px) brightness(1.45);
-  animation: sigilImgIn var(--t-iris-fill-dur) var(--ease-open) var(--t-iris-fill) forwards;
+  filter: blur(14px) brightness(1.4);
+  transform: scale(0.94);
+  animation: sigilImgIn var(--t-iris-fill-dur) var(--ease-flow) var(--t-iris-fill) forwards;
 }
 
 @keyframes sigilImgIn {
-  0%   { opacity: 0; filter: blur(16px) brightness(1.55); transform: scale(1.08); }
-  35%  { opacity: 0.55; filter: blur(6px) brightness(1.2); transform: scale(1.03); }
-  65%  { opacity: 0.88; filter: blur(2px) brightness(1.05); transform: scale(1.01); }
+  0%   { opacity: 0; filter: blur(18px) brightness(1.5); transform: scale(0.9); }
+  40%  { opacity: 0.6; filter: blur(7px) brightness(1.18); transform: scale(0.97); }
+  70%  { opacity: 0.9; filter: blur(2px) brightness(1.05); transform: scale(0.995); }
   100% { opacity: 1; filter: blur(0) brightness(1) contrast(1.04); transform: scale(1); }
 }
 

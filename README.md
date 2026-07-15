@@ -1,6 +1,6 @@
 # Symvolia Platform
 
-Permanent site: **https://symvoliaplatform.com/**
+Permanent site: **https://symvolia.github.io/symvolia-platform/**
 
 Static HTML/CSS/JS — no build step.
 

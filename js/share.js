@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const PERMANENT_URL = 'https://symvoliaplatform.com/';
+  const PERMANENT_URL = 'https://symvolia.github.io/symvolia-platform/';
   const linkEl = document.getElementById('publicLink');
   const permanentLink = document.getElementById('permanentLink');
   const openBtn = document.getElementById('openBtn');
