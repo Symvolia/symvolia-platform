@@ -83,6 +83,42 @@
     document.addEventListener('pointerdown', retry, { once: true });
   }
 
+  function currentAmbient() {
+    return entered ? mainAmbient : stageAmbient;
+  }
+
+  function suspendAmbient() {
+    [stageAmbient, mainAmbient].forEach((el) => {
+      if (el && !el.paused) el.pause();
+    });
+  }
+
+  function resumeAmbient() {
+    if (document.hidden || !document.hasFocus() || navigator.onLine === false) return;
+
+    const el = currentAmbient();
+    if (!el || !el.paused) return;
+
+    if (el.volume === 0) el.volume = entered ? MAIN_VOLUME : STAGE_VOLUME;
+    const p = el.play();
+    if (p !== undefined) p.catch(() => {});
+  }
+
+  function bindAmbientLifecycle() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) suspendAmbient();
+      else resumeAmbient();
+    });
+
+    window.addEventListener('blur', suspendAmbient);
+    window.addEventListener('focus', resumeAmbient);
+
+    window.addEventListener('offline', suspendAmbient);
+    window.addEventListener('online', resumeAmbient);
+
+    window.addEventListener('pagehide', suspendAmbient);
+  }
+
   function awakenLivingSymbol() {
     stage.classList.add('stage--alive');
     document.documentElement.classList.add('is-stage-alive');
@@ -273,6 +309,7 @@
 
   startStageAmbient();
   bindAmbientFallback();
+  bindAmbientLifecycle();
   bindSectionNavigation();
   window.setTimeout(awakenLivingSymbol, ALIVE_MS);
   window.setTimeout(showEnterCta, ENTER_CTA_MS);
