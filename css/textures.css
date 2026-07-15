@@ -162,6 +162,11 @@
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.06));
 }
 
+/* Photorealistic 3D serpent ring — subtle grounding glow */
+.living__ouroboros-img {
+  mix-blend-mode: normal;
+}
+
 /* Stage grain enhancement */
 .stage__grain,
 .main__grain {

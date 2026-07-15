@@ -76,6 +76,27 @@
   50%      { opacity: 0.98; transform: scale(1.01) rotate(0deg); }
 }
 
+.living__ouroboros-img {
+  position: absolute;
+  top: -7%;
+  left: -7%;
+  width: 114%;
+  height: 114%;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  animation: ouroborosSpin 90s linear infinite;
+  filter:
+    drop-shadow(0 0 14px rgba(0, 0, 0, 0.65))
+    drop-shadow(0 0 26px rgba(190, 180, 165, 0.12))
+    brightness(0.94) contrast(1.06);
+  will-change: transform;
+}
+
+@keyframes ouroborosSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 .living__ouroboros .glyph__snake {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -426,6 +447,10 @@ body.is-stage-alive.esoteric-surface::after {
   }
 
   .living__ouroboros .glyph__snake {
+    animation: none;
+  }
+
+  .living__ouroboros-img {
     animation: none;
   }
 
