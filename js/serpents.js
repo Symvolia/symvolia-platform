@@ -8,55 +8,138 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isSmall = Math.min(window.innerWidth, window.innerHeight) < 640;
 
-  // Double-helix torus parameters
-  const RING_R = 0.92;        // ring radius (mean sits between sigil and runes)
-  const HELIX_R = 0.086;      // how far each serpent coils from the ring center
-  const TUBE_R = 0.036;       // serpent body thickness (slender)
-  const COILS = 8;            // number of intertwining coils around the ring
-  const TUBULAR = isSmall ? 200 : 320;
-  const RADIAL = isSmall ? 8 : 12;
+  // Ouroboros parameters — a single serpent biting its own tail
+  const RING_R = 0.9;         // ring radius (mean, sits between sigil and runes)
+  const BODY_R = 0.05;        // max body thickness
+  const HEAD_R = 0.088;       // head size
+  const GAP = THREE.MathUtils.degToRad(20); // gap the head reaches across to bite the tail
+  const SEG = isSmall ? 260 : 380;
+  const RADIAL = isSmall ? 9 : 13;
 
-  let renderer, scene, camera, group, material, envMap;
-  let serpentA = null;
-  let serpentB = null;
+  let renderer, scene, camera, group;
+  let bodyMat, headMat, eyeMat, envMap;
+  let bodyMesh = null;
+  let headMesh = null;
 
   const clock = { start: null };
   let rafId = null;
   let lastBuild = 0;
   let phase = 0;
 
-  function makeCurve(offset, phaseNow) {
-    const pts = [];
-    const seg = TUBULAR;
-    for (let i = 0; i <= seg; i++) {
-      const th = (i / seg) * Math.PI * 2;
-      const c = Math.cos(th);
-      const s = Math.sin(th);
-      const coil = COILS * th + offset + phaseNow;
-      const rad = RING_R + HELIX_R * Math.cos(coil);
-      pts.push(new THREE.Vector3(rad * c, rad * s, HELIX_R * Math.sin(coil)));
-    }
-    return new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.5);
+  function smoothstep(a, b, x) {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+    return t * t * (3 - 2 * t);
   }
 
-  function buildTube(offset, phaseNow, existing) {
-    const curve = makeCurve(offset, phaseNow);
-    const geo = new THREE.TubeGeometry(curve, TUBULAR, TUBE_R, RADIAL, true);
-    if (existing) {
-      existing.geometry.dispose();
-      existing.geometry = geo;
-      return existing;
+  // Body radius profile: pointed tail → full belly → neck narrows into head
+  function bodyRadius(u) {
+    const tailTip = smoothstep(0.0, 0.07, u);
+    const headTaper = 1.0 - 0.4 * smoothstep(0.82, 1.0, u);
+    const belly = 0.66 + 0.34 * Math.sin(Math.PI * Math.pow(u, 0.92));
+    return BODY_R * tailTip * headTaper * belly * 1.4;
+  }
+
+  function makeCurve(phaseNow) {
+    const start = Math.PI * 0.5;
+    const span = Math.PI * 2 - GAP;
+    const pts = [];
+    for (let i = 0; i <= SEG; i++) {
+      const u = i / SEG;
+      const ang = start + span * u;
+      const rr = RING_R + Math.sin(u * Math.PI * 11 - phaseNow) * 0.009;
+      const z = Math.sin(u * Math.PI * 7 - phaseNow) * 0.026;
+      pts.push(new THREE.Vector3(Math.cos(ang) * rr, Math.sin(ang) * rr, z));
     }
-    const mesh = new THREE.Mesh(geo, material);
-    mesh.castShadow = false;
-    return mesh;
+    const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.5);
+    curve.arcLengthDivisions = SEG * 2;
+    curve.updateArcLengths();
+    return curve;
+  }
+
+  function buildBodyGeometry(phaseNow) {
+    const curve = makeCurve(phaseNow);
+    const frames = curve.computeFrenetFrames(SEG, false);
+    const positions = [];
+    const normals = [];
+    const uvs = [];
+    const indices = [];
+
+    for (let i = 0; i <= SEG; i++) {
+      const u = i / SEG;
+      const p = curve.getPointAt(u);
+      const normal = frames.normals[i];
+      const binormal = frames.binormals[i];
+      const r = bodyRadius(u);
+      for (let j = 0; j <= RADIAL; j++) {
+        const v = j / RADIAL;
+        const a = v * Math.PI * 2;
+        const cos = Math.cos(a);
+        const sin = Math.sin(a);
+        const nx = cos * normal.x + sin * binormal.x;
+        const ny = cos * normal.y + sin * binormal.y;
+        const nz = cos * normal.z + sin * binormal.z;
+        positions.push(p.x + r * nx, p.y + r * ny, p.z + r * nz);
+        normals.push(nx, ny, nz);
+        uvs.push(u, v);
+      }
+    }
+
+    for (let i = 0; i < SEG; i++) {
+      for (let j = 0; j < RADIAL; j++) {
+        const a = (RADIAL + 1) * i + j;
+        const b = (RADIAL + 1) * (i + 1) + j;
+        const c = (RADIAL + 1) * (i + 1) + j + 1;
+        const d = (RADIAL + 1) * i + j + 1;
+        indices.push(a, b, d);
+        indices.push(b, c, d);
+      }
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    geo.setIndex(indices);
+    return { geo, curve, frames };
+  }
+
+  function placeHead(curve, frames) {
+    const headP = curve.getPointAt(1);
+    const headT = frames.tangents[SEG].clone().normalize();
+    headMesh.position.copy(headP);
+    headMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), headT);
+    // nudge the snout forward so it reaches over the tail (the bite)
+    headMesh.position.addScaledVector(headT, HEAD_R * 0.45);
   }
 
   function rebuild(phaseNow) {
-    serpentA = buildTube(0, phaseNow, serpentA);
-    serpentB = buildTube(Math.PI, phaseNow, serpentB);
-    if (!serpentA.parent) group.add(serpentA);
-    if (!serpentB.parent) group.add(serpentB);
+    const built = buildBodyGeometry(phaseNow);
+    if (bodyMesh) {
+      bodyMesh.geometry.dispose();
+      bodyMesh.geometry = built.geo;
+    } else {
+      bodyMesh = new THREE.Mesh(built.geo, bodyMat);
+      group.add(bodyMesh);
+    }
+    placeHead(built.curve, built.frames);
+  }
+
+  function makeHead() {
+    const head = new THREE.Group();
+
+    const skull = new THREE.Mesh(new THREE.SphereGeometry(HEAD_R, 20, 16), headMat);
+    skull.scale.set(0.82, 0.62, 1.4); // elongated snout along +z
+    head.add(skull);
+
+    const eyeGeo = new THREE.SphereGeometry(HEAD_R * 0.2, 14, 12);
+    const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+    const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeL.position.set(HEAD_R * 0.42, HEAD_R * 0.3, HEAD_R * 0.55);
+    eyeR.position.set(-HEAD_R * 0.42, HEAD_R * 0.3, HEAD_R * 0.55);
+    head.add(eyeL);
+    head.add(eyeR);
+
+    return head;
   }
 
   function makeScaleTexture() {
@@ -65,7 +148,6 @@
     c.width = s;
     c.height = s;
     const g = c.getContext('2d');
-    // Neutral mid-gray = flat; brighter = raised scale
     g.fillStyle = '#7f7f7f';
     g.fillRect(0, 0, s, s);
 
@@ -102,7 +184,7 @@
     const g = c.getContext('2d');
     const grd = g.createLinearGradient(0, 0, 0, 256);
     grd.addColorStop(0.0, '#40392f');
-    grd.addColorStop(0.24, '#efe9dc'); // bright reflection band → silver sheen
+    grd.addColorStop(0.24, '#efe9dc');
     grd.addColorStop(0.32, '#4a4238');
     grd.addColorStop(0.6, '#12100e');
     grd.addColorStop(1.0, '#000000');
@@ -145,19 +227,35 @@
     scene.environment = envMap;
 
     const scaleTex = makeScaleTexture();
-    scaleTex.repeat.set(170, 9);
+    scaleTex.repeat.set(150, 7);
     const scaleRough = makeScaleTexture();
-    scaleRough.repeat.set(170, 9);
+    scaleRough.repeat.set(150, 7);
 
-    material = new THREE.MeshStandardMaterial({
+    bodyMat = new THREE.MeshStandardMaterial({
       color: 0xc9c3b7,
       metalness: 0.82,
       roughness: 0.42,
       envMap: envMap,
       envMapIntensity: 1.15,
       bumpMap: scaleTex,
-      bumpScale: 0.045,
+      bumpScale: 0.04,
       roughnessMap: scaleRough,
+    });
+
+    headMat = new THREE.MeshStandardMaterial({
+      color: 0xcdc7bb,
+      metalness: 0.85,
+      roughness: 0.38,
+      envMap: envMap,
+      envMapIntensity: 1.15,
+    });
+
+    eyeMat = new THREE.MeshStandardMaterial({
+      color: 0x120b04,
+      metalness: 0.3,
+      roughness: 0.12,
+      emissive: 0x2a1606,
+      emissiveIntensity: 0.35,
     });
 
     // Lights
@@ -175,6 +273,9 @@
     group = new THREE.Group();
     scene.add(group);
 
+    headMesh = makeHead();
+    group.add(headMesh);
+
     sizeRenderer();
     rebuild(0);
 
@@ -190,20 +291,17 @@
     if (clock.start === null) clock.start = now;
     const t = (now - clock.start) / 1000;
 
-    // Slither: the helix phase travels so the serpents coil on themselves
+    // Subtle slither travelling along the body
     phase = t * 0.9;
-
-    // Rebuild geometry (throttled) to animate the spiral weave
-    if (now - lastBuild > 28) {
+    if (now - lastBuild > 32) {
       rebuild(phase);
       lastBuild = now;
     }
 
-    // Slow in-plane rotation only, so the whole ring stays visible
-    // (a small constant tilt gives depth without hiding anything behind the sigil)
-    group.rotation.z = t * 0.12;
+    // In-plane rotation only + small constant tilt: the whole ouroboros
+    // stays visible and nothing slips behind the sigil.
+    group.rotation.z = t * 0.1;
     group.rotation.x = -0.12;
-    group.rotation.y = 0;
 
     renderer.render(scene, camera);
     rafId = window.requestAnimationFrame(frame);
