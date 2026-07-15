@@ -80,8 +80,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 75%;
-  height: 75%;
+  width: 69%;
+  height: 69%;
   object-fit: contain;
   pointer-events: none;
   transform-origin: center center;
