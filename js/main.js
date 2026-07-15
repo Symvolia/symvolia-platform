@@ -74,25 +74,52 @@
     fadeAudio(ambientChants, CHANTS_VOL, AUDIO_FADE_MS);
   }
 
+  function currentTracks() {
+    return audioPhase === 'intro' ? INTRO_TRACKS : [ambientChants].filter(Boolean);
+  }
+
+  function play() {
+    if (audioPhase === 'intro') startIntroAudio();
+    else switchToMainAudio();
+  }
+
   function initAudio() {
     if (!audioAllowed()) return;
 
-    const play = () => {
-      if (audioPhase === 'intro') startIntroAudio();
-      else switchToMainAudio();
-    };
-
-    // Attempt autoplay; browsers usually block until a user gesture.
+    // 1) Best-effort unmuted autoplay.
     play();
 
-    const onInteract = () => {
+    // 2) Muted autoplay is always permitted — start playback muted, then
+    //    unmute as soon as it begins. Works outright on browsers that allow
+    //    it (and instantly on the first gesture on the others).
+    const bootstrap = () => {
+      currentTracks().forEach((el) => {
+        el.muted = true;
+        const p = el.play();
+        if (p !== undefined) {
+          p.then(() => {
+            el.muted = false;
+          }).catch(() => {});
+        }
+      });
       play();
-      document.removeEventListener('pointerdown', onInteract);
-      document.removeEventListener('keydown', onInteract);
     };
+    bootstrap();
+    document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
+    window.addEventListener('load', bootstrap, { once: true });
+    window.addEventListener('pageshow', bootstrap, { once: true });
 
-    document.addEventListener('pointerdown', onInteract);
-    document.addEventListener('keydown', onInteract);
+    // 3) Guarantee sound at the first real user gesture (harmless if already playing).
+    const onInteract = () => {
+      currentTracks().forEach((el) => { el.muted = false; });
+      play();
+      ['pointerdown', 'keydown', 'touchstart', 'wheel', 'mousemove'].forEach((ev) =>
+        document.removeEventListener(ev, onInteract)
+      );
+    };
+    ['pointerdown', 'keydown', 'touchstart', 'wheel', 'mousemove'].forEach((ev) =>
+      document.addEventListener(ev, onInteract, { passive: true })
+    );
   }
 
   function awakenLivingSymbol() {
