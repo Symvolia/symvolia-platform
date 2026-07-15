@@ -423,10 +423,13 @@ body.is-stage-alive.esoteric-surface::after {
   display: none !important;
 }
 
-.stage--alive .stage__composition,
-.stage--alive .stage__footer {
+.stage--alive .stage__composition {
   position: relative;
   z-index: 2;
+}
+
+.stage--alive .stage__footer {
+  z-index: 8;
 }
 
 .stage--alive .stage__living,

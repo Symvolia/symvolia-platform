@@ -106,7 +106,11 @@ section#stage.stage {
 }
 
 .stage__footer {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(1rem, 3.5vh, 2.5rem);
+  margin: 0 auto;
   z-index: 8;
   display: flex;
   flex-direction: column;
@@ -115,14 +119,13 @@ section#stage.stage {
   text-align: center;
   width: 100%;
   max-width: 36rem;
-  margin-top: clamp(0.5rem, 2vh, 1.25rem);
   padding: 0 1rem;
 }
 
-/* Desktop: lift tagline / Enter / contacts higher */
+/* Desktop: slight lift for tagline / Enter / contacts */
 @media (min-width: 768px) {
   .stage__footer {
-    transform: translateY(-1.5cm);
+    bottom: clamp(1.6rem, 5vh, 3.2rem);
   }
 }
 
