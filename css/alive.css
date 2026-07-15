@@ -76,12 +76,33 @@
   50%      { opacity: 0.98; transform: scale(1.01) rotate(0deg); }
 }
 
+.living__ouroboros {
+  perspective: 1600px;
+}
+
+.living__ouroboros-3d {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  animation: ouroborosWeave 11s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* 3D undulation — serpents weave over/under, not just spin flat */
+@keyframes ouroborosWeave {
+  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+  25%      { transform: rotateX(13deg) rotateY(-9deg); }
+  50%      { transform: rotateX(0deg) rotateY(0deg); }
+  75%      { transform: rotateX(-13deg) rotateY(9deg); }
+}
+
 .living__ouroboros-img {
   position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  height: 80%;
+  top: 13.5%;
+  left: 13.5%;
+  width: 73%;
+  height: 73%;
   object-fit: contain;
   transform-origin: 50% 50%;
   animation: ouroborosSpin 72s linear infinite;
@@ -454,7 +475,8 @@ body.is-stage-alive.esoteric-surface::after {
     animation: none;
   }
 
-  .living__ouroboros-img {
+  .living__ouroboros-img,
+  .living__ouroboros-3d {
     animation: none;
   }
 
