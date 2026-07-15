@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Publish to GitHub Pages — permanent URL: https://symvolia.github.io/symvolia-platform/
+# Publish to GitHub Pages — permanent URL: https://symvoliaplatform.com/
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 REPO="Symvolia/symvolia-platform"
-PERMANENT_URL="https://symvolia.github.io/symvolia-platform/"
+PERMANENT_URL="https://symvoliaplatform.com/"
 LINK_FILE="$PROJECT_DIR/assets/site-link.txt"
 
 cd "$PROJECT_DIR"
@@ -21,7 +21,7 @@ if [[ -n "$(git status --porcelain)" ]]; then
   git commit -m "$(cat <<'EOF'
 Publish Symvolia platform site for GitHub Pages.
 
-Permanent URL: https://symvolia.github.io/symvolia-platform/
+Permanent URL: https://symvoliaplatform.com/
 EOF
 )" || true
 fi
