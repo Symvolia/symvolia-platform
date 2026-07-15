@@ -226,28 +226,27 @@
     envMap = makeEnvironment();
     scene.environment = envMap;
 
+    // Polished, photorealistic silver metal (like before) with only a faint
+    // micro-scale texture so the reflections stay clean and glossy.
     const scaleTex = makeScaleTexture();
     scaleTex.repeat.set(150, 7);
-    const scaleRough = makeScaleTexture();
-    scaleRough.repeat.set(150, 7);
 
     bodyMat = new THREE.MeshStandardMaterial({
-      color: 0xc9c3b7,
-      metalness: 0.82,
-      roughness: 0.42,
+      color: 0xcdc7bb,
+      metalness: 0.96,
+      roughness: 0.28,
       envMap: envMap,
-      envMapIntensity: 1.15,
+      envMapIntensity: 1.3,
       bumpMap: scaleTex,
-      bumpScale: 0.04,
-      roughnessMap: scaleRough,
+      bumpScale: 0.012,
     });
 
     headMat = new THREE.MeshStandardMaterial({
       color: 0xcdc7bb,
-      metalness: 0.85,
-      roughness: 0.38,
+      metalness: 0.96,
+      roughness: 0.28,
       envMap: envMap,
-      envMapIntensity: 1.15,
+      envMapIntensity: 1.3,
     });
 
     eyeMat = new THREE.MeshStandardMaterial({
@@ -298,10 +297,11 @@
       lastBuild = now;
     }
 
-    // In-plane rotation only + small constant tilt: the whole ouroboros
-    // stays visible and nothing slips behind the sigil.
+    // Slow rotation + a gentle 3D undulation for the "graphic motion 3d" feel,
+    // kept subtle so the whole ouroboros stays visible around the sigil.
     group.rotation.z = t * 0.1;
-    group.rotation.x = -0.12;
+    group.rotation.x = -0.14 + Math.sin(t * 0.45) * 0.07;
+    group.rotation.y = Math.sin(t * 0.32) * 0.06;
 
     renderer.render(scene, camera);
     rafId = window.requestAnimationFrame(frame);
