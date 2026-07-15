@@ -9,16 +9,18 @@
   const tunnel = document.getElementById('tunnel');
   const stageAmbient = document.getElementById('stageAmbient');
   const mainAmbient = document.getElementById('mainAmbient');
+  const enterSound = document.getElementById('enterSound');
 
   if (!stage || !main) return;
 
   const DIVE_MS = 2600;
   const REVEAL_START_MS = 1600;
   const ALIVE_MS = 4000;
-  const ENTER_CTA_MS = 7500;
+  const ENTER_CTA_MS = 4900;
 
   const STAGE_VOLUME = 0.55;
   const MAIN_VOLUME = 0.5;
+  const ENTER_SOUND_VOLUME = 0.8;
   const FADE_MS = 1400;
 
   let entered = false;
@@ -81,6 +83,18 @@
     stage.addEventListener('pointerdown', retry, { once: true });
     document.addEventListener('keydown', retry, { once: true });
     document.addEventListener('pointerdown', retry, { once: true });
+  }
+
+  function playEnterSound() {
+    if (!enterSound) return;
+    try {
+      enterSound.currentTime = 0;
+      enterSound.volume = ENTER_SOUND_VOLUME;
+      const p = enterSound.play();
+      if (p !== undefined) p.catch(() => {});
+    } catch (err) {
+      /* ignore */
+    }
   }
 
   function currentAmbient() {
@@ -215,6 +229,11 @@
 
     if (enterBtn) enterBtn.disabled = false;
 
+    if (enterSound) {
+      enterSound.pause();
+      enterSound.currentTime = 0;
+    }
+
     fadeAudio(mainAmbient, 0, FADE_MS);
     startStageAmbient();
 
@@ -257,6 +276,8 @@
     entered = true;
 
     if (enterBtn) enterBtn.disabled = true;
+
+    playEnterSound();
 
     fadeAudio(stageAmbient, 0, FADE_MS);
     if (mainAmbient) {
