@@ -59,6 +59,42 @@
     if (!serpentB.parent) group.add(serpentB);
   }
 
+  function makeScaleTexture() {
+    const s = 256;
+    const c = document.createElement('canvas');
+    c.width = s;
+    c.height = s;
+    const g = c.getContext('2d');
+    // Neutral mid-gray = flat; brighter = raised scale
+    g.fillStyle = '#7f7f7f';
+    g.fillRect(0, 0, s, s);
+
+    const cols = 18;
+    const rows = 14;
+    const rw = s / cols;
+    const rh = s / rows;
+    for (let y = -1; y <= rows; y++) {
+      for (let x = -1; x <= cols; x++) {
+        const ox = (((y % 2) + 2) % 2) * rw * 0.5;
+        const cxp = x * rw + ox + rw * 0.5;
+        const cyp = y * rh + rh * 0.5;
+        const grd = g.createRadialGradient(cxp, cyp - rh * 0.22, 1, cxp, cyp + rh * 0.1, rw * 0.66);
+        grd.addColorStop(0, '#efefef');
+        grd.addColorStop(0.55, '#a2a2a2');
+        grd.addColorStop(1, '#454545');
+        g.beginPath();
+        g.ellipse(cxp, cyp, rw * 0.52, rh * 0.64, 0, 0, Math.PI * 2);
+        g.fillStyle = grd;
+        g.fill();
+      }
+    }
+    const tex = new THREE.CanvasTexture(c);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    return tex;
+  }
+
   function makeEnvironment() {
     const c = document.createElement('canvas');
     c.width = 32;
@@ -108,12 +144,20 @@
     envMap = makeEnvironment();
     scene.environment = envMap;
 
+    const scaleTex = makeScaleTexture();
+    scaleTex.repeat.set(170, 9);
+    const scaleRough = makeScaleTexture();
+    scaleRough.repeat.set(170, 9);
+
     material = new THREE.MeshStandardMaterial({
-      color: 0xcdc7bb,
-      metalness: 0.96,
-      roughness: 0.3,
+      color: 0xc9c3b7,
+      metalness: 0.82,
+      roughness: 0.42,
       envMap: envMap,
-      envMapIntensity: 1.25,
+      envMapIntensity: 1.15,
+      bumpMap: scaleTex,
+      bumpScale: 0.045,
+      roughnessMap: scaleRough,
     });
 
     // Lights
@@ -135,7 +179,7 @@
     rebuild(0);
 
     if (reducedMotion) {
-      group.rotation.x = -0.32;
+      group.rotation.x = -0.12;
       renderer.render(scene, camera);
       return;
     }
@@ -155,10 +199,11 @@
       lastBuild = now;
     }
 
-    // Slow overall rotation + gentle 3D undulation for a living feel
+    // Slow in-plane rotation only, so the whole ring stays visible
+    // (a small constant tilt gives depth without hiding anything behind the sigil)
     group.rotation.z = t * 0.12;
-    group.rotation.x = -0.28 + Math.sin(t * 0.5) * 0.16;
-    group.rotation.y = Math.sin(t * 0.33) * 0.12;
+    group.rotation.x = -0.12;
+    group.rotation.y = 0;
 
     renderer.render(scene, camera);
     rafId = window.requestAnimationFrame(frame);
