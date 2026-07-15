@@ -76,46 +76,14 @@
   50%      { opacity: 0.98; transform: scale(1.01) rotate(0deg); }
 }
 
-.living__ouroboros {
-  perspective: 1600px;
-}
-
-.living__ouroboros-3d {
+.living__ouroboros-canvas {
   position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
-  transform-origin: 50% 50%;
-  animation: ouroborosWeave 11s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* 3D undulation — serpents weave over/under, not just spin flat */
-@keyframes ouroborosWeave {
-  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
-  25%      { transform: rotateX(13deg) rotateY(-9deg); }
-  50%      { transform: rotateX(0deg) rotateY(0deg); }
-  75%      { transform: rotateX(-13deg) rotateY(9deg); }
-}
-
-.living__ouroboros-img {
-  position: absolute;
-  top: 13.5%;
-  left: 13.5%;
-  width: 73%;
-  height: 73%;
-  object-fit: contain;
-  transform-origin: 50% 50%;
-  animation: ouroborosSpin 72s linear infinite;
-  filter:
-    drop-shadow(0 0 14px rgba(0, 0, 0, 0.65))
-    drop-shadow(0 0 26px rgba(190, 180, 165, 0.12))
-    brightness(0.94) contrast(1.06);
-  will-change: transform;
-}
-
-@keyframes ouroborosSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 16px rgba(0, 0, 0, 0.6));
 }
 
 .living__ouroboros .glyph__snake {
