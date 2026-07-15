@@ -119,10 +119,10 @@ section#stage.stage {
   padding: 0 1rem;
 }
 
-/* Desktop: lift tagline / Enter / contacts 1cm higher */
+/* Desktop: lift tagline / Enter / contacts higher */
 @media (min-width: 768px) {
   .stage__footer {
-    transform: translateY(-1cm);
+    transform: translateY(-1.5cm);
   }
 }
 
