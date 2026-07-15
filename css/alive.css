@@ -432,6 +432,17 @@ body.is-stage-alive.esoteric-surface::after {
   z-index: 8;
 }
 
+/* Desktop: lift the symbol group toward the top, separated from the footer */
+@media (min-width: 768px) {
+  .stage--alive {
+    justify-content: flex-start;
+  }
+
+  .stage--alive .stage__composition {
+    margin-top: -1.5rem;
+  }
+}
+
 .stage--alive .stage__living,
 .stage--alive .stage__inscriptions,
 .stage--alive .living__cross,
