@@ -7,45 +7,92 @@
   const enterBtn = document.getElementById('enterBtn');
   const backBtn = document.getElementById('backBtn');
   const tunnel = document.getElementById('tunnel');
-  const eyeOpenSound = document.getElementById('eyeOpenSound');
+  const ambientAncient = document.getElementById('ambientAncient');
+  const ambientAtmos = document.getElementById('ambientAtmos');
+  const ambientChants = document.getElementById('ambientChants');
 
   if (!stage || !main) return;
 
   const DIVE_MS = 2600;
   const REVEAL_START_MS = 1600;
-  const EYE_OPEN_SOUND_MS = 200;
   const ALIVE_MS = 4000;
   const ENTER_CTA_MS = 7500;
 
+  const INTRO_TRACKS = [ambientAncient, ambientAtmos].filter(Boolean);
+  const INTRO_VOL = 0.3;
+  const CHANTS_VOL = 0.42;
+  const AUDIO_FADE_MS = 1600;
+
   let entered = false;
-  let eyeSoundPlayed = false;
   let revealObserver = null;
+  let audioPhase = 'intro';
+  const audioFades = new Map();
 
-  function playEyeOpenSound() {
-    if (eyeSoundPlayed) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    eyeSoundPlayed = true;
-
-    if (!eyeOpenSound) return;
-
-    eyeOpenSound.volume = 0.38;
-    const playPromise = eyeOpenSound.play();
-
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        eyeSoundPlayed = false;
-      });
-    }
+  function audioAllowed() {
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  function bindEyeSoundFallback() {
-    const retry = () => {
-      if (!eyeSoundPlayed) playEyeOpenSound();
+  function fadeAudio(el, target, duration) {
+    if (!el) return;
+
+    const existing = audioFades.get(el);
+    if (existing) cancelAnimationFrame(existing);
+
+    if (target > 0 && el.paused) {
+      const p = el.play();
+      if (p !== undefined) p.catch(() => {});
+    }
+
+    const from = el.volume;
+    const start = performance.now();
+
+    const step = (now) => {
+      const t = duration <= 0 ? 1 : Math.min(1, (now - start) / duration);
+      el.volume = Math.max(0, Math.min(1, from + (target - from) * t));
+      if (t < 1) {
+        audioFades.set(el, requestAnimationFrame(step));
+      } else {
+        audioFades.delete(el);
+        if (target === 0) el.pause();
+      }
     };
 
-    stage.addEventListener('pointerdown', retry, { once: true });
-    document.addEventListener('keydown', retry, { once: true });
+    audioFades.set(el, requestAnimationFrame(step));
+  }
+
+  function startIntroAudio() {
+    audioPhase = 'intro';
+    if (!audioAllowed()) return;
+    INTRO_TRACKS.forEach((el) => fadeAudio(el, INTRO_VOL, AUDIO_FADE_MS));
+    fadeAudio(ambientChants, 0, AUDIO_FADE_MS);
+  }
+
+  function switchToMainAudio() {
+    audioPhase = 'main';
+    if (!audioAllowed()) return;
+    INTRO_TRACKS.forEach((el) => fadeAudio(el, 0, AUDIO_FADE_MS));
+    fadeAudio(ambientChants, CHANTS_VOL, AUDIO_FADE_MS);
+  }
+
+  function initAudio() {
+    if (!audioAllowed()) return;
+
+    const play = () => {
+      if (audioPhase === 'intro') startIntroAudio();
+      else switchToMainAudio();
+    };
+
+    // Attempt autoplay; browsers usually block until a user gesture.
+    play();
+
+    const onInteract = () => {
+      play();
+      document.removeEventListener('pointerdown', onInteract);
+      document.removeEventListener('keydown', onInteract);
+    };
+
+    document.addEventListener('pointerdown', onInteract);
+    document.addEventListener('keydown', onInteract);
   }
 
   function awakenLivingSymbol() {
@@ -151,6 +198,7 @@
     main.hidden = true;
 
     resetReveals();
+    startIntroAudio();
 
     stage.hidden = false;
     stage.setAttribute('aria-hidden', 'false');
@@ -183,6 +231,8 @@
     entered = true;
 
     if (enterBtn) enterBtn.disabled = true;
+
+    switchToMainAudio();
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -227,8 +277,7 @@
     }, hideDelay);
   }
 
-  window.setTimeout(playEyeOpenSound, EYE_OPEN_SOUND_MS);
-  bindEyeSoundFallback();
+  initAudio();
   bindSectionNavigation();
   window.setTimeout(awakenLivingSymbol, ALIVE_MS);
   window.setTimeout(showEnterCta, ENTER_CTA_MS);
