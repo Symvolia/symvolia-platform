@@ -7,9 +7,8 @@
   const enterBtn = document.getElementById('enterBtn');
   const backBtn = document.getElementById('backBtn');
   const tunnel = document.getElementById('tunnel');
-  const ambientAncient = document.getElementById('ambientAncient');
-  const ambientChants = document.getElementById('ambientChants');
-  const audioToggle = document.getElementById('audioToggle');
+  const stageAmbient = document.getElementById('stageAmbient');
+  const mainAmbient = document.getElementById('mainAmbient');
 
   if (!stage || !main) return;
 
@@ -18,140 +17,70 @@
   const ALIVE_MS = 4000;
   const ENTER_CTA_MS = 7500;
 
-  const INTRO_TRACKS = [ambientAncient].filter(Boolean);
-  const INTRO_VOL = 0.3;
-  const CHANTS_VOL = 0.42;
-  const AUDIO_FADE_MS = 1600;
+  const STAGE_VOLUME = 0.55;
+  const MAIN_VOLUME = 0.5;
+  const FADE_MS = 1400;
 
   let entered = false;
   let revealObserver = null;
-  let audioPhase = 'intro';
-  let userMuted = false;
-  const audioFades = new Map();
+  const fadeTimers = new WeakMap();
 
-  function audioAllowed() {
-    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  function fadeAudio(el, target, duration) {
+  function fadeAudio(el, target, duration, onDone) {
     if (!el) return;
 
-    const existing = audioFades.get(el);
-    if (existing) cancelAnimationFrame(existing);
+    const existing = fadeTimers.get(el);
+    if (existing) window.clearInterval(existing);
+
+    const start = el.volume;
+    const delta = target - start;
+    const steps = Math.max(1, Math.round(duration / 40));
+    let step = 0;
 
     if (target > 0 && el.paused) {
       const p = el.play();
       if (p !== undefined) p.catch(() => {});
     }
 
-    const from = el.volume;
-    const start = performance.now();
+    const timer = window.setInterval(() => {
+      step += 1;
+      const t = step / steps;
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      el.volume = Math.min(1, Math.max(0, start + delta * eased));
 
-    const step = (now) => {
-      const t = duration <= 0 ? 1 : Math.min(1, (now - start) / duration);
-      el.volume = Math.max(0, Math.min(1, from + (target - from) * t));
-      if (t < 1) {
-        audioFades.set(el, requestAnimationFrame(step));
-      } else {
-        audioFades.delete(el);
+      if (step >= steps) {
+        window.clearInterval(timer);
+        fadeTimers.delete(el);
+        el.volume = Math.min(1, Math.max(0, target));
         if (target === 0) el.pause();
+        if (onDone) onDone();
       }
-    };
+    }, 40);
 
-    audioFades.set(el, requestAnimationFrame(step));
+    fadeTimers.set(el, timer);
   }
 
-  function startIntroAudio(force) {
-    audioPhase = 'intro';
-    if (userMuted || (!audioAllowed() && !force)) return;
-    INTRO_TRACKS.forEach((el) => fadeAudio(el, INTRO_VOL, AUDIO_FADE_MS));
-    fadeAudio(ambientChants, 0, AUDIO_FADE_MS);
-  }
+  function startStageAmbient() {
+    if (!stageAmbient) return;
+    if (!stageAmbient.paused && stageAmbient.volume > 0) return;
 
-  function switchToMainAudio(force) {
-    audioPhase = 'main';
-    if (userMuted || (!audioAllowed() && !force)) return;
-    INTRO_TRACKS.forEach((el) => fadeAudio(el, 0, AUDIO_FADE_MS));
-    fadeAudio(ambientChants, CHANTS_VOL, AUDIO_FADE_MS);
-  }
-
-  function currentTracks() {
-    return audioPhase === 'intro' ? INTRO_TRACKS : [ambientChants].filter(Boolean);
-  }
-
-  function allTracks() {
-    return INTRO_TRACKS.concat([ambientChants]).filter(Boolean);
-  }
-
-  function play(force) {
-    if (userMuted) return;
-    if (audioPhase === 'intro') startIntroAudio(force);
-    else switchToMainAudio(force);
-  }
-
-  function updateAudioToggle() {
-    if (!audioToggle) return;
-    audioToggle.classList.toggle('is-muted', userMuted);
-    audioToggle.setAttribute('aria-pressed', String(!userMuted));
-    audioToggle.setAttribute('aria-label', userMuted ? 'Attiva audio' : 'Disattiva audio');
-  }
-
-  function setMuted(muted) {
-    userMuted = muted;
-    if (muted) {
-      allTracks().forEach((el) => { el.muted = true; });
+    stageAmbient.volume = 0;
+    const p = stageAmbient.play();
+    if (p !== undefined) {
+      p.then(() => fadeAudio(stageAmbient, STAGE_VOLUME, FADE_MS))
+        .catch(() => {});
     } else {
-      allTracks().forEach((el) => { el.muted = false; });
-      play(true);
+      fadeAudio(stageAmbient, STAGE_VOLUME, FADE_MS);
     }
-    updateAudioToggle();
   }
 
-  function initAudio() {
-    if (audioToggle) {
-      audioToggle.addEventListener('click', () => setMuted(!userMuted));
-    }
-    updateAudioToggle();
-
-    if (!audioAllowed()) return;
-
-    // 1) Best-effort unmuted autoplay.
-    play();
-
-    // 2) Muted autoplay is always permitted — start playback muted, then
-    //    unmute as soon as it begins. Works outright on browsers that allow
-    //    it (and instantly on the first gesture on the others).
-    const bootstrap = () => {
-      if (userMuted) return;
-      currentTracks().forEach((el) => {
-        el.muted = true;
-        const p = el.play();
-        if (p !== undefined) {
-          p.then(() => {
-            if (!userMuted) el.muted = false;
-          }).catch(() => {});
-        }
-      });
-      play();
+  function bindAmbientFallback() {
+    const retry = () => {
+      if (!entered) startStageAmbient();
     };
-    bootstrap();
-    document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
-    window.addEventListener('load', bootstrap, { once: true });
-    window.addEventListener('pageshow', bootstrap, { once: true });
 
-    // 3) Guarantee sound at the first real user gesture (harmless if already playing).
-    const onInteract = () => {
-      if (!userMuted) {
-        currentTracks().forEach((el) => { el.muted = false; });
-        play();
-      }
-      ['pointerdown', 'keydown', 'touchstart', 'wheel', 'mousemove'].forEach((ev) =>
-        document.removeEventListener(ev, onInteract)
-      );
-    };
-    ['pointerdown', 'keydown', 'touchstart', 'wheel', 'mousemove'].forEach((ev) =>
-      document.addEventListener(ev, onInteract, { passive: true })
-    );
+    stage.addEventListener('pointerdown', retry, { once: true });
+    document.addEventListener('keydown', retry, { once: true });
+    document.addEventListener('pointerdown', retry, { once: true });
   }
 
   function awakenLivingSymbol() {
@@ -250,6 +179,9 @@
 
     if (enterBtn) enterBtn.disabled = false;
 
+    fadeAudio(mainAmbient, 0, FADE_MS);
+    startStageAmbient();
+
     document.documentElement.classList.remove('is-stage-alive');
     document.body.classList.remove('is-stage-alive');
     document.body.classList.remove('is-entered');
@@ -257,7 +189,6 @@
     main.hidden = true;
 
     resetReveals();
-    startIntroAudio();
 
     stage.hidden = false;
     stage.setAttribute('aria-hidden', 'false');
@@ -291,7 +222,11 @@
 
     if (enterBtn) enterBtn.disabled = true;
 
-    switchToMainAudio();
+    fadeAudio(stageAmbient, 0, FADE_MS);
+    if (mainAmbient) {
+      mainAmbient.volume = 0;
+      fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
+    }
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -336,7 +271,8 @@
     }, hideDelay);
   }
 
-  initAudio();
+  startStageAmbient();
+  bindAmbientFallback();
   bindSectionNavigation();
   window.setTimeout(awakenLivingSymbol, ALIVE_MS);
   window.setTimeout(showEnterCta, ENTER_CTA_MS);

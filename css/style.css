@@ -1076,62 +1076,6 @@ body.is-entered .main {
   backdrop-filter: blur(8px);
 }
 
-.audio-toggle {
-  position: fixed;
-  right: 1.4rem;
-  bottom: 1.4rem;
-  z-index: 300;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.9rem;
-  height: 2.9rem;
-  border-radius: 50%;
-  color: rgba(150, 138, 126, 0.72);
-  background: rgba(6, 5, 4, 0.62);
-  border: 1px solid rgba(90, 78, 68, 0.3);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 6px 20px rgba(0, 0, 0, 0.4);
-  cursor: pointer;
-  opacity: 0.55;
-  backdrop-filter: blur(6px);
-  transition:
-    color 0.35s var(--ease-flow),
-    border-color 0.35s var(--ease-flow),
-    background 0.35s var(--ease-flow),
-    opacity 0.35s var(--ease-flow),
-    transform 0.35s var(--ease-flow);
-}
-
-.audio-toggle:hover,
-.audio-toggle:focus-visible {
-  color: #d8cec2;
-  border-color: rgba(120, 102, 84, 0.55);
-  background: rgba(20, 16, 13, 0.8);
-  opacity: 1;
-  transform: translateY(-2px);
-  outline: none;
-}
-
-.audio-toggle__icon {
-  width: 1.35rem;
-  height: 1.35rem;
-  display: none;
-}
-
-.audio-toggle .audio-toggle__on {
-  display: block;
-}
-
-.audio-toggle.is-muted .audio-toggle__on {
-  display: none;
-}
-
-.audio-toggle.is-muted .audio-toggle__off {
-  display: block;
-}
-
 .mail-menu {
   position: absolute;
   z-index: 200;
