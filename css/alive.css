@@ -184,9 +184,10 @@
 }
 
 .living__code--ne {
-  top: 10%;
+  top: 16%;
   right: 0;
   text-align: right;
+  max-width: 30%;
 }
 
 .living__code--e {
@@ -194,7 +195,7 @@
   right: 0;
   transform: translateY(-50%);
   text-align: right;
-  max-width: 28%;
+  max-width: 30%;
 }
 
 .living__code--link {
@@ -211,9 +212,10 @@
 }
 
 .living__code--se {
-  bottom: 10%;
+  bottom: 16%;
   right: 0;
   text-align: right;
+  max-width: 30%;
 }
 
 .living__code--s {
@@ -221,19 +223,21 @@
   left: 0;
   transform: translateY(-50%);
   text-align: left;
-  max-width: 28%;
+  max-width: 30%;
 }
 
 .living__code--sw {
-  bottom: 10%;
+  bottom: 16%;
   left: 0;
   text-align: left;
+  max-width: 30%;
 }
 
 .living__code--nw {
-  top: 10%;
+  top: 16%;
   left: 0;
   text-align: left;
+  max-width: 30%;
 }
 
 .living__rune {

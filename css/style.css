@@ -119,6 +119,13 @@ section#stage.stage {
   padding: 0 1rem;
 }
 
+/* Desktop: lift tagline / Enter / contacts 1cm higher */
+@media (min-width: 768px) {
+  .stage__footer {
+    transform: translateY(-1cm);
+  }
+}
+
 .stage--requiem .stage__pulse,
 .stage--requiem .stage__haze {
   opacity: 0.12;
