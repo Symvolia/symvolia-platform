@@ -10,12 +10,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=24">
-  <link rel="stylesheet" href="css/textures.css?v=24">
-  <link rel="stylesheet" href="css/alive.css?v=24">
-  <link rel="stylesheet" href="css/responsive.css?v=24">
+  <link rel="stylesheet" href="css/style.css?v=25">
+  <link rel="stylesheet" href="css/textures.css?v=25">
+  <link rel="stylesheet" href="css/alive.css?v=25">
+  <link rel="stylesheet" href="css/void.css?v=25">
+  <link rel="stylesheet" href="css/responsive.css?v=25">
 </head>
 <body class="esoteric-surface">
+
+  <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
+    <svg class="sound-toggle__glyph sound-toggle__glyph--on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 8.5a5 5 0 0 1 0 7M18.8 6.2a8.2 8.2 0 0 1 0 11.6"/>
+    </svg>
+    <svg class="sound-toggle__glyph sound-toggle__glyph--off" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/>
+    </svg>
+  </button>
 
   <audio id="stageAmbient" preload="auto" loop src="assets/audio/atmos-dark-1.m4a?v=1" aria-hidden="true"></audio>
   <audio id="mainAmbient" preload="auto" loop src="assets/audio/ancient-chants-live.m4a?v=1" aria-hidden="true"></audio>
@@ -216,10 +228,25 @@
     </section>
 
     <section class="main__archive" id="archive">
-      <div class="main__section-head reveal" data-reveal>
-        <h2 class="main__section-title">Sound Archive</h2>
-        <p class="main__section-sub">Works · Collaborations · Passages</p>
+      <div class="archive-portal reveal" data-reveal>
+        <button type="button" class="archive-portal__btn" id="archivePortalBtn" aria-expanded="false" aria-controls="archivePanel">
+          <span class="archive-portal__aura" aria-hidden="true"></span>
+          <span class="archive-portal__ring" aria-hidden="true"></span>
+          <span class="archive-portal__label">Sound Archive</span>
+          <span class="archive-portal__sub">Enter the void · Works · Collaborations · Passages</span>
+        </button>
       </div>
+
+      <div class="archive-panel" id="archivePanel" hidden>
+        <div class="archive-panel__head">
+          <h2 class="main__section-title">Sound Archive</h2>
+          <p class="main__section-sub">Works · Collaborations · Passages</p>
+          <button type="button" class="archive-panel__close" id="archivePanelClose" aria-label="Chiudi archivio" title="Chiudi archivio">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </button>
+        </div>
 
       <div class="archive-grid">
         <article class="archive-card reveal" data-reveal id="podcast">
@@ -262,6 +289,7 @@
           <a href="https://vimeo.com/1133774775" class="archive-card__link" target="_blank" rel="noopener noreferrer">Watch on Vimeo</a>
         </article>
       </div>
+      </div>
     </section>
 
     <footer class="main__contact" id="contact">
@@ -296,6 +324,14 @@
     </footer>
   </main>
 
-  <script src="js/main.js?v=10"></script>
+  <div class="void" id="voidPortal" aria-hidden="true">
+    <div class="void__gradient" aria-hidden="true"></div>
+    <div class="void__vortex" aria-hidden="true"></div>
+    <div class="void__glow" aria-hidden="true"></div>
+    <div class="void__particles" id="voidParticles" aria-hidden="true"></div>
+    <div class="void__core" aria-hidden="true"></div>
+  </div>
+
+  <script src="js/main.js?v=11"></script>
 </body>
 </html>

@@ -1,0 +1,451 @@
+/* ─── Symvolia — sound toggle · archive portal · void dive ─── */
+
+/* Palette locale del void */
+:root {
+  --void-black: #000000;
+  --void-purple-deep: #4a148c;
+  --void-purple: #7c3aed;
+  --void-white: #ffffff;
+  --void-ms: 2600ms;
+}
+
+/* ─────────────────────────  Sound toggle  ───────────────────────── */
+
+.sound-toggle {
+  position: fixed;
+  top: clamp(0.9rem, 2.4vh, 1.4rem);
+  right: clamp(0.9rem, 2.4vw, 1.5rem);
+  z-index: 300;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: rgba(198, 189, 177, 0.9);
+  background: rgba(6, 5, 4, 0.6);
+  border: 1px solid rgba(120, 108, 96, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 6px 20px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 0.35s var(--ease-open),
+    border-color 0.35s var(--ease-open),
+    background 0.35s var(--ease-open),
+    transform 0.35s var(--ease-open),
+    opacity 0.6s var(--ease-open);
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  color: var(--void-white);
+  border-color: rgba(124, 58, 237, 0.55);
+  background: rgba(20, 14, 26, 0.72);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.sound-toggle__glyph {
+  width: 1.3rem;
+  height: 1.3rem;
+  display: none;
+}
+
+.sound-toggle .sound-toggle__glyph--on {
+  display: block;
+}
+
+.sound-toggle.is-muted .sound-toggle__glyph--on {
+  display: none;
+}
+
+.sound-toggle.is-muted .sound-toggle__glyph--off {
+  display: block;
+}
+
+.sound-toggle.is-muted {
+  color: rgba(150, 138, 126, 0.6);
+}
+
+/* ─────────────────────────  Archive portal button  ───────────────────────── */
+
+.archive-portal {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1.5rem 2rem;
+}
+
+.archive-portal__btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: min(88vw, 30rem);
+  min-height: 13rem;
+  padding: 2.5rem 2rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  background:
+    radial-gradient(120% 120% at 50% 40%, rgba(74, 20, 140, 0.28) 0%, rgba(8, 5, 12, 0.9) 62%, rgba(2, 1, 3, 0.96) 100%);
+  color: rgba(216, 208, 196, 0.96);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 20px 60px rgba(0, 0, 0, 0.55);
+  transition:
+    transform 0.6s var(--ease-flow),
+    border-color 0.6s var(--ease-open),
+    box-shadow 0.6s var(--ease-open);
+}
+
+.archive-portal__btn:hover,
+.archive-portal__btn:focus-visible {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 26px 70px rgba(74, 20, 140, 0.35);
+  outline: none;
+}
+
+/* Aura viola che pulsa dietro al testo */
+.archive-portal__aura {
+  position: absolute;
+  inset: -30% -10%;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.45) 0%, rgba(74, 20, 140, 0.18) 38%, transparent 70%);
+  filter: blur(18px);
+  opacity: 0.55;
+  animation: portalAura 5.5s var(--ease-breathe) infinite;
+}
+
+.archive-portal__ring {
+  position: absolute;
+  width: 9rem;
+  height: 9rem;
+  z-index: -1;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.25) inset;
+  opacity: 0.5;
+  animation: portalRing 6s linear infinite;
+}
+
+.archive-portal__label {
+  font-family: var(--font-elegant);
+  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  color: var(--void-white);
+  text-shadow: 0 0 26px rgba(124, 58, 237, 0.5);
+}
+
+.archive-portal__sub {
+  font-family: var(--font-elegant);
+  font-size: 0.72rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(198, 189, 177, 0.72);
+}
+
+@keyframes portalAura {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.08); }
+}
+
+@keyframes portalRing {
+  from { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.06); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+/* Nasconde il pulsante mentre il pannello è aperto */
+.main__archive.is-open .archive-portal {
+  display: none;
+}
+
+/* ─────────────────────────  Archive panel  ───────────────────────── */
+
+.archive-panel {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s var(--ease-open), transform 0.9s var(--ease-flow);
+}
+
+.archive-panel[hidden] {
+  display: none;
+}
+
+.main__archive.is-open .archive-panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.archive-panel__head {
+  position: relative;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.archive-panel__close {
+  position: absolute;
+  top: -0.4rem;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: rgba(198, 189, 177, 0.85);
+  background: rgba(8, 5, 12, 0.6);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  cursor: pointer;
+  transition: color 0.3s var(--ease-open), border-color 0.3s var(--ease-open), transform 0.3s var(--ease-open);
+}
+
+.archive-panel__close svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.archive-panel__close:hover,
+.archive-panel__close:focus-visible {
+  color: var(--void-white);
+  border-color: rgba(124, 58, 237, 0.65);
+  transform: rotate(90deg);
+  outline: none;
+}
+
+/* ─────────────────────────  Void dive overlay  ───────────────────────── */
+
+.void {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--void-black);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  /* trama sottile sul nero iniziale */
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(20, 12, 30, 0.4) 0%, #000 70%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.void.is-active,
+.void.is-closing {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Layer centrali condivisi */
+.void__gradient,
+.void__vortex,
+.void__glow,
+.void__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  will-change: transform, opacity, filter;
+}
+
+/* Gradiente di profondità nero → viola → bianco */
+.void__gradient {
+  width: 120vmax;
+  height: 120vmax;
+  background: radial-gradient(circle at center,
+    var(--void-white) 0%,
+    var(--void-purple) 16%,
+    var(--void-purple-deep) 40%,
+    #150a24 62%,
+    var(--void-black) 78%);
+  opacity: 0;
+}
+
+/* Vortice di colori viola */
+.void__vortex {
+  width: 100vmax;
+  height: 100vmax;
+  background: conic-gradient(from 0deg,
+    transparent 0deg,
+    rgba(124, 58, 237, 0.55) 40deg,
+    transparent 90deg,
+    rgba(74, 20, 140, 0.6) 150deg,
+    transparent 200deg,
+    rgba(124, 58, 237, 0.5) 270deg,
+    transparent 320deg,
+    rgba(74, 20, 140, 0.55) 360deg);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+/* Glow viola pulsante */
+.void__glow {
+  width: 40vmax;
+  height: 40vmax;
+  background: radial-gradient(circle at center, rgba(124, 58, 237, 0.9) 0%, rgba(74, 20, 140, 0.35) 45%, transparent 72%);
+  filter: blur(30px);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+/* Nucleo luminoso: il punto in cui si sprofonda */
+.void__core {
+  width: 8vmax;
+  height: 8vmax;
+  background: radial-gradient(circle at center, #ffffff 0%, #d8b4fe 30%, var(--void-purple) 60%, transparent 78%);
+  box-shadow: 0 0 60px rgba(255, 255, 255, 0.5), 0 0 120px rgba(124, 58, 237, 0.6);
+  opacity: 0;
+}
+
+/* Contenitore particelle */
+.void__particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.void__particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--size, 5px);
+  height: var(--size, 5px);
+  margin: calc(var(--size, 5px) / -2) 0 0 calc(var(--size, 5px) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #ffffff 0%, var(--void-purple) 55%, transparent 100%);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Animazione di ingresso (dive nel void) ── */
+.void.is-active {
+  animation: voidFade var(--void-ms) var(--ease-open) forwards;
+}
+
+.void.is-active .void__gradient {
+  animation: voidGradientIn var(--void-ms) var(--ease-open) forwards;
+}
+
+.void.is-active .void__vortex {
+  animation: voidVortexIn var(--void-ms) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.void.is-active .void__glow {
+  animation: voidGlowPulse 1.3s var(--ease-breathe) infinite;
+}
+
+.void.is-active .void__core {
+  animation: voidCoreIn var(--void-ms) cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.void.is-active .void__particle {
+  animation: voidParticleIn var(--void-ms) cubic-bezier(0.5, 0, 0.3, 1) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* ── Animazione di uscita (ritorno) ── */
+.void.is-closing {
+  animation: voidFade var(--void-ms) var(--ease-open) forwards;
+}
+
+.void.is-closing .void__gradient {
+  animation: voidGradientIn var(--void-ms) var(--ease-open) reverse forwards;
+}
+
+.void.is-closing .void__vortex {
+  animation: voidVortexIn var(--void-ms) cubic-bezier(0.4, 0, 0.2, 1) reverse forwards;
+}
+
+.void.is-closing .void__glow {
+  animation: voidGlowPulse 1.3s var(--ease-breathe) infinite;
+}
+
+.void.is-closing .void__core {
+  animation: voidCoreIn var(--void-ms) cubic-bezier(0.65, 0, 0.35, 1) reverse forwards;
+}
+
+.void.is-closing .void__particle {
+  animation: voidParticleOut var(--void-ms) cubic-bezier(0.5, 0, 0.3, 1) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Fade generale dell'overlay: entra, resta, esce rivelando il contenuto */
+@keyframes voidFade {
+  0% { opacity: 0; visibility: visible; }
+  12% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Il gradiente scala verso l'osservatore (effetto sprofondamento) + blur graduale */
+@keyframes voidGradientIn {
+  0% { transform: translate(-50%, -50%) scale(0.12) rotate(0deg); filter: blur(16px); opacity: 0; }
+  22% { opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(3.6) rotate(40deg); filter: blur(3px); opacity: 1; }
+}
+
+@keyframes voidVortexIn {
+  0% { transform: translate(-50%, -50%) scale(0.2) rotate(0deg); opacity: 0; }
+  18% { opacity: 0.95; }
+  100% { transform: translate(-50%, -50%) scale(2.9) rotate(460deg); opacity: 0.12; }
+}
+
+@keyframes voidGlowPulse {
+  0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.3); }
+}
+
+@keyframes voidCoreIn {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  30% { opacity: 1; }
+  72% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(7); opacity: 0; }
+}
+
+/* Particelle che convergono verso il centro */
+@keyframes voidParticleIn {
+  0% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+  18% { opacity: 1; }
+  100% { transform: translate(0, 0) scale(0.15); opacity: 0; }
+}
+
+/* Particelle che si allontanano dal centro (uscita) */
+@keyframes voidParticleOut {
+  0% { transform: translate(0, 0) scale(0.15); opacity: 0; }
+  18% { opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+}
+
+/* Accessibilità: niente animazioni pesanti */
+@media (prefers-reduced-motion: reduce) {
+  .void,
+  .void.is-active,
+  .void.is-closing,
+  .void.is-active *,
+  .void.is-closing * {
+    animation: none !important;
+  }
+  .archive-portal__aura,
+  .archive-portal__ring {
+    animation: none !important;
+  }
+}

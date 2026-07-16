@@ -10,6 +10,14 @@
   const stageAmbient = document.getElementById('stageAmbient');
   const mainAmbient = document.getElementById('mainAmbient');
   const enterSound = document.getElementById('enterSound');
+  const soundToggle = document.getElementById('soundToggle');
+
+  const voidPortal = document.getElementById('voidPortal');
+  const voidParticles = document.getElementById('voidParticles');
+  const archiveSection = document.getElementById('archive');
+  const archivePortalBtn = document.getElementById('archivePortalBtn');
+  const archivePanel = document.getElementById('archivePanel');
+  const archivePanelClose = document.getElementById('archivePanelClose');
 
   if (!stage || !main) return;
 
@@ -22,10 +30,17 @@
   const ENTER_SOUND_VOLUME = 0.8;
   const FADE_MS = 1400;
 
+  const VOID_MS = 2600;
+
   let entered = false;
   let livingAwake = false;
+  let soundMuted = false;
   let revealObserver = null;
   const fadeTimers = new WeakMap();
+
+  function prefersReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
 
   function fadeAudio(el, target, duration, onDone) {
     if (!el) return;
@@ -131,6 +146,157 @@
     window.addEventListener('online', resumeAmbient);
 
     window.addEventListener('pagehide', suspendAmbient);
+  }
+
+  /* ── Sound on/off toggle (persistent, all screens) ── */
+  function setMuted(muted) {
+    soundMuted = muted;
+
+    [stageAmbient, mainAmbient, enterSound].forEach((el) => {
+      if (el) el.muted = muted;
+    });
+
+    if (soundToggle) {
+      soundToggle.classList.toggle('is-muted', muted);
+      soundToggle.setAttribute('aria-pressed', String(!muted));
+      soundToggle.setAttribute('aria-label', muted ? 'Attiva audio' : 'Disattiva audio');
+    }
+
+    try {
+      localStorage.setItem('symvolia-muted', muted ? '1' : '0');
+    } catch (err) {
+      /* storage unavailable */
+    }
+
+    if (!muted) resumeAmbient();
+  }
+
+  function bindSoundToggle() {
+    let stored = '0';
+    try {
+      stored = localStorage.getItem('symvolia-muted') || '0';
+    } catch (err) {
+      /* ignore */
+    }
+    setMuted(stored === '1');
+
+    if (soundToggle) {
+      soundToggle.addEventListener('click', () => setMuted(!soundMuted));
+    }
+  }
+
+  /* ── Void dive animation + Sound Archive portal ── */
+  let voidBusy = false;
+  let archiveOpen = false;
+  let particlesBuilt = false;
+
+  function buildVoidParticles() {
+    if (particlesBuilt || !voidParticles) return;
+
+    const count = 30;
+    const frag = document.createDocumentFragment();
+
+    for (let i = 0; i < count; i += 1) {
+      const particle = document.createElement('span');
+      particle.className = 'void__particle';
+
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 32 + Math.random() * 58;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist;
+      const size = 3 + Math.random() * 6;
+
+      particle.style.setProperty('--tx', `${tx.toFixed(1)}vmax`);
+      particle.style.setProperty('--ty', `${ty.toFixed(1)}vmax`);
+      particle.style.setProperty('--size', `${size.toFixed(1)}px`);
+      particle.style.setProperty('--delay', `${Math.floor(Math.random() * 480)}ms`);
+
+      frag.appendChild(particle);
+    }
+
+    voidParticles.appendChild(frag);
+    particlesBuilt = true;
+  }
+
+  function runVoid(closing, onMid, onDone) {
+    if (!voidPortal || prefersReducedMotion()) {
+      if (onMid) onMid();
+      if (onDone) onDone();
+      return;
+    }
+
+    buildVoidParticles();
+
+    voidPortal.classList.remove('is-active', 'is-closing');
+    void voidPortal.offsetWidth; // restart animations
+    voidPortal.classList.add(closing ? 'is-closing' : 'is-active');
+
+    window.setTimeout(() => {
+      if (onMid) onMid();
+    }, Math.round(VOID_MS * 0.46));
+
+    window.setTimeout(() => {
+      voidPortal.classList.remove('is-active', 'is-closing');
+      if (onDone) onDone();
+    }, VOID_MS);
+  }
+
+  function revealArchiveCards() {
+    if (!archivePanel) return;
+    const items = archivePanel.querySelectorAll('[data-reveal]');
+    items.forEach((el, i) => {
+      el.style.setProperty('--reveal-delay', `${(i * 0.08).toFixed(2)}s`);
+      el.classList.add('is-revealed');
+    });
+  }
+
+  function openArchive() {
+    if (voidBusy || archiveOpen || !archiveSection || !archivePanel) return;
+    voidBusy = true;
+
+    runVoid(false, () => {
+      archivePanel.hidden = false;
+      void archivePanel.offsetWidth;
+      archiveSection.classList.add('is-open');
+      archiveOpen = true;
+      if (archivePortalBtn) archivePortalBtn.setAttribute('aria-expanded', 'true');
+      revealArchiveCards();
+    }, () => {
+      voidBusy = false;
+      if (archivePanelClose) archivePanelClose.focus({ preventScroll: true });
+    });
+  }
+
+  function closeArchive() {
+    if (voidBusy || !archiveOpen || !archiveSection || !archivePanel) return;
+    voidBusy = true;
+
+    runVoid(true, () => {
+      archiveSection.classList.remove('is-open');
+      archivePanel.hidden = true;
+      archiveOpen = false;
+      if (archivePortalBtn) archivePortalBtn.setAttribute('aria-expanded', 'false');
+    }, () => {
+      voidBusy = false;
+      if (archivePortalBtn) archivePortalBtn.focus({ preventScroll: true });
+    });
+  }
+
+  function resetArchive() {
+    if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing');
+    if (archiveSection) archiveSection.classList.remove('is-open');
+    if (archivePanel) archivePanel.hidden = true;
+    if (archivePortalBtn) archivePortalBtn.setAttribute('aria-expanded', 'false');
+    archiveOpen = false;
+    voidBusy = false;
+  }
+
+  function bindArchivePortal() {
+    if (archivePortalBtn) archivePortalBtn.addEventListener('click', openArchive);
+    if (archivePanelClose) archivePanelClose.addEventListener('click', closeArchive);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && archiveOpen && !voidBusy) closeArchive();
+    });
   }
 
   function awaken() {
@@ -252,6 +418,8 @@
     fadeAudio(mainAmbient, 0, FADE_MS);
     startStageAmbient();
 
+    resetArchive();
+
     document.documentElement.classList.remove('is-stage-alive');
     document.body.classList.remove('is-stage-alive');
     document.body.classList.remove('is-entered');
@@ -341,10 +509,12 @@
     }, hideDelay);
   }
 
+  bindSoundToggle();
   startStageAmbient();
   bindAmbientFallback();
   bindAmbientLifecycle();
   bindSectionNavigation();
+  bindArchivePortal();
   window.setTimeout(showEnterCta, ENTER_CTA_MS);
 
   if (enterBtn) {
