@@ -1,6 +1,7 @@
 /**
- * Symvolia — Cinematic Intro Timeline
- * One continuous breath. Promise phases, transform/opacity only.
+ * Symvolia — Cinematic Eye Opening
+ * Requiem-weight lids · amber–olive iris · canvas grain
+ * ENTER → homepage (sigil), never library
  */
 (function () {
   'use strict';
@@ -16,10 +17,10 @@
   if (!cine) return;
 
   const eye = document.getElementById('cineEye');
-  const iris = cine.querySelector('.eye__iris');
-  const pupil = cine.querySelector('.eye__pupil');
-  const ambient = cine.querySelector('.cine__ambient');
+  const pupil = document.getElementById('cinePupil');
+  const pupilDepth = cine.querySelector('.pupil-depth');
   const vignette = cine.querySelector('.cine__vignette');
+  const noiseCanvas = document.getElementById('eyeNoise');
   const mark = cine.querySelector('.cine__mark');
   const letters = Array.from(cine.querySelectorAll('.cine__letter'));
   const tagline = cine.querySelector('.cine__tagline');
@@ -34,6 +35,7 @@
     skipped: false,
     destroyed: false,
     _willChange: [],
+    _noiseRaf: 0,
 
     play() {
       if (this.playing || this.destroyed) return this._run();
@@ -48,6 +50,7 @@
     destroy() {
       this.destroyed = true;
       this.playing = false;
+      if (this._noiseRaf) cancelAnimationFrame(this._noiseRaf);
       this._clearWillChange();
       cleanup();
     },
@@ -80,7 +83,11 @@
 
     _clearWillChange() {
       this._willChange.forEach((el) => {
-        try { el.style.willChange = 'auto'; } catch (_) { /* */ }
+        try {
+          el.style.willChange = 'auto';
+        } catch (_) {
+          /* */
+        }
       });
       this._willChange = [];
     },
@@ -90,12 +97,6 @@
     if (!el) return;
     el.classList.add('is-shown');
     el.style.visibility = 'visible';
-  }
-
-  function setOpacityTransform(el, opacity, transform) {
-    if (!el) return;
-    el.style.opacity = String(opacity);
-    if (transform != null) el.style.transform = transform;
   }
 
   function animateTo(el, { opacity, transform, duration, easing, delayMs }) {
@@ -110,12 +111,55 @@
           if (opacity != null) el.style.opacity = String(opacity);
           if (transform != null) el.style.transform = transform;
         });
-        window.setTimeout(() => {
-          el.style.willChange = 'auto';
-          resolve();
-        }, duration + 32);
+        window.setTimeout(() => resolve(), duration + 32);
       }, d);
     });
+  }
+
+  /* ── Film grain (canvas) ── */
+  function initNoise() {
+    if (!noiseCanvas || reduced) return;
+    const ctx = noiseCanvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+
+    let w = 0;
+    let h = 0;
+    let frame = 0;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      w = Math.ceil(window.innerWidth / 2);
+      h = Math.ceil(window.innerHeight / 2);
+      noiseCanvas.width = w;
+      noiseCanvas.height = h;
+      noiseCanvas.style.width = '100%';
+      noiseCanvas.style.height = '100%';
+      void dpr;
+    };
+
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    const tick = () => {
+      if (timeline.destroyed) return;
+      frame += 1;
+      // Update every 3rd frame — organic flicker, cheaper
+      if (frame % 3 === 0) {
+        const img = ctx.createImageData(w, h);
+        const data = img.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const v = (Math.random() * 255) | 0;
+          data[i] = v;
+          data[i + 1] = v;
+          data[i + 2] = v;
+          data[i + 3] = 28 + ((Math.random() * 20) | 0);
+        }
+        ctx.putImageData(img, 0, 0);
+      }
+      timeline._noiseRaf = requestAnimationFrame(tick);
+    };
+
+    timeline._noiseRaf = requestAnimationFrame(tick);
   }
 
   /* ── Phase 0 — preload ── */
@@ -124,11 +168,7 @@
     root.classList.add('is-cine', 'loading');
     body.style.overflow = 'hidden';
 
-    const assets = [
-      'assets/logo.png',
-      'assets/logo.svg',
-      'assets/logo-sigil.png',
-    ];
+    const assets = ['assets/logo.png', 'assets/logo.svg', 'assets/logo-sigil.png'];
     await Promise.all(
       assets.map(
         (src) =>
@@ -140,7 +180,6 @@
       )
     );
 
-    // Wait for full window load (fonts + remaining)
     if (document.readyState !== 'complete') {
       await new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
     }
@@ -149,73 +188,52 @@
     show(cine);
     cine.style.opacity = '1';
     cine.style.visibility = 'visible';
-    await delay(420); // remainder of 0–500ms preload feel
+    initNoise();
+    await delay(480);
   }
 
-  /* ── Phase 1 — eye birth ── */
+  /* ── Phase 1 — eye birth (Requiem) ── */
   async function phase1() {
     timeline.currentPhase = 1;
     show(eye);
     eye.style.opacity = '1';
     eye.style.visibility = 'visible';
-    timeline._markWillChange(eye, 'transform, opacity');
-    timeline._markWillChange(iris, 'transform, opacity');
-    timeline._markWillChange(pupil, 'transform');
-    timeline._markWillChange(ambient, 'transform, opacity');
+    timeline._markWillChange(eye, 'opacity');
 
-    // Lids open (CSS classes with staggered delay)
+    // Darkness first — lids still shut, iris barely there
+    await delay(200);
+
+    // Lids part with mass; iris brightens in parallel
     eye.classList.add('is-open');
 
-    // Ambient glow
-    if (ambient) {
-      ambient.style.transition = 'transform 1200ms var(--ease-organic), opacity 1200ms var(--ease-organic)';
-      requestAnimationFrame(() => {
-        ambient.style.opacity = '1';
-        ambient.style.transform = 'scale(18)';
-      });
-    }
-
-    // Iris expand — delay 800ms after lids start
-    await delay(800);
+    // Pupil still dilated while lids open
+    await delay(1100);
     if (timeline.skipped) return;
-    if (iris) {
-      iris.style.transition =
-        'transform 1200ms var(--ease-spring), opacity 900ms var(--ease-organic)';
-      requestAnimationFrame(() => {
-        iris.style.opacity = '1';
-        iris.style.transform = 'translate(-50%, -50%) scale(1)';
-      });
-    }
 
-    // Pupil contracts when iris ~80% (800+960≈1760 from lids; from iris start: 960ms)
-    await delay(960);
+    // Light hits — pupil contracts
+    eye.classList.add('is-pupil-ready');
+
+    await delay(1000);
     if (timeline.skipped) return;
-    if (pupil) {
-      pupil.style.transition = 'transform 600ms var(--ease-standard), width 600ms var(--ease-standard), height 600ms var(--ease-standard)';
-      requestAnimationFrame(() => {
-        pupil.style.width = '35%';
-        pupil.style.height = '35%';
-        pupil.style.transform = 'translate(-50%, -50%) scale(1)';
-      });
-    }
 
-    // Finish eye-open window (~2800 from load start of phase1; lids 1800 + lead)
-    await delay(640);
     if (vignette) {
       show(vignette);
-      vignette.style.transition = 'opacity 900ms var(--ease-organic)';
+      vignette.style.transition = 'opacity 1100ms var(--ease-organic)';
       vignette.style.opacity = '1';
     }
+
+    // Hold on the open eye
+    await delay(400);
   }
 
-  /* ── Phase 2 — breathing ── */
+  /* ── Phase 2 — living breath ── */
   function phase2() {
     timeline.currentPhase = 2;
     if (reduced || timeline.skipped) return;
     eye.classList.add('is-breathing', 'is-iris-breathing', 'is-pupil-breathing');
   }
 
-  /* ── Phase 3 — logo & text ── */
+  /* ── Phase 3 — brand ── */
   async function phase3() {
     timeline.currentPhase = 3;
     if (timeline.skipped) return;
@@ -224,7 +242,8 @@
     if (wordmark) {
       wordmark.style.letterSpacing = '0.3em';
       wordmark.style.textIndent = '0.3em';
-      wordmark.style.transition = 'letter-spacing 900ms var(--ease-organic), text-indent 900ms var(--ease-organic)';
+      wordmark.style.transition =
+        'letter-spacing 900ms var(--ease-organic), text-indent 900ms var(--ease-organic)';
       requestAnimationFrame(() => {
         wordmark.style.letterSpacing = '0.42em';
         wordmark.style.textIndent = '0.42em';
@@ -261,7 +280,7 @@
     });
   }
 
-  /* ── Phase 4 — enter button ── */
+  /* ── Phase 4 — enter ── */
   let phase4Done = false;
 
   async function phase4() {
@@ -285,7 +304,9 @@
 
     try {
       window.dispatchEvent(new CustomEvent('symvolia:intro-complete', { detail: { cine: true } }));
-    } catch (_) { /* */ }
+    } catch (_) {
+      /* */
+    }
   }
 
   async function jumpToPhase4() {
@@ -293,32 +314,17 @@
     timeline.skipped = true;
     timeline.currentPhase = 4;
 
-    // Snap eye open
     show(eye);
     eye.style.opacity = '1';
     eye.style.visibility = 'visible';
-    eye.classList.add('is-open');
+    eye.classList.add('is-open', 'is-pupil-ready');
     eye.classList.remove('is-closing');
-    if (iris) {
-      iris.style.transition = 'none';
-      iris.style.opacity = '1';
-      iris.style.transform = 'translate(-50%, -50%) scale(1)';
-    }
-    if (pupil) {
-      pupil.style.transition = 'none';
-      pupil.style.width = '35%';
-      pupil.style.height = '35%';
-    }
-    if (ambient) {
-      ambient.style.opacity = '1';
-      ambient.style.transform = 'scale(18)';
-    }
+
     if (vignette) {
       show(vignette);
       vignette.style.opacity = '1';
     }
 
-    // Show brand instantly (soft fade 280ms)
     [mark, ...letters, tagline].forEach((el) => {
       if (!el) return;
       show(el);
@@ -336,15 +342,7 @@
     cine.classList.add('cine--static');
     show(eye);
     eye.style.opacity = '1';
-    eye.classList.add('is-open');
-    if (iris) {
-      iris.style.opacity = '1';
-      iris.style.transform = 'translate(-50%, -50%) scale(1)';
-    }
-    if (pupil) {
-      pupil.style.width = '35%';
-      pupil.style.height = '35%';
-    }
+    eye.classList.add('is-open', 'is-pupil-ready');
     [mark, ...letters, tagline, vignette].forEach((el) => {
       if (!el) return;
       show(el);
@@ -354,13 +352,12 @@
     await phase4();
   }
 
-  /* ── Phase 5 — enter transition ── */
+  /* ── Phase 5 — ENTER → homepage ── */
   async function phase5() {
     timeline.currentPhase = 5;
     unlockSkip = false;
     if (enterBtn) enterBtn.disabled = true;
 
-    // Step 1 — button out
     if (enterBtn) {
       enterBtn.classList.remove('is-visible');
       enterBtn.style.transition = 'opacity 150ms ease-in, transform 150ms ease-in';
@@ -368,7 +365,6 @@
       enterBtn.style.transform = 'translate3d(-50%, 0, 0) scale(0.9)';
     }
 
-    // Step 2 — text reverse stagger
     const textOut = async (el, wait) => {
       if (!el) return;
       await delay(wait);
@@ -381,22 +377,11 @@
     rev.forEach((letter, i) => textOut(letter, 40 + i * 40));
     textOut(mark, 40 + rev.length * 40);
 
-    // Step 3 — eye closes + pupil dilates
     await delay(200);
-    eye.classList.remove('is-breathing', 'is-iris-breathing', 'is-pupil-breathing', 'is-open');
+    eye.classList.remove('is-breathing', 'is-iris-breathing', 'is-pupil-breathing', 'is-open', 'is-pupil-ready');
     eye.classList.add('is-closing');
-    if (pupil) {
-      pupil.style.transition = 'width 400ms var(--ease-close), height 400ms var(--ease-close), transform 400ms var(--ease-close)';
-      pupil.style.width = '70%';
-      pupil.style.height = '70%';
-    }
-    if (ambient) {
-      ambient.style.transition = 'opacity 400ms var(--ease-close)';
-      ambient.style.opacity = '0';
-    }
 
-    // Step 4 — iris wipe
-    await delay(300);
+    await delay(320);
     if (wipe) {
       wipe.style.opacity = '1';
       wipe.style.transition = 'transform 600ms var(--ease-standard)';
@@ -407,7 +392,6 @@
 
     await delay(400);
 
-    // Step 5 — land on HOMEPAGE (sigil / ouroboros), NEVER the library
     const stage = document.getElementById('stage');
     const main = document.getElementById('main');
 
@@ -424,7 +408,9 @@
     window.scrollTo(0, 0);
     try {
       if (history.replaceState) history.replaceState(null, '', '#home');
-    } catch (_) { /* */ }
+    } catch (_) {
+      /* */
+    }
 
     root.classList.remove('is-cine', 'is-intro');
     root.classList.add('is-home', 'is-journey-alive', 'is-journey-cta');
@@ -453,7 +439,9 @@
 
     try {
       window.dispatchEvent(new CustomEvent('symvolia:home-ready'));
-    } catch (_) { /* */ }
+    } catch (_) {
+      /* */
+    }
 
     await delay(500);
     cine.classList.add('is-done');
@@ -463,7 +451,6 @@
     }, 200);
   }
 
-  /* ── Cursor ── */
   function bindCursor() {
     if (!cursor || reduced) return;
     if (window.matchMedia('(pointer: coarse)').matches) return;
@@ -475,7 +462,6 @@
     timeline._cursorMove = move;
   }
 
-  /* ── Skip ── */
   let unlockSkip = true;
 
   function onSkipKey(e) {
@@ -513,10 +499,13 @@
   cine.addEventListener('click', onSkipClick);
   bindCursor();
 
-  // Noscript-like safety: if something stalls, reveal enter
   window.setTimeout(() => {
     if (timeline.currentPhase < 4 && !timeline.destroyed) jumpToPhase4();
   }, 9000);
+
+  // silence unused refs (kept for future pupil r tweaks)
+  void pupil;
+  void pupilDepth;
 
   window.SymvoliaCine = timeline;
   timeline.play();

@@ -1,29 +1,36 @@
 /* ══════════════════════════════════════════════════════════════════════
-   Symvolia — Cinematic Intro
-   One continuous breath. Transform + opacity only.
+   Symvolia — Cinematic Eye Opening
+   Requiem for a Dream · biological weight · amber–olive iris
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --color-void: #0a0a0f;
-  --color-gold: #8b6914;
-  --color-lid: #0d0d14;
-  --color-text: rgba(255, 255, 255, 0.92);
+  --void: #06040a;
+  --iris-core: #3d2008;
+  --iris-mid: #8b5e1a;
+  --iris-outer: #4a6741;
+  --iris-edge: #1a1f10;
+  --iris-gold: #c4922a;
+  --iris-green: #6b8c3e;
+  --lid-shadow: #1a0f0a;
+  --lid-skin: #2d1e14;
+  --lash-dark: #0a0806;
+  --sclera-base: #e8ddd0;
+  --pupil-black: #050303;
+  --color-text: rgba(255, 252, 245, 0.92);
   --ease-organic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-micro-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --ease-mass: cubic-bezier(0.33, 0.1, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --ease-micro-spring: cubic-bezier(0.34, 1.15, 0.64, 1);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-close: cubic-bezier(0.4, 0, 1, 1);
-  --dur-eye-open: 1800ms;
-  --dur-iris-expand: 1200ms;
-  --dur-pupil: 600ms;
-  --dur-letter: 700ms;
-  --dur-enter: 700ms;
+  --dur-lid: 2200ms;
+  --dur-iris: 1600ms;
+  --dur-pupil: 900ms;
 }
 
-/* ── Phase 0: preload / anti-flash ── */
 html,
 body {
-  background: var(--color-void) !important;
+  background: var(--void) !important;
 }
 
 html.loading,
@@ -46,7 +53,6 @@ html.loading .scroll-progress {
   opacity: 0 !important;
 }
 
-/* Hide legacy stage chrome while cinematic intro owns the viewport */
 html.is-cine .stage,
 html.is-cine .main,
 html.is-cine .scroll-progress {
@@ -62,446 +68,424 @@ html.is-cine .sound-toggle {
   z-index: 10050;
 }
 
-/* ── Cinematic shell ── */
+/* ── Shell ── */
+.cine.intro-scene,
 .cine {
   position: fixed;
   inset: 0;
   z-index: 10000;
   display: grid;
   place-items: center;
-  background: var(--color-void);
+  background: var(--void);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
 
 .cine.is-done {
   pointer-events: none;
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.01ms linear;
+  transition: opacity 400ms var(--ease-organic);
 }
 
 .cine__vignette {
   position: absolute;
   inset: 0;
+  z-index: 6;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse 55% 50% at 50% 48%,
-    transparent 0%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
   opacity: 0;
-  will-change: opacity;
+  background:
+    radial-gradient(ellipse 55% 48% at 50% 48%, transparent 20%, rgba(6, 4, 10, 0.35) 55%, rgba(6, 4, 10, 0.92) 100%);
 }
 
-.cine__ambient {
-  position: absolute;
-  left: 50%;
-  top: 46%;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgba(139, 105, 20, 0.045) 0%,
-    rgba(139, 105, 20, 0.02) 35%,
-    transparent 70%
-  );
-  transform: scale(0);
-  opacity: 0;
-  will-change: transform, opacity;
-  filter: blur(8px);
-}
-
-.cine__eye {
-  position: relative;
-  width: min(48vmin, 360px);
-  height: min(30vmin, 220px);
-  z-index: 2;
-  opacity: 0;
-  visibility: hidden;
-  will-change: transform, opacity;
-}
-
-@media (max-width: 767px) {
-  .cine__eye {
-    transform: scale(0.85);
-    transform-origin: center center;
-  }
-}
-
-.cine__eye.is-breathing {
-  animation: cine-eye-breathe 3200ms ease-in-out infinite;
-}
-
-@keyframes cine-eye-breathe {
-  0%,
-  100% { transform: scale(1); }
-  50% { transform: scale(1.008); }
-}
-
-@media (max-width: 767px) {
-  .cine__eye.is-breathing {
-    animation-name: cine-eye-breathe-mobile;
-  }
-  @keyframes cine-eye-breathe-mobile {
-    0%,
-    100% { transform: scale(0.85); }
-    50% { transform: scale(0.856); }
-  }
-}
-
-.eye__stage {
+.eye__noise-layer {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  border-radius: 50% / 62%;
-}
-
-.eye__orb {
-  position: absolute;
-  inset: 0;
-  border-radius: 50% / 62%;
-  overflow: hidden;
-  box-shadow:
-    0 0 80px rgba(0, 0, 0, 0.9),
-    inset 0 -2px 8px rgba(139, 105, 20, 0.08);
-  background: #050508;
-}
-
-.eye__iris {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 78%;
-  height: 100%;
-  margin: 0;
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0.05);
-  opacity: 0;
-  background: radial-gradient(
-    circle at 50% 48%,
-    #8b6914 0%,
-    #5c4a12 18%,
-    #2d3a1a 48%,
-    #12140f 72%,
-    #0f0f0f 88%,
-    #050505 100%
-  );
-  will-change: transform, opacity;
-}
-
-.cine__eye.is-iris-breathing .eye__iris {
-  animation: cine-iris-tilt 8000ms ease-in-out infinite;
-}
-
-@keyframes cine-iris-tilt {
-  0%,
-  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-  50% { transform: translate(-50%, -50%) scale(1) rotate(0.8deg); }
-}
-
-.eye__fibers {
-  position: absolute;
-  inset: 0;
+  z-index: 7;
   width: 100%;
   height: 100%;
-  opacity: 0.15;
   pointer-events: none;
+  opacity: 0.14;
+  mix-blend-mode: soft-light;
 }
 
-.eye__pupil {
+/* ── Eye container — extreme close-up ── */
+.eye-container {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 70%;
-  height: 70%;
-  border-radius: 50%;
-  background: #000;
-  box-shadow: 0 0 2px 2px rgba(26, 10, 0, 0.4);
-  transform: translate(-50%, -50%) scale(1);
-  will-change: transform;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.08);
 }
 
-.cine__eye.is-pupil-breathing .eye__pupil {
-  animation: cine-pupil-micro 4000ms ease-in-out infinite;
+.eye-container.is-shown {
+  visibility: visible;
 }
 
-@keyframes cine-pupil-micro {
+.eye__void {
+  position: absolute;
+  inset: 0;
+  background: var(--void);
+  z-index: 0;
+}
+
+.eye__assembly {
+  position: relative;
+  z-index: 1;
+  width: min(110vmin, 880px);
+  height: min(110vmin, 880px);
+  transform: scale(0.78);
+  opacity: 0.12;
+  filter: brightness(0.12) contrast(1.1) saturate(0.7);
+  transition:
+    transform var(--dur-iris) var(--ease-mass),
+    opacity var(--dur-iris) var(--ease-organic),
+    filter var(--dur-iris) var(--ease-organic);
+}
+
+.eye-container.is-open .eye__assembly {
+  transform: scale(1.05);
+  opacity: 1;
+  filter: brightness(1.05) contrast(1.18) saturate(1.15);
+}
+
+.eye__iris-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.pupil-base,
+.pupil-depth {
+  transform-origin: 200px 200px;
+  transform-box: fill-box;
+  transform: scale(1);
+  transition: transform var(--dur-pupil) var(--ease-standard);
+}
+
+.eye-container.is-open.is-pupil-ready .pupil-base,
+.eye-container.is-open.is-pupil-ready .pupil-depth {
+  transform: scale(0.58);
+}
+
+.eye-container.is-closing .pupil-base,
+.eye-container.is-closing .pupil-depth {
+  transform: scale(1.15);
+  transition: transform 400ms var(--ease-close);
+}
+
+.iris-fibers {
+  opacity: 0.35;
+  transition: opacity 1400ms var(--ease-organic);
+}
+
+.eye-container.is-open .iris-fibers {
+  opacity: 0.65;
+}
+
+.corneal-gloss,
+.corneal-gloss-small {
+  opacity: 0;
+  transition: opacity 1200ms var(--ease-organic) 600ms;
+}
+
+.eye-container.is-open .corneal-gloss,
+.eye-container.is-open .corneal-gloss-small {
+  opacity: 1;
+}
+
+/* Breathing */
+@keyframes eye-breathe {
   0%,
-  100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(0.97); }
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.012);
+  }
 }
 
-/* Lids — almond aperture, soft lash edge */
+@keyframes iris-breathe {
+  0%,
+  100% {
+    filter: brightness(1) contrast(1.08);
+  }
+  50% {
+    filter: brightness(1.04) contrast(1.1);
+  }
+}
+
+@keyframes pupil-micro {
+  0%,
+  100% {
+    transform: scale(0.58);
+  }
+  50% {
+    transform: scale(0.555);
+  }
+}
+
+.eye-container.is-breathing .eye__assembly {
+  animation: eye-breathe 5.5s var(--ease-organic) infinite;
+}
+
+.eye-container.is-iris-breathing .eye__assembly {
+  animation: eye-breathe 5.5s var(--ease-organic) infinite, iris-breathe 6.2s var(--ease-organic) infinite;
+}
+
+.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-base,
+.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-depth {
+  animation: pupil-micro 4.8s var(--ease-organic) infinite;
+}
+
+/* ── Eyelids — biological mass ── */
+.eye__lids {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .eye__lid {
   position: absolute;
-  left: -4%;
-  right: -4%;
+  left: 0;
+  right: 0;
   height: 58%;
-  z-index: 5;
-  background: linear-gradient(
-    to bottom,
-    var(--color-lid) 0%,
-    var(--color-lid) 78%,
-    rgba(13, 13, 20, 0.92) 100%
-  );
-  filter: blur(0.5px);
+  transition: transform var(--dur-lid) var(--ease-mass);
   will-change: transform;
-  pointer-events: none;
+}
+
+.eye__lid svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .eye__lid--upper {
-  top: -6%;
-  border-radius: 0 0 50% 50% / 0 0 42% 42%;
-  transform: translate3d(0, 48%, 0);
-  box-shadow: inset 0 -6px 10px rgba(0, 0, 0, 0.35);
+  top: 0;
+  transform: translate3d(0, 0, 0);
+  box-shadow: 0 18px 40px rgba(6, 4, 10, 0.55);
 }
 
 .eye__lid--lower {
-  bottom: -6%;
-  border-radius: 50% 50% 0 0 / 42% 42% 0 0;
-  transform: translate3d(0, -48%, 0);
-  background: linear-gradient(
-    to top,
-    var(--color-lid) 0%,
-    var(--color-lid) 78%,
-    rgba(13, 13, 20, 0.92) 100%
-  );
-  box-shadow: inset 0 6px 10px rgba(0, 0, 0, 0.35);
+  bottom: 0;
+  transform: translate3d(0, 0, 0);
+  box-shadow: 0 -14px 36px rgba(6, 4, 10, 0.5);
 }
 
-.cine__eye.is-open .eye__lid--upper {
-  transform: translate3d(0, -62%, 0);
-  transition: transform var(--dur-eye-open) var(--ease-organic);
+/* Rest open — partial retract = almond aperture, not lids off-frame */
+.eye-container.is-open .eye__lid--upper {
+  transform: translate3d(0, -42%, 0);
 }
 
-.cine__eye.is-open .eye__lid--lower {
-  transform: translate3d(0, 42%, 0);
-  transition: transform var(--dur-eye-open) var(--ease-organic);
-  transition-delay: 120ms;
+.eye-container.is-open .eye__lid--lower {
+  transform: translate3d(0, 44%, 0);
+  transition-delay: 140ms;
 }
 
-.cine__eye.is-closing .eye__lid--upper {
-  transform: translate3d(0, 48%, 0);
-  transition: transform 400ms var(--ease-close);
-  transition-delay: 0ms;
+.eye-container.is-closing .eye__lid--upper {
+  transform: translate3d(0, 0, 0);
+  transition-duration: 520ms;
+  transition-timing-function: var(--ease-close);
 }
 
-.cine__eye.is-closing .eye__lid--lower {
-  transform: translate3d(0, -48%, 0);
-  transition: transform 400ms var(--ease-close);
-  transition-delay: 0ms;
+.eye-container.is-closing .eye__lid--lower {
+  transform: translate3d(0, 0, 0);
+  transition-duration: 520ms;
+  transition-delay: 40ms;
+  transition-timing-function: var(--ease-close);
+}
+
+.eye-container.is-closing .eye__assembly {
+  transform: scale(0.88);
+  opacity: 0.35;
+  filter: brightness(0.35);
+  transition-duration: 500ms;
+  transition-timing-function: var(--ease-close);
+}
+
+/* ── Brand ── */
+.cine__brand {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  transform: translate3d(-50%, 0, 0);
+  pointer-events: none;
+  text-align: center;
 }
 
 .cine__mark {
-  width: min(56px, 12vw);
-  height: min(56px, 12vw);
+  width: 52px;
+  height: 52px;
   opacity: 0;
-  visibility: hidden;
-  transform: translate3d(0, 12px, 0);
-  will-change: transform, opacity;
-  filter: drop-shadow(0 0 40px rgba(139, 105, 20, 0.2));
-  overflow: hidden;
-  border-radius: 50%;
+  transform: translate3d(0, 14px, 0);
+  filter: drop-shadow(0 0 18px rgba(139, 94, 26, 0.25));
 }
 
 .cine__mark img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  /* Extract sigil feel from logo crop */
-  filter: brightness(1.15) contrast(1.05);
+  object-fit: contain;
 }
 
 .cine__wordmark {
   margin: 0;
-  padding: 0;
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(1.35rem, 4.2vw, 2.35rem);
+  font-size: clamp(1.35rem, 3.2vw, 2rem);
   letter-spacing: 0.42em;
   text-indent: 0.42em;
   text-transform: uppercase;
-  color: var(--color-text);
-  text-shadow: 0 0 40px rgba(139, 105, 20, 0.2);
-  display: flex;
-  justify-content: center;
-  gap: 0;
+  color: rgba(255, 248, 238, 0.9);
 }
 
 .cine__letter {
   display: inline-block;
   opacity: 0;
-  visibility: hidden;
-  transform: translate3d(0, 8px, 0);
-  will-change: transform, opacity;
+  transform: translate3d(0, 12px, 0);
 }
 
 .cine__tagline {
-  margin: 0;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(0.85rem, 2.2vw, 1.05rem);
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.72);
-  text-shadow: 0 0 40px rgba(139, 105, 20, 0.2);
+  margin: 0.15rem 0 0;
+  font-family: 'Nothing You Could Do', cursive;
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  color: rgba(196, 146, 42, 0.55);
   opacity: 0;
-  visibility: hidden;
-  transform: translate3d(0, 6px, 0);
-  will-change: transform, opacity;
+  transform: translate3d(0, 10px, 0);
+}
+
+.cine__brand.is-shown .cine__mark,
+.cine__mark.is-shown,
+.cine__letter.is-shown,
+.cine__tagline.is-shown {
+  visibility: visible;
 }
 
 /* ── Enter ── */
 .cine__enter {
   position: absolute;
   left: 50%;
-  bottom: max(8vh, 2.5rem);
-  transform: translate3d(-50%, 0, 0) scale(0.94);
-  z-index: 4;
-  appearance: none;
-  background: transparent;
-  border: 1px solid rgba(139, 105, 20, 0.5);
-  padding: 14px 48px;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 0.78rem;
-  font-weight: 400;
-  letter-spacing: 0.25em;
-  text-indent: 0.25em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
+  bottom: max(7vh, 2.5rem);
+  z-index: 9;
+  transform: translate3d(-50%, 12px, 0) scale(0.94);
   opacity: 0;
   visibility: hidden;
-  cursor: none;
-  will-change: transform, opacity;
+  appearance: none;
+  border: 1px solid rgba(196, 146, 42, 0.35);
+  background: rgba(6, 4, 10, 0.35);
+  color: rgba(255, 248, 238, 0.88);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.8rem;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   transition:
-    border-color 400ms var(--ease-organic),
-    background-color 400ms var(--ease-organic),
-    color 400ms var(--ease-organic),
-    box-shadow 400ms var(--ease-organic),
-    transform 400ms var(--ease-organic);
+    opacity 700ms var(--ease-micro-spring),
+    transform 700ms var(--ease-micro-spring),
+    border-color 300ms ease,
+    background 300ms ease;
 }
 
+.cine__enter.is-shown,
 .cine__enter.is-visible {
-  animation: cine-enter-border 2400ms ease-in-out infinite;
-}
-
-@keyframes cine-enter-border {
-  0%,
-  100% { border-color: rgba(139, 105, 20, 0.5); }
-  50% { border-color: rgba(139, 105, 20, 0.8); }
+  visibility: visible;
 }
 
 .cine__enter:hover,
 .cine__enter:focus-visible {
-  border-color: rgba(139, 105, 20, 0.9);
-  background: rgba(139, 105, 20, 0.08);
-  color: rgba(255, 255, 255, 1);
-  box-shadow: inset 0 0 20px rgba(139, 105, 20, 0.1);
-  transform: translate3d(-50%, 0, 0) scale(1.02);
+  border-color: rgba(196, 146, 42, 0.7);
+  background: rgba(26, 15, 10, 0.55);
   outline: none;
-  animation: none;
 }
 
 .cine__enter-label--tap {
   display: none;
 }
 
-@media (max-width: 767px), (pointer: coarse) {
-  .cine__enter-label--desk { display: none; }
-  .cine__enter-label--tap { display: inline; }
-  html.is-cine body {
-    cursor: auto;
+@media (pointer: coarse) {
+  .cine__enter-label--desk {
+    display: none;
   }
-  .cine__enter {
-    cursor: pointer;
-  }
-  .cine__cursor {
-    display: none !important;
+  .cine__enter-label--tap {
+    display: inline;
   }
 }
 
-/* Custom cursor */
+/* ── Wipe + cursor ── */
+.cine__wipe {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1a1208 0%, var(--void) 70%);
+  transform: scale(0);
+  opacity: 0;
+  z-index: 12;
+  pointer-events: none;
+}
+
 .cine__cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
   border-radius: 50%;
-  background: rgba(139, 105, 20, 0.8);
+  background: rgba(196, 146, 42, 0.55);
+  box-shadow: 0 0 12px rgba(196, 146, 42, 0.35);
   pointer-events: none;
   z-index: 10060;
   opacity: 0;
-  transform: translate3d(-100px, -100px, 0);
-  will-change: transform;
+  mix-blend-mode: screen;
 }
 
-/* Iris wipe */
-.cine__wipe {
-  position: fixed;
-  left: 50%;
-  top: 46%;
-  width: 24px;
-  height: 24px;
-  margin: -12px 0 0 -12px;
-  border-radius: 50%;
-  background: var(--color-void);
-  transform: scale(0);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 10040;
-  will-change: transform, opacity;
+/* Reduced motion */
+.cine--static .eye__assembly,
+.cine--static .pupil-base,
+.cine--static .pupil-depth {
+  transition: none !important;
+  animation: none !important;
 }
 
-/* Active / revealed helpers driven by JS */
-.cine .is-shown {
-  visibility: visible !important;
+.cine--static .eye__lid {
+  transition: none !important;
 }
 
-/* Noscript / reduced: static open eye + enter */
-@media (prefers-reduced-motion: reduce) {
-  .cine__eye.is-breathing,
-  .cine__eye.is-iris-breathing .eye__iris,
-  .cine__eye.is-pupil-breathing .eye__pupil,
-  .cine__enter.is-visible {
-    animation: none !important;
+@media (max-width: 640px) {
+  .eye__assembly {
+    width: min(108vmin, 100vw);
+    height: min(108vmin, 100vw);
+  }
+
+  .cine__brand {
+    top: 62%;
   }
 }
 
-.cine--static .cine__eye,
-.cine--static .cine__mark,
-.cine--static .cine__letter,
-.cine--static .cine__tagline,
-.cine--static .cine__enter,
-.cine--static .cine__vignette {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-}
-
-.cine--static .eye__lid--upper {
-  transform: translate3d(0, -60%, 0) !important;
-}
-
-.cine--static .eye__lid--lower {
-  transform: translate3d(0, 40%, 0) !important;
-}
-
-.cine--static .eye__iris {
-  transform: translate(-50%, -50%) scale(1) !important;
-  opacity: 1 !important;
-}
-
-.cine--static .eye__pupil {
-  width: 35%;
-  height: 35%;
+@media (prefers-reduced-motion: reduce) {
+  .eye-container.is-breathing .eye__assembly,
+  .eye-container.is-iris-breathing .eye__assembly,
+  .eye-container.is-pupil-breathing .pupil-base,
+  .eye-container.is-pupil-breathing .pupil-depth {
+    animation: none !important;
+  }
 }

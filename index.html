@@ -3,59 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0f">
+  <meta name="theme-color" content="#06040a">
   <link rel="canonical" href="https://symvolia.github.io/symvolia-platform/">
   <meta name="description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
   <title>Symvolia — The Echo of your Own Soul</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=31">
-  <link rel="stylesheet" href="css/textures.css?v=31">
-  <link rel="stylesheet" href="css/alive.css?v=31">
-  <link rel="stylesheet" href="css/void.css?v=31">
-  <link rel="stylesheet" href="css/cinematic-intro.css?v=2">
+  <link rel="stylesheet" href="css/style.css?v=32">
+  <link rel="stylesheet" href="css/textures.css?v=32">
+  <link rel="stylesheet" href="css/alive.css?v=32">
+  <link rel="stylesheet" href="css/void.css?v=32">
+  <link rel="stylesheet" href="css/cinematic-intro.css?v=10">
   <link rel="stylesheet" href="css/home-reveal.css?v=3">
-  <link rel="stylesheet" href="css/ouroboros.css?v=31">
-  <link rel="stylesheet" href="css/design-system.css?v=31">
-  <link rel="stylesheet" href="css/environment.css?v=31">
-  <link rel="stylesheet" href="css/responsive.css?v=31">
-  <style>html,body{background:#0a0a0f!important}</style>
+  <link rel="stylesheet" href="css/ouroboros.css?v=32">
+  <link rel="stylesheet" href="css/design-system.css?v=32">
+  <link rel="stylesheet" href="css/environment.css?v=32">
+  <link rel="stylesheet" href="css/responsive.css?v=32">
+  <style>html,body{background:#06040a!important}</style>
   <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
 </head>
 <body class="esoteric-surface">
 
   <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollProgressBar"></div></div>
 
-  <div class="cine" id="cineIntro" role="presentation">
+  <div class="cine intro-scene" id="cineIntro" role="presentation">
+    <canvas class="eye__noise-layer" id="eyeNoise" aria-hidden="true"></canvas>
     <div class="cine__vignette" aria-hidden="true"></div>
-    <div class="cine__ambient" aria-hidden="true"></div>
 
-    <div class="cine__eye" id="cineEye" aria-hidden="true">
-      <div class="eye__stage">
-        <div class="eye__orb">
-          <div class="eye__iris">
-            <svg class="eye__fibers" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-              <g stroke="rgba(255,220,160,0.9)" stroke-width="0.35" fill="none">
-                <line x1="50" y1="50" x2="50" y2="8"/>
-                <line x1="50" y1="50" x2="71" y2="14"/>
-                <line x1="50" y1="50" x2="86" y2="29"/>
-                <line x1="50" y1="50" x2="92" y2="50"/>
-                <line x1="50" y1="50" x2="86" y2="71"/>
-                <line x1="50" y1="50" x2="71" y2="86"/>
-                <line x1="50" y1="50" x2="50" y2="92"/>
-                <line x1="50" y1="50" x2="29" y2="86"/>
-                <line x1="50" y1="50" x2="14" y2="71"/>
-                <line x1="50" y1="50" x2="8" y2="50"/>
-                <line x1="50" y1="50" x2="14" y2="29"/>
-                <line x1="50" y1="50" x2="29" y2="14"/>
-              </g>
-            </svg>
-            <div class="eye__pupil" aria-hidden="true"></div>
-          </div>
+    <div class="eye-container" id="cineEye" aria-hidden="true">
+      <div class="eye__void" aria-hidden="true"></div>
+
+      <div class="eye__assembly">
+        <svg class="eye__iris-svg" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+          <defs>
+            <radialGradient id="irisGrad" cx="50%" cy="45%">
+              <stop offset="0%" stop-color="#3d2008"/>
+              <stop offset="25%" stop-color="#8B5E1A"/>
+              <stop offset="55%" stop-color="#7a7a2a"/>
+              <stop offset="75%" stop-color="#4a6741"/>
+              <stop offset="90%" stop-color="#2d3d20"/>
+              <stop offset="100%" stop-color="#1a1f10"/>
+            </radialGradient>
+            <radialGradient id="limbalRing" cx="50%" cy="50%">
+              <stop offset="70%" stop-color="transparent"/>
+              <stop offset="88%" stop-color="rgba(10,8,6,0.3)"/>
+              <stop offset="100%" stop-color="rgba(5,3,2,0.9)"/>
+            </radialGradient>
+            <radialGradient id="scleraGrad" cx="50%" cy="42%">
+              <stop offset="0%" stop-color="#e8ddd0"/>
+              <stop offset="40%" stop-color="#d4c8bc"/>
+              <stop offset="75%" stop-color="#b8a898"/>
+              <stop offset="100%" stop-color="#8a7060"/>
+            </radialGradient>
+            <radialGradient id="cornealGloss" cx="38%" cy="32%">
+              <stop offset="0%" stop-color="rgba(255,252,245,0.42)"/>
+              <stop offset="35%" stop-color="rgba(255,252,245,0.14)"/>
+              <stop offset="100%" stop-color="rgba(255,252,245,0)"/>
+            </radialGradient>
+            <radialGradient id="pupilDepthGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#0f0405"/>
+              <stop offset="100%" stop-color="#050303"/>
+            </radialGradient>
+            <filter id="irisTexture" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="turbulence" baseFrequency="0.9 0.015" numOctaves="4" seed="8" result="noise"/>
+              <feColorMatrix type="saturate" values="3" in="noise" result="coloredNoise"/>
+              <feBlend in="SourceGraphic" in2="coloredNoise" mode="overlay"/>
+            </filter>
+            <clipPath id="irisClip"><circle cx="200" cy="200" r="152"/></clipPath>
+          </defs>
+
+          <ellipse class="sclera-base" cx="200" cy="200" rx="195" ry="140" fill="url(#scleraGrad)"/>
+          <g class="sclera-veins" opacity="0.4" fill="none">
+            <path d="M 60 180 Q 120 170 160 190" stroke="#c4968a" stroke-width="0.7"/>
+            <path d="M 240 185 Q 290 170 340 175" stroke="#c4968a" stroke-width="0.6"/>
+            <path d="M 80 215 Q 130 225 160 210" stroke="#b48878" stroke-width="0.5"/>
+            <path d="M 245 210 Q 295 220 335 215" stroke="#b48878" stroke-width="0.5"/>
+            <path d="M 70 155 Q 110 148 150 160" stroke="#c4a89a" stroke-width="0.45"/>
+            <path d="M 255 160 Q 300 150 345 158" stroke="#c4a89a" stroke-width="0.45"/>
+          </g>
+
+          <circle class="iris-base" cx="200" cy="200" r="152" fill="url(#irisGrad)" filter="url(#irisTexture)"/>
+
+          <g class="iris-fibers" clip-path="url(#irisClip)" fill="none" opacity="0.55">
+            <line x1="200" y1="200" x2="200" y2="48" stroke="#c4922a" stroke-width="1.1" opacity="0.55"/>
+            <line x1="200" y1="200" x2="228" y2="50" stroke="#e0b040" stroke-width="0.7" opacity="0.4"/>
+            <line x1="200" y1="200" x2="255" y2="58" stroke="#6b8c3e" stroke-width="0.9" opacity="0.45"/>
+            <line x1="200" y1="200" x2="280" y2="72" stroke="#c4922a" stroke-width="0.75" opacity="0.5"/>
+            <line x1="200" y1="200" x2="305" y2="92" stroke="#8B5E1A" stroke-width="1" opacity="0.42"/>
+            <line x1="200" y1="200" x2="325" y2="118" stroke="#6b8c3e" stroke-width="0.85" opacity="0.48"/>
+            <line x1="200" y1="200" x2="340" y2="150" stroke="#c4922a" stroke-width="0.7" opacity="0.4"/>
+            <line x1="200" y1="200" x2="348" y2="180" stroke="#a07030" stroke-width="1.05" opacity="0.5"/>
+            <line x1="200" y1="200" x2="350" y2="200" stroke="#6b8c3e" stroke-width="0.9" opacity="0.55"/>
+            <line x1="200" y1="200" x2="348" y2="225" stroke="#c4922a" stroke-width="0.75" opacity="0.4"/>
+            <line x1="200" y1="200" x2="340" y2="255" stroke="#8B5E1A" stroke-width="1" opacity="0.45"/>
+            <line x1="200" y1="200" x2="325" y2="285" stroke="#6b8c3e" stroke-width="0.85" opacity="0.42"/>
+            <line x1="200" y1="200" x2="300" y2="312" stroke="#c4922a" stroke-width="0.7" opacity="0.5"/>
+            <line x1="200" y1="200" x2="270" y2="332" stroke="#8B5E1A" stroke-width="1.05" opacity="0.48"/>
+            <line x1="200" y1="200" x2="235" y2="345" stroke="#6b8c3e" stroke-width="0.8" opacity="0.4"/>
+            <line x1="200" y1="200" x2="200" y2="352" stroke="#c4922a" stroke-width="0.95" opacity="0.52"/>
+            <line x1="200" y1="200" x2="165" y2="345" stroke="#e0b040" stroke-width="0.7" opacity="0.4"/>
+            <line x1="200" y1="200" x2="130" y2="332" stroke="#6b8c3e" stroke-width="0.9" opacity="0.48"/>
+            <line x1="200" y1="200" x2="100" y2="312" stroke="#c4922a" stroke-width="0.75" opacity="0.45"/>
+            <line x1="200" y1="200" x2="75" y2="285" stroke="#8B5E1A" stroke-width="1" opacity="0.42"/>
+            <line x1="200" y1="200" x2="58" y2="255" stroke="#6b8c3e" stroke-width="0.85" opacity="0.5"/>
+            <line x1="200" y1="200" x2="50" y2="220" stroke="#c4922a" stroke-width="0.7" opacity="0.4"/>
+            <line x1="200" y1="200" x2="48" y2="200" stroke="#a07030" stroke-width="1.05" opacity="0.52"/>
+            <line x1="200" y1="200" x2="50" y2="175" stroke="#6b8c3e" stroke-width="0.9" opacity="0.45"/>
+            <line x1="200" y1="200" x2="58" y2="145" stroke="#c4922a" stroke-width="0.75" opacity="0.4"/>
+            <line x1="200" y1="200" x2="75" y2="115" stroke="#8B5E1A" stroke-width="1" opacity="0.48"/>
+            <line x1="200" y1="200" x2="100" y2="88" stroke="#6b8c3e" stroke-width="0.85" opacity="0.42"/>
+            <line x1="200" y1="200" x2="130" y2="68" stroke="#c4922a" stroke-width="0.7" opacity="0.5"/>
+            <line x1="200" y1="200" x2="165" y2="52" stroke="#8B5E1A" stroke-width="0.95" opacity="0.45"/>
+          </g>
+          <!-- Collarette ring near pupil -->
+          <circle cx="200" cy="200" r="88" fill="none" stroke="rgba(196,146,42,0.22)" stroke-width="6"/>
+          <circle cx="200" cy="200" r="78" fill="none" stroke="rgba(61,32,8,0.35)" stroke-width="3"/>
+
+          <circle class="limbal-ring" cx="200" cy="200" r="152" fill="url(#limbalRing)"/>
+          <circle class="pupil-base" id="cinePupil" cx="200" cy="200" r="100" fill="#050303"/>
+          <circle class="pupil-depth" cx="200" cy="200" r="82" fill="url(#pupilDepthGrad)" opacity="0.85"/>
+          <ellipse class="corneal-gloss" cx="168" cy="155" rx="42" ry="28" fill="url(#cornealGloss)" transform="rotate(-15 168 155)"/>
+          <ellipse class="corneal-gloss-small" cx="228" cy="240" rx="8" ry="6" fill="rgba(255,252,245,0.05)"/>
+        </svg>
+      </div>
+
+      <div class="eye__lids" aria-hidden="true">
+        <div class="eye__lid eye__lid--upper">
+          <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="upperLidGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#06040a"/>
+                <stop offset="40%" stop-color="#120c10"/>
+                <stop offset="78%" stop-color="#1a100c"/>
+                <stop offset="100%" stop-color="#2a1a12"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 0 L1200 0 L1200 400 Q600 200 0 400 Z" fill="url(#upperLidGrad)"/>
+            <path d="M0 400 Q600 200 1200 400" stroke="rgba(8,5,12,0.55)" stroke-width="14" fill="none" opacity="0.7"/>
+          </svg>
         </div>
-        <div class="eye__lid eye__lid--upper" aria-hidden="true"></div>
-        <div class="eye__lid eye__lid--lower" aria-hidden="true"></div>
+        <div class="eye__lid eye__lid--lower">
+          <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="lowerLidGrad" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#06040a"/>
+                <stop offset="55%" stop-color="#0f0a14"/>
+                <stop offset="100%" stop-color="#1a0f0a"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 400 L1200 400 L1200 0 Q600 200 0 0 Z" fill="url(#lowerLidGrad)"/>
+            <path d="M0 0 Q600 200 1200 0" stroke="rgba(8,5,12,0.5)" stroke-width="12" fill="none" opacity="0.65"/>
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -87,10 +187,6 @@
   </noscript>
   <script>
     window.setTimeout(function () {
-      var c = document.getElementById('cineIntro');
-      if (c && !c.classList.contains('is-done') && window.SymvoliaCine) {
-        try { window.SymvoliaCine.phases; } catch (e) {}
-      }
       document.documentElement.classList.remove('loading');
     }, 10000);
   </script>
@@ -414,6 +510,6 @@
   <script src="js/main.js?v=16" defer></script>
   <script src="js/environment.js?v=4" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
-  <script src="js/cinematic-intro.js?v=3" defer></script>
+  <script src="js/cinematic-intro.js?v=10" defer></script>
 </body>
 </html>
