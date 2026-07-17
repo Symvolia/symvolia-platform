@@ -10,12 +10,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=26">
-  <link rel="stylesheet" href="css/textures.css?v=26">
-  <link rel="stylesheet" href="css/alive.css?v=26">
-  <link rel="stylesheet" href="css/void.css?v=26">
-  <link rel="stylesheet" href="css/intro-eye.css?v=26">
-  <link rel="stylesheet" href="css/responsive.css?v=26">
+  <link rel="stylesheet" href="css/style.css?v=27">
+  <link rel="stylesheet" href="css/textures.css?v=27">
+  <link rel="stylesheet" href="css/alive.css?v=27">
+  <link rel="stylesheet" href="css/void.css?v=27">
+  <link rel="stylesheet" href="css/intro-eye.css?v=27">
+  <link rel="stylesheet" href="css/ouroboros.css?v=27">
+  <link rel="stylesheet" href="css/responsive.css?v=27">
   <script>document.documentElement.classList.add('is-intro');</script>
 </head>
 <body class="esoteric-surface">
@@ -75,7 +76,7 @@
           <div class="living__axis living__axis--v" aria-hidden="true"></div>
 
           <div class="living__ouroboros">
-            <img src="assets/ouroboros-photo.png?v=1" alt="" class="living__ouroboros-photo" aria-hidden="true">
+            <canvas class="living__ouroboros-canvas" id="ouroborosCanvas" aria-hidden="true"></canvas>
           </div>
         </div>
       </div>
@@ -353,6 +354,7 @@
   </div>
 
   <script src="js/intro-eye.js?v=1"></script>
+  <script src="js/ouroboros.js?v=1"></script>
   <script src="js/main.js?v=11"></script>
 </body>
 </html>

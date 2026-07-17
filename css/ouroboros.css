@@ -1,0 +1,20 @@
+/* ─── Symvolia — living Ouroboros (canvas choreography) ─── */
+
+/* The canvas fills the ouroboros slot; the ring itself is drawn smaller,
+   leaving room around it for glow, energy aura and the bite particle burst. */
+.living__ouroboros-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 116%;
+  height: 116%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .living__ouroboros-canvas {
+    /* JS renders a single static frame in this case. */
+  }
+}
