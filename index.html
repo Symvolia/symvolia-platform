@@ -9,15 +9,17 @@
   <title>Symvolia — The Echo of your Own Soul</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=28">
-  <link rel="stylesheet" href="css/textures.css?v=28">
-  <link rel="stylesheet" href="css/alive.css?v=28">
-  <link rel="stylesheet" href="css/void.css?v=28">
-  <link rel="stylesheet" href="css/intro-eye.css?v=28">
-  <link rel="stylesheet" href="css/ouroboros.css?v=28">
-  <link rel="stylesheet" href="css/design-system.css?v=28">
-  <link rel="stylesheet" href="css/responsive.css?v=28">
+  <link rel="stylesheet" href="css/style.css?v=30">
+  <link rel="stylesheet" href="css/textures.css?v=30">
+  <link rel="stylesheet" href="css/alive.css?v=30">
+  <link rel="stylesheet" href="css/void.css?v=30">
+  <link rel="stylesheet" href="css/intro-eye.css?v=30">
+  <link rel="stylesheet" href="css/ouroboros.css?v=30">
+  <link rel="stylesheet" href="css/design-system.css?v=30">
+  <link rel="stylesheet" href="css/environment.css?v=30">
+  <link rel="stylesheet" href="css/responsive.css?v=30">
   <script>document.documentElement.classList.add('is-intro');</script>
 </head>
 <body class="esoteric-surface">
@@ -32,14 +34,15 @@
     <button type="button" class="intro__skip" id="introSkip" aria-label="Salta introduzione">Skip · press Enter</button>
   </div>
   <script>
-    // Failsafe: se lo script dell'intro non parte, non lasciare l'overlay bloccato.
+    // Failsafe: se il portale non parte, non lasciare l'overlay bloccato.
     window.setTimeout(function () {
       var i = document.getElementById('intro');
       if (i && !i.classList.contains('is-done')) {
         i.classList.add('is-done');
         document.documentElement.classList.remove('is-intro');
+        try { window.dispatchEvent(new CustomEvent('symvolia:intro-complete')); } catch (e) {}
       }
-    }, 9000);
+    }, 14000);
   </script>
 
   <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
@@ -244,9 +247,6 @@
             Guided by ritual energy and cinematic darkness, each work invites the listener
             to surrender the senses and descend toward the essence of the true self.
           </p>
-          <p>
-            Leave expectations at the door. Let the music speak.
-          </p>
         </div>
       </div>
     </section>
@@ -356,9 +356,20 @@
     <div class="void__core" aria-hidden="true"></div>
   </div>
 
-  <script src="js/intro-eye.js?v=1"></script>
-  <script src="js/ouroboros.js?v=2"></script>
-  <script src="js/main.js?v=11"></script>
-  <script src="js/design-system.js?v=1"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="js/portal/portal-audio.js?v=2" defer></script>
+  <script src="js/ouroboros.js?v=2" defer></script>
+  <script src="js/main.js?v=14" defer></script>
+  <script src="js/environment.js?v=3" defer></script>
+  <script src="js/design-system.js?v=1" defer></script>
+  <script type="module" src="js/portal/portal-transition.js?v=6"></script>
 </body>
 </html>

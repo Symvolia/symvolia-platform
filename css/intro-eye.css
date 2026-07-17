@@ -1,7 +1,5 @@
-/* ─── Symvolia — Requiem-style cinematic eye intro (hero) ─── */
+/* ─── Symvolia — Cinematic portal intro (eye → seal, no black cuts) ─── */
 
-/* Overlay full-screen a copertura di tutto, si autoavvia al load
-   e sfuma alla fine rivelando la home (#stage) sottostante. */
 .intro {
   position: fixed;
   inset: 0;
@@ -14,11 +12,11 @@
   cursor: pointer;
 }
 
-/* Stato finale: dissolvenza e disattivazione. */
 .intro.is-done {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  background: transparent;
 }
 
 .intro__canvas {
@@ -29,7 +27,6 @@
   display: block;
 }
 
-/* Logo Symvolia nitido che compare sul nero al termine dell'animazione. */
 .intro__logo {
   position: absolute;
   top: 50%;
@@ -38,10 +35,8 @@
   transform: translate(-50%, -50%) scale(0.92);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1),
-    transform 1.6s cubic-bezier(0.19, 1, 0.22, 1);
-  filter: drop-shadow(0 0 26px rgba(255, 196, 92, 0.5))
-    drop-shadow(0 0 60px rgba(180, 120, 40, 0.35));
+  /* Seal lives inside the WebGL pupil — DOM logo stays hidden (no flash) */
+  visibility: hidden;
 }
 
 .intro__logo img {
@@ -50,12 +45,6 @@
   display: block;
 }
 
-.intro.show-logo .intro__logo {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-/* Suggerimento e pulsante skip, discreti. */
 .intro__skip {
   position: absolute;
   bottom: clamp(1.2rem, 4vh, 2.4rem);
@@ -74,7 +63,7 @@
   cursor: pointer;
   opacity: 0;
   animation: introSkipIn 1s ease forwards;
-  animation-delay: 1.4s;
+  animation-delay: 3.6s;
   transition: color 0.3s ease;
 }
 
@@ -88,10 +77,9 @@
   to { opacity: 1; }
 }
 
-/* Nasconde la home mentre l'intro è attiva (evita flash sotto la dissolvenza). */
 html.is-intro .sound-toggle {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0.55;
+  pointer-events: auto;
 }
 
 .sound-toggle {
@@ -100,12 +88,8 @@ html.is-intro .sound-toggle {
     opacity 0.8s ease;
 }
 
-/* Accessibilità: chi preferisce meno movimento salta l'intro. */
 @media (prefers-reduced-motion: reduce) {
   .intro {
     transition: none;
-  }
-  .intro:not(.is-done) {
-    /* Gestito via JS: viene marcata is-done immediatamente. */
   }
 }

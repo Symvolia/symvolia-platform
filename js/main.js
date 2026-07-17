@@ -23,12 +23,12 @@
 
   const DIVE_MS = 2600;
   const REVEAL_START_MS = 1600;
-  const ENTER_CTA_MS = 4300;
 
   const STAGE_VOLUME = 0.55;
   const MAIN_VOLUME = 0.5;
   const ENTER_SOUND_VOLUME = 0.8;
   const FADE_MS = 1400;
+  const CROSSFADE_MS = 500;
 
   const VOID_MS = 2600;
 
@@ -151,6 +151,11 @@
   /* ── Sound on/off toggle (persistent, all screens) ── */
   function setMuted(muted) {
     soundMuted = muted;
+    try {
+      window.dispatchEvent(
+        new CustomEvent('symvolia:mute-change', { detail: { muted: soundMuted } })
+      );
+    } catch (err) { /* ignore */ }
 
     [stageAmbient, mainAmbient, enterSound].forEach((el) => {
       if (el) el.muted = muted;
@@ -299,19 +304,32 @@
     });
   }
 
-  function awaken() {
+  function awaken(opts) {
     if (livingAwake) return;
     livingAwake = true;
-    playEnterSound();
+    const silent = opts && opts.silent;
+    // Siren braam only on the dive into the site — silent during auto-emergence.
+    if (!silent) playEnterSound();
     awakenLivingSymbol();
   }
 
   function handleEnter() {
+    // Opening journey auto-awakens the living symbol; Enter always dives in.
+    // Fallback: if somehow still asleep, awaken first then wait for a second press.
     if (!livingAwake) {
-      awaken();
+      awaken({ silent: false });
+      showEnterCta();
       return;
     }
     enterSite('bio');
+  }
+
+  function setAmbientLevel(level) {
+    if (soundMuted) return;
+    const el = currentAmbient();
+    if (!el || el.paused) return;
+    const target = Math.max(0, Math.min(1, level));
+    fadeAudio(el, target, CROSSFADE_MS);
   }
 
   function awakenLivingSymbol() {
@@ -392,12 +410,19 @@
         e.preventDefault();
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (window.SymvoliaEnv && typeof window.SymvoliaEnv.pulseSectionVeil === 'function') {
+          window.SymvoliaEnv.pulseSectionVeil();
+        }
         scrollToSection(id, reducedMotion ? 'auto' : 'smooth');
 
         if (history.replaceState) {
           history.replaceState(null, '', hash);
         } else {
           window.location.hash = hash;
+        }
+
+        if (window.SymvoliaEnv && typeof window.SymvoliaEnv.setMood === 'function') {
+          window.SymvoliaEnv.setMood(id);
         }
       });
     });
@@ -423,8 +448,11 @@
     document.documentElement.classList.remove('is-stage-alive');
     document.body.classList.remove('is-stage-alive');
     document.body.classList.remove('is-entered');
+    document.body.removeAttribute('data-mood');
+    document.documentElement.classList.add('is-journey-alive', 'is-journey-cta');
     main.classList.remove('is-visible');
     main.hidden = true;
+    showEnterCta();
 
     resetReveals();
 
@@ -460,11 +488,17 @@
 
     if (enterBtn) enterBtn.disabled = true;
 
+    playEnterSound();
+
     fadeAudio(stageAmbient, 0, FADE_MS);
     if (mainAmbient) {
       mainAmbient.volume = 0;
+      const p = mainAmbient.play();
+      if (p !== undefined) p.catch(() => {});
       fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
     }
+
+    document.documentElement.classList.remove('is-journey-locked', 'is-journey-cta');
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -509,13 +543,25 @@
     }, hideDelay);
   }
 
+  // Public API for the living-environment / portal orchestrators.
+  window.Symvolia = {
+    awaken,
+    showEnterCta,
+    enterSite,
+    setAmbientLevel,
+    startStageAmbient,
+    isMuted: () => soundMuted,
+    isAwake: () => livingAwake,
+    isEntered: () => entered,
+  };
+
   bindSoundToggle();
   startStageAmbient();
   bindAmbientFallback();
   bindAmbientLifecycle();
   bindSectionNavigation();
   bindArchivePortal();
-  window.setTimeout(showEnterCta, ENTER_CTA_MS);
+  // Enter CTA is revealed by environment.js after the opening journey.
 
   if (enterBtn) {
     enterBtn.addEventListener('click', handleEnter);

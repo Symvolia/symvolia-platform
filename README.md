@@ -4,19 +4,26 @@ Permanent site: **https://symvolia.github.io/symvolia-platform/**
 
 Static HTML/CSS/JS — no build step.
 
-## Publish everything (one command)
+## Opening portal
+
+Cinematic **eye → seal** metamorphosis (~9–10s): Three.js + GSAP + Web Audio.
+No black cuts · no yellow aura ring. See `docs/PORTAL-PERFORMANCE.md`.
+
+## Publish
 
 ```bash
 ./scripts/publish.sh "optional commit message"
 ```
 
-Syncs the running local copy (localhost + tunnel) **and** pushes to GitHub.
-GitHub Actions then auto-deploys to the permanent link within 1–2 minutes.
+Pushes to GitHub; Actions deploys Pages in 1–2 minutes.
+
+> Note: `symvoliaplatform.com` is not configured in DNS (NXDOMAIN).
+> Live URL is the GitHub Pages link above until a real domain is pointed at the repo.
 
 ## Local preview
 
 ```bash
-python3 -m http.server 8765
+python3 -m http.server 8777
 ```
 
 ## Temporary public link (tunnel)
