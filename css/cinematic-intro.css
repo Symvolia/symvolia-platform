@@ -146,7 +146,7 @@ html.is-cine .sound-toggle {
   z-index: 0;
 }
 
-/* Stage: extreme close-up → settle back for brand */
+/* Stage: ECU → settle — pupil stays on true viewport center */
 .eye__stage {
   position: relative;
   z-index: 1;
@@ -154,17 +154,18 @@ html.is-cine .sound-toggle {
   height: min(118vmin, 920px);
   display: grid;
   place-items: center;
-  transform: scale(1.12) translate3d(0, 2%, 0);
+  transform: scale(1.1);
   transition: transform var(--dur-settle) var(--ease-cine);
   will-change: transform;
 }
 
+/* ~iris diameter ≈ --sigil-alive so handoff lands on the seal */
 .eye-container.is-settled .eye__stage {
-  transform: scale(0.62) translate3d(0, -18%, 0);
+  transform: scale(0.5);
 }
 
 .eye-container.is-closing .eye__stage {
-  transform: scale(0.9) translate3d(0, 0, 0);
+  transform: scale(0.72);
   transition-duration: 700ms;
   transition-timing-function: var(--ease-close);
 }
@@ -338,17 +339,17 @@ html.is-cine .sound-toggle {
   transition-timing-function: var(--ease-close);
 }
 
-/* ── Brand — appears as eye settles ── */
+/* ── Brand — below centered eye, never shifts the pupil ── */
 .cine__brand {
   position: absolute;
   left: 50%;
-  top: 58%;
+  top: calc(50% + min(30vmin, 230px));
   z-index: 8;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  transform: translate3d(-50%, 8px, 0);
+  gap: 0.5rem;
+  transform: translate3d(-50%, 12px, 0);
   pointer-events: none;
   text-align: center;
   opacity: 0;
@@ -363,11 +364,7 @@ html.is-cine .sound-toggle {
 }
 
 .cine__mark {
-  width: 48px;
-  height: 48px;
-  opacity: 0;
-  transform: translate3d(0, 16px, 0) scale(0.94);
-  filter: drop-shadow(0 0 16px rgba(139, 94, 26, 0.22));
+  display: none; /* homepage seal is the pupil — no second logo here */
 }
 
 .cine__mark img {
@@ -471,16 +468,16 @@ html.is-cine .sound-toggle {
   }
 }
 
-/* ── Iris wipe → homepage (same void as stage) ── */
+/* ── Iris wipe → homepage (same void + same center as pupil/sigil) ── */
 .cine__wipe {
   position: absolute;
   left: 50%;
-  top: 46%;
+  top: 50%;
   width: 16px;
   height: 16px;
   margin: -8px 0 0 -8px;
   border-radius: 50%;
-  background: radial-gradient(circle, #1a1210 0%, #010101 55%, #010101 100%);
+  background: radial-gradient(circle, #12100e 0%, #010101 55%, #010101 100%);
   transform: scale(0);
   opacity: 0;
   z-index: 12;
@@ -526,11 +523,15 @@ html.is-cine .sound-toggle {
   }
 
   .eye-container.is-settled .eye__stage {
-    transform: scale(0.58) translate3d(0, -14%, 0);
+    transform: scale(0.48);
   }
 
   .cine__brand {
-    top: 56%;
+    top: calc(50% + min(28vmin, 200px));
+  }
+
+  .cine__enter {
+    bottom: max(5vh, 1.6rem);
   }
 }
 

@@ -19,6 +19,7 @@
   const vignette = cine.querySelector('.cine__vignette');
   const noiseCanvas = document.getElementById('eyeNoise');
   const mark = cine.querySelector('.cine__mark');
+  void mark; // kept in DOM, hidden — homepage seal is the pupil
   const letters = Array.from(cine.querySelectorAll('.cine__letter'));
   const tagline = cine.querySelector('.cine__tagline');
   const enterBtn = document.getElementById('cineEnter');
@@ -219,18 +220,9 @@
     await delay(900);
     if (timeline.skipped) return;
 
-    // Brand rises into the cleared space
+    // Brand rises into the cleared space (wordmark under centered pupil)
     timeline.currentPhase = 3;
     cine.classList.add('is-brand');
-
-    await animateTo(mark, {
-      opacity: 1,
-      transform: 'translate3d(0, 0, 0) scale(1)',
-      duration: 900,
-      easing: 'var(--ease-cine)',
-      delayMs: 0,
-    });
-    if (timeline.skipped) return;
 
     await Promise.all(
       letters.map((letter, i) =>
@@ -239,7 +231,7 @@
           transform: 'translate3d(0, 0, 0)',
           duration: 680,
           easing: 'var(--ease-soft)',
-          delayMs: 120 + i * 55,
+          delayMs: 80 + i * 55,
         })
       )
     );
@@ -250,7 +242,7 @@
       transform: 'translate3d(0, 0, 0)',
       duration: 780,
       easing: 'var(--ease-soft)',
-      delayMs: 80,
+      delayMs: 60,
     });
   }
 
@@ -288,7 +280,7 @@
       vignette.classList.add('is-shown');
     }
 
-    [mark, ...letters, tagline].forEach((el) => {
+    [...letters, tagline].forEach((el) => {
       if (!el) return;
       show(el);
       el.style.transition = 'opacity 320ms var(--ease-soft), transform 320ms var(--ease-soft)';
@@ -308,7 +300,7 @@
       show(vignette);
       vignette.classList.add('is-shown');
     }
-    [mark, ...letters, tagline].forEach((el) => {
+    [...letters, tagline].forEach((el) => {
       if (!el) return;
       show(el);
       el.style.opacity = '1';
@@ -346,28 +338,27 @@
     letters
       .slice()
       .reverse()
-      .forEach((letter, i) => fadeOut(letter, 50 + i * 35, -8));
-    fadeOut(mark, 50 + letters.length * 35, -10);
+      .forEach((letter, i) => fadeOut(letter, 40 + i * 32, -8));
 
-    await delay(280);
+    await delay(240);
 
-    // Keep is-open; is-closing overrides lids — no snap
+    // Keep is-open; is-closing overrides lids — pupil stays centered
     eye.classList.remove('is-breathing', 'is-pupil-breathing', 'is-settled');
     eye.classList.add('is-closing');
 
-    await delay(380);
+    await delay(360);
 
     if (wipe) {
       wipe.style.opacity = '1';
-      wipe.style.transition = 'transform 900ms var(--ease-cine), opacity 200ms linear';
+      wipe.style.transition = 'transform 880ms var(--ease-cine), opacity 180ms linear';
       requestAnimationFrame(() => {
-        wipe.style.transform = 'scale(90)';
+        wipe.style.transform = 'scale(95)';
       });
     }
 
-    await delay(520);
+    await delay(480);
 
-    // Prepare homepage under the wipe while still covered
+    // Prepare homepage under the wipe — awaken first so sigil = pupil center
     const stage = document.getElementById('stage');
     const main = document.getElementById('main');
 
@@ -409,9 +400,11 @@
     }
 
     if (stage) {
-      stage.classList.add('stage--home-enter');
+      stage.classList.add('stage--alive', 'stage--home-enter');
       requestAnimationFrame(() => {
-        stage.classList.add('stage--home-visible');
+        requestAnimationFrame(() => {
+          stage.classList.add('stage--home-visible');
+        });
       });
     }
 
