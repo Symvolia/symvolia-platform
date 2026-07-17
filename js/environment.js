@@ -211,26 +211,26 @@
   bindNavVeil();
 
   window.addEventListener('symvolia:intro-complete', (e) => {
-    // Portal already ran awaken / tagline / CTA — only unlock + mark done.
-    if (e && e.detail && e.detail.portal) {
+    // Cinematic intro owns Enter; only unlock journey classes.
+    if (e && e.detail && (e.detail.cine || e.detail.portal)) {
       orchestrated = true;
       html.classList.add('is-journey-alive', 'is-journey-cta');
-      html.classList.remove('is-journey-locked', 'is-intro');
+      html.classList.remove('is-journey-locked');
       return;
     }
     beginJourney();
   });
 
   // If intro was skipped / reduced / already gone when we load.
-  if (!html.classList.contains('is-intro') || reduced) {
+  if ((!html.classList.contains('is-intro') && !html.classList.contains('is-cine')) || reduced) {
     window.setTimeout(beginJourney, reduced ? 50 : 200);
   }
 
-  // Failsafe: never leave the journey locked (portal ≈ 9.6s).
+  // Failsafe: never leave the journey locked.
   window.setTimeout(() => {
     if (!orchestrated) beginJourney();
     html.classList.remove('is-journey-locked');
-  }, 14000);
+  }, 12000);
 
   window.SymvoliaEnv = {
     pulseSectionVeil,

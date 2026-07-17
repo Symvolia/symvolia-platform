@@ -3,46 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#010101">
+  <meta name="theme-color" content="#0a0a0f">
   <link rel="canonical" href="https://symvolia.github.io/symvolia-platform/">
   <meta name="description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
   <title>Symvolia — The Echo of your Own Soul</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=30">
-  <link rel="stylesheet" href="css/textures.css?v=30">
-  <link rel="stylesheet" href="css/alive.css?v=30">
-  <link rel="stylesheet" href="css/void.css?v=30">
-  <link rel="stylesheet" href="css/intro-eye.css?v=30">
-  <link rel="stylesheet" href="css/ouroboros.css?v=30">
-  <link rel="stylesheet" href="css/design-system.css?v=30">
-  <link rel="stylesheet" href="css/environment.css?v=30">
-  <link rel="stylesheet" href="css/responsive.css?v=30">
-  <script>document.documentElement.classList.add('is-intro');</script>
+  <link rel="stylesheet" href="css/style.css?v=31">
+  <link rel="stylesheet" href="css/textures.css?v=31">
+  <link rel="stylesheet" href="css/alive.css?v=31">
+  <link rel="stylesheet" href="css/void.css?v=31">
+  <link rel="stylesheet" href="css/cinematic-intro.css?v=2">
+  <link rel="stylesheet" href="css/ouroboros.css?v=31">
+  <link rel="stylesheet" href="css/design-system.css?v=31">
+  <link rel="stylesheet" href="css/environment.css?v=31">
+  <link rel="stylesheet" href="css/responsive.css?v=31">
+  <style>html,body{background:#0a0a0f!important}</style>
+  <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
 </head>
 <body class="esoteric-surface">
 
   <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollProgressBar"></div></div>
 
-  <div class="intro" id="intro" role="presentation">
-    <canvas class="intro__canvas" id="introCanvas"></canvas>
-    <div class="intro__logo" id="introLogo" aria-hidden="true">
-      <img src="assets/logo.png" alt="Symvolia" width="360" height="360">
+  <div class="cine" id="cineIntro" role="presentation">
+    <div class="cine__vignette" aria-hidden="true"></div>
+    <div class="cine__ambient" aria-hidden="true"></div>
+
+    <div class="cine__eye" id="cineEye" aria-hidden="true">
+      <div class="eye__stage">
+        <div class="eye__orb">
+          <div class="eye__iris">
+            <svg class="eye__fibers" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+              <g stroke="rgba(255,220,160,0.9)" stroke-width="0.35" fill="none">
+                <line x1="50" y1="50" x2="50" y2="8"/>
+                <line x1="50" y1="50" x2="71" y2="14"/>
+                <line x1="50" y1="50" x2="86" y2="29"/>
+                <line x1="50" y1="50" x2="92" y2="50"/>
+                <line x1="50" y1="50" x2="86" y2="71"/>
+                <line x1="50" y1="50" x2="71" y2="86"/>
+                <line x1="50" y1="50" x2="50" y2="92"/>
+                <line x1="50" y1="50" x2="29" y2="86"/>
+                <line x1="50" y1="50" x2="14" y2="71"/>
+                <line x1="50" y1="50" x2="8" y2="50"/>
+                <line x1="50" y1="50" x2="14" y2="29"/>
+                <line x1="50" y1="50" x2="29" y2="14"/>
+              </g>
+            </svg>
+            <div class="eye__pupil" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="eye__lid eye__lid--upper" aria-hidden="true"></div>
+        <div class="eye__lid eye__lid--lower" aria-hidden="true"></div>
+      </div>
     </div>
-    <button type="button" class="intro__skip" id="introSkip" aria-label="Salta introduzione">Skip · press Enter</button>
+
+    <div class="cine__brand">
+      <div class="cine__mark" aria-hidden="true">
+        <img src="assets/logo.png" alt="" width="64" height="64">
+      </div>
+      <h1 class="cine__wordmark" aria-label="Symvolia">
+        <span class="cine__letter">S</span><span class="cine__letter">Y</span><span class="cine__letter">M</span><span class="cine__letter">V</span><span class="cine__letter">O</span><span class="cine__letter">L</span><span class="cine__letter">I</span><span class="cine__letter">A</span>
+      </h1>
+      <p class="cine__tagline">The Echo of your Own Soul</p>
+    </div>
+
+    <button type="button" class="cine__enter" id="cineEnter" aria-label="Enter">
+      <span class="cine__enter-label--desk">Enter</span>
+      <span class="cine__enter-label--tap">Tap to Enter</span>
+    </button>
+
+    <div class="cine__wipe" id="cineWipe" aria-hidden="true"></div>
+    <div class="cine__cursor" id="cineCursor" aria-hidden="true"></div>
   </div>
+
+  <noscript>
+    <style>
+      html.loading, html.is-cine { overflow: auto !important; }
+      .cine { display: none !important; }
+      .stage, .sound-toggle { visibility: visible !important; opacity: 1 !important; }
+    </style>
+  </noscript>
   <script>
-    // Failsafe: se il portale non parte, non lasciare l'overlay bloccato.
     window.setTimeout(function () {
-      var i = document.getElementById('intro');
-      if (i && !i.classList.contains('is-done')) {
-        i.classList.add('is-done');
-        document.documentElement.classList.remove('is-intro');
-        try { window.dispatchEvent(new CustomEvent('symvolia:intro-complete')); } catch (e) {}
+      var c = document.getElementById('cineIntro');
+      if (c && !c.classList.contains('is-done') && window.SymvoliaCine) {
+        try { window.SymvoliaCine.phases; } catch (e) {}
       }
-    }, 14000);
+      document.documentElement.classList.remove('loading');
+    }, 10000);
   </script>
 
   <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
@@ -356,20 +405,10 @@
     <div class="void__core" aria-hidden="true"></div>
   </div>
 
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
-    }
-  }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-  <script src="js/portal/portal-audio.js?v=2" defer></script>
-  <script src="js/ouroboros.js?v=2" defer></script>
-  <script src="js/main.js?v=14" defer></script>
-  <script src="js/environment.js?v=3" defer></script>
+  <script src="js/ouroboros.js?v=3" defer></script>
+  <script src="js/main.js?v=15" defer></script>
+  <script src="js/environment.js?v=4" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
-  <script type="module" src="js/portal/portal-transition.js?v=6"></script>
+  <script src="js/cinematic-intro.js?v=2" defer></script>
 </body>
 </html>
