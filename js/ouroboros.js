@@ -115,7 +115,7 @@
   // ── Bite particles ──
   const particles = [];
   function spawnBurst(x, y) {
-    const n = 10 + Math.floor(Math.random() * 3);
+    const n = 5 + Math.floor(Math.random() * 2); // 5–6, restrained
     for (let i = 0; i < n; i += 1) {
       const ang = (i / n) * Math.PI * 2 + Math.random() * 0.5;
       const speed = (0.06 + Math.random() * 0.09) * minDim; // px per sec
@@ -174,19 +174,16 @@
     return s;
   }
 
-  // ── Glow intensity 0..~1.3 ──
+  // ── Serpent luminescence — subtle & constant (no breathing / no pulsing).
+  //    Kept in the 0.35–0.5 range: shadow-and-mystery, not "magical glow".
   function glowAt(t) {
-    if (t < CONFIG.emergeMs) return 0.7 * easeOutCubic(t / CONFIG.emergeMs);
+    if (t < CONFIG.emergeMs) return 0.35 * easeOutCubic(t / CONFIG.emergeMs);
     const lt = (t - CONFIG.emergeMs) % CONFIG.cycleMs;
-    if (lt < P.orbitEnd) return 0.45 + 0.15 * Math.sin((t / 1000) * 1.1); // slow pulse
-    if (lt < P.formEnd) return lerp(0.6, 1.0, easeInCubic((lt - P.orbitEnd) / (P.formEnd - P.orbitEnd)));
-    if (lt < BITE_AT + 250) {
-      // Spike at the bite, then settle.
-      const k = clamp01((lt - P.formEnd) / (BITE_AT + 250 - P.formEnd));
-      return lerp(1.0, 1.3, k);
-    }
-    if (lt < P.holdEnd) return lerp(1.3, 0.9, clamp01((lt - (BITE_AT + 250)) / (P.holdEnd - (BITE_AT + 250))));
-    return lerp(0.9, 0.45, easeInOutCubic((lt - P.holdEnd) / (CONFIG.cycleMs - P.holdEnd)));
+    if (lt < P.formEnd) return 0.35;
+    // A restrained, elegant rise toward the bite.
+    if (lt < BITE_AT + 250) return lerp(0.35, 0.5, clamp01((lt - P.formEnd) / (BITE_AT + 250 - P.formEnd)));
+    if (lt < P.holdEnd) return lerp(0.5, 0.4, clamp01((lt - (BITE_AT + 250)) / (P.holdEnd - (BITE_AT + 250))));
+    return lerp(0.4, 0.35, easeInOutCubic((lt - P.holdEnd) / (CONFIG.cycleMs - P.holdEnd)));
   }
 
   // Emergence alpha (one-time rise) and zoom.
@@ -239,36 +236,29 @@
     const ringSize = minDim * CONFIG.ringScale * s;
     const ringR = ringSize * 0.46; // radius of the serpent path
 
-    // 2) Energy aura — a breathing golden donut around the sigil (never covers
-    //    the centre, so the sigil stays clean).
-    const auraPulse = 0.2 + 0.6 * (0.5 + 0.5 * Math.sin(t * 0.0016));
-    const aura = ctx.createRadialGradient(cx, cy, ringR * 0.35, cx, cy, ringR * 1.15);
-    aura.addColorStop(0, gold(0));
-    aura.addColorStop(0.55, gold(0.05 * auraPulse * (0.6 + glow) * alpha));
-    aura.addColorStop(0.8, gold(0.14 * auraPulse * (0.6 + glow) * alpha));
-    aura.addColorStop(1, gold(0));
-    ctx.fillStyle = aura;
-    ctx.fillRect(0, 0, W, H);
-
-    // 3) Bioluminescent base glow hugging the ring path.
-    const bio = ctx.createRadialGradient(cx, cy, ringR * 0.7, cx, cy, ringR * 1.05);
-    bio.addColorStop(0, gold(0));
-    bio.addColorStop(0.75, gold(0.10 * glow * alpha));
-    bio.addColorStop(1, gold(0));
-    ctx.fillStyle = bio;
+    // 2) Sigil glimmer — a barely-there constant glow at the very centre.
+    //    (No rotating aura, no breathing halo — just a faint, still presence.)
+    const glimmer = ctx.createRadialGradient(cx, cy, 0, cx, cy, ringR * 0.42);
+    glimmer.addColorStop(0, gold(0.05 * alpha));
+    glimmer.addColorStop(0.6, gold(0.02 * alpha));
+    glimmer.addColorStop(1, gold(0));
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = glimmer;
     ctx.beginPath();
-    ctx.arc(cx, cy, ringR * 1.05, 0, Math.PI * 2);
+    ctx.arc(cx, cy, ringR * 0.42, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
 
-    // 4) The ring itself — rotated, scaled, with a golden glow (shadow) that
-    //    hugs the serpents' silhouette.
+    // 3) The ring itself — rotated, scaled, with a SUBTLE golden glow that only
+    //    hugs the serpents' silhouette (no light around it).
     if (ringReady) {
       ctx.save();
       ctx.globalAlpha = alpha * 0.98;
       ctx.translate(cx, cy);
       ctx.rotate(angle);
-      ctx.shadowColor = gold(Math.min(0.9, 0.35 + glow * 0.5));
-      ctx.shadowBlur = (14 + glow * 22) * (minDim / 600);
+      ctx.shadowColor = gold(0.22 + glow * 0.28);
+      ctx.shadowBlur = (8 + glow * 10) * (minDim / 600);
       ctx.drawImage(ring, -ringSize / 2, -ringSize / 2, ringSize, ringSize);
       ctx.restore();
     }
@@ -303,19 +293,20 @@
         spawnBurst(headX, headY);
       }
 
-      // Contact flash right after the bite.
+      // Contact flash right after the bite — reduced, elegant.
       const sinceBite = lt - BITE_AT;
-      if (sinceBite >= 0 && sinceBite < 420) {
-        const k = 1 - sinceBite / 420;
-        const flash = ctx.createRadialGradient(headX, headY, 0, headX, headY, ringR * 0.5 * (1.2 - k));
-        flash.addColorStop(0, goldB(0.8 * k * alpha));
-        flash.addColorStop(0.4, gold(0.4 * k * alpha));
+      if (sinceBite >= 0 && sinceBite < 360) {
+        const k = 1 - sinceBite / 360;
+        const fr = ringR * 0.24 * (1.1 - k * 0.4);
+        const flash = ctx.createRadialGradient(headX, headY, 0, headX, headY, fr);
+        flash.addColorStop(0, goldB(0.4 * k * alpha));
+        flash.addColorStop(0.5, gold(0.18 * k * alpha));
         flash.addColorStop(1, gold(0));
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
         ctx.fillStyle = flash;
         ctx.beginPath();
-        ctx.arc(headX, headY, ringR * 0.5 * (1.2 - k), 0, Math.PI * 2);
+        ctx.arc(headX, headY, fr, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }

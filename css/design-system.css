@@ -1,0 +1,304 @@
+/* ══════════════════════════════════════════════════════════════════════
+   SYMVOLIA — Design System "Alchemica Eterea"
+   Dark spirituality · introspection · cosmic mysticism.
+
+   This layer is ADDITIVE: it exposes tokens, utilities and keyframes plus a
+   few safe global touches (scrollbar, focus, nav hover, scroll progress).
+   It intentionally does NOT rewrite the site's established typography/colours
+   — those live in style.css and are layered with alchemical gold accents here.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────  1. TOKENS  ───────────────────────── */
+:root {
+  /* Dark foundation */
+  --ds-black: #010101;
+  --ds-black-alt: #0a0a0a;
+  --ds-gray-dark: #1a1a1a;
+  --ds-gray-medium: #2d2d2d;
+  --ds-gray-light: #3d3d3d;
+  --ds-white-cold: #e8e8e8;
+  --ds-white-soft: #c9c9c9;
+  --ds-white-muted: #8b8b8b;
+
+  /* Alchemical accents */
+  --ds-gold-main: #d4af37;
+  --ds-gold-dark: #8b7500;
+  --ds-gold-bright: #ffd700;
+  --ds-silver: #b8b8b8;
+  --ds-copper: #7a6a3d;
+
+  /* Spiritual palette */
+  --ds-indigo: #1a0033;
+  --ds-violet: #4a1a6f;
+  --ds-blue-cosmic: #0a1a3d;
+  --ds-green-alchemic: #1a3d2a;
+  --ds-red-blood: #4a1a1a;
+  --ds-amber: #3d2a1a;
+
+  /* Shadows */
+  --ds-shadow-subtle: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --ds-shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.5);
+  --ds-shadow-large: 0 20px 50px rgba(0, 0, 0, 0.7);
+  --ds-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  --ds-glow: 0 0 20px rgba(212, 175, 55, 0.3);
+  --ds-glow-hover: 0 0 40px rgba(212, 175, 55, 0.6);
+  --ds-glow-violet: 0 0 30px rgba(74, 26, 111, 0.4);
+
+  /* Transitions */
+  --ds-t-fast: all 0.15s ease-out;
+  --ds-t-normal: all 0.3s ease-out;
+  --ds-t-slow: all 0.6s ease-out;
+
+  /* Fonts (available for opt-in adoption; base site keeps Cormorant) */
+  --ds-font-heading: 'Playfair Display', Georgia, serif;
+  --ds-font-body: 'Lato', 'Open Sans', system-ui, sans-serif;
+  --ds-font-accent: 'Cinzel', 'Cormorant Garamond', serif;
+}
+
+/* ─────────────────────────  2. KEYFRAMES  ───────────────────────── */
+@keyframes dsFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dsFadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dsFadeInDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dsSlideInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes dsShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+@keyframes dsPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+}
+@keyframes dsFloating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes dsBreathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+@keyframes dsTextGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0); }
+  50% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
+}
+@keyframes dsHoverGlow {
+  0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+  100% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+}
+@keyframes dsShimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* ─────────────────────────  3. UTILITIES  ───────────────────────── */
+.ds-fade-in { animation: dsFadeIn 0.6s ease-out forwards; }
+.ds-fade-in-up { animation: dsFadeInUp 0.6s ease-out forwards; }
+.ds-fade-in-down { animation: dsFadeInDown 0.6s ease-out forwards; }
+.ds-slide-in-left { animation: dsSlideInLeft 0.5s ease-out forwards; }
+.ds-breathing { animation: dsBreathing 3s ease-in-out infinite; }
+.ds-floating { animation: dsFloating 3s ease-in-out infinite; }
+.ds-pulse { animation: dsPulse 2s ease-in-out infinite; }
+.ds-text-glow { animation: dsTextGlow 2s ease-in-out infinite; }
+
+.ds-text-gold { color: var(--ds-gold-main); }
+.ds-text-mystical {
+  font-family: var(--ds-font-accent);
+  letter-spacing: 0.08em;
+  color: var(--ds-gold-main);
+  text-transform: uppercase;
+}
+.ds-divider-gold {
+  border: 0;
+  border-top: 1px solid var(--ds-gold-dark);
+  opacity: 0.3;
+}
+.ds-divider-dashed {
+  border: 0;
+  border-top: 2px dashed var(--ds-gold-main);
+  opacity: 0.4;
+}
+
+.ds-glow-hover {
+  transition: var(--ds-t-normal);
+}
+.ds-glow-hover:hover {
+  box-shadow: var(--ds-glow-hover);
+}
+
+/* Component blueprints (opt-in) */
+.ds-card {
+  background: var(--ds-black-alt);
+  border: 1px solid rgba(139, 117, 0, 0.3);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--ds-shadow-subtle);
+  transition: var(--ds-t-normal);
+}
+.ds-card:hover {
+  box-shadow: var(--ds-shadow-medium);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+.ds-card--premium {
+  background: linear-gradient(135deg, var(--ds-gray-dark) 0%, var(--ds-black-alt) 100%);
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  box-shadow: var(--ds-glow);
+}
+.ds-card--premium:hover {
+  border-color: var(--ds-gold-bright);
+  box-shadow: var(--ds-glow-hover);
+}
+
+.ds-btn {
+  font-family: var(--ds-font-accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 8px;
+  border: 2px solid var(--ds-gold-main);
+  cursor: pointer;
+  transition: var(--ds-t-normal);
+}
+.ds-btn--primary {
+  background: var(--ds-gold-main);
+  color: var(--ds-black);
+  border-color: var(--ds-gold-main);
+}
+.ds-btn--primary:hover {
+  background: var(--ds-gold-bright);
+  border-color: var(--ds-gold-bright);
+  transform: scale(1.05);
+  box-shadow: var(--ds-shadow-medium);
+}
+.ds-btn--secondary {
+  background: transparent;
+  color: var(--ds-gold-main);
+}
+.ds-btn--secondary:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--ds-gold-bright);
+}
+
+.ds-input {
+  background: var(--ds-gray-dark);
+  border: 1px solid var(--ds-gray-medium);
+  color: var(--ds-white-cold);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: var(--ds-t-normal);
+}
+.ds-input::placeholder { color: var(--ds-white-muted); }
+.ds-input:focus {
+  outline: none;
+  border-color: var(--ds-gold-main);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* ─────────────────────────  4. SAFE GLOBAL TOUCHES  ───────────────────────── */
+
+/* Custom gold scrollbar (shows on the scrollable main view). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-gold-main) var(--ds-black-alt);
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ds-black-alt); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ds-gold-main), var(--ds-gold-dark));
+  border-radius: 8px;
+  border: 2px solid var(--ds-black-alt);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--ds-gold-bright), var(--ds-gold-main));
+}
+
+/* Unified gold focus ring for keyboard users. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--ds-gold-main);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Navigation: gold hover + sliding underline (alchemical accent). */
+.main__nav a {
+  position: relative;
+}
+.main__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35rem;
+  height: 1px;
+  background: var(--ds-gold-main);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.85;
+  transition: transform 0.3s ease-out;
+}
+.main__nav a:hover,
+.main__nav a:focus-visible {
+  color: var(--ds-gold-main);
+}
+.main__nav a:hover::after,
+.main__nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Scroll progress indicator (top, fills as the page scrolls). */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 400;
+  pointer-events: none;
+}
+.scroll-progress__bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--ds-gold-dark), var(--ds-gold-main), var(--ds-gold-bright));
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  transition: width 0.1s linear;
+}
+/* Only relevant once the reader has entered the scrollable content. */
+body:not(.is-entered) .scroll-progress { opacity: 0; }
+
+/* ─────────────────────────  5. ACCESSIBILITY  ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-fade-in,
+  .ds-fade-in-up,
+  .ds-fade-in-down,
+  .ds-slide-in-left,
+  .ds-breathing,
+  .ds-floating,
+  .ds-pulse,
+  .ds-text-glow {
+    animation: none;
+  }
+  .scroll-progress__bar { transition: none; }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --ds-white-cold: #ffffff;
+    --ds-white-soft: #e0e0e0;
+  }
+}
