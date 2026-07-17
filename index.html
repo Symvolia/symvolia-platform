@@ -10,13 +10,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=25">
-  <link rel="stylesheet" href="css/textures.css?v=25">
-  <link rel="stylesheet" href="css/alive.css?v=25">
-  <link rel="stylesheet" href="css/void.css?v=25">
-  <link rel="stylesheet" href="css/responsive.css?v=25">
+  <link rel="stylesheet" href="css/style.css?v=26">
+  <link rel="stylesheet" href="css/textures.css?v=26">
+  <link rel="stylesheet" href="css/alive.css?v=26">
+  <link rel="stylesheet" href="css/void.css?v=26">
+  <link rel="stylesheet" href="css/intro-eye.css?v=26">
+  <link rel="stylesheet" href="css/responsive.css?v=26">
+  <script>document.documentElement.classList.add('is-intro');</script>
 </head>
 <body class="esoteric-surface">
+
+  <div class="intro" id="intro" role="presentation">
+    <canvas class="intro__canvas" id="introCanvas"></canvas>
+    <div class="intro__logo" id="introLogo" aria-hidden="true">
+      <img src="assets/logo.png" alt="Symvolia" width="360" height="360">
+    </div>
+    <button type="button" class="intro__skip" id="introSkip" aria-label="Salta introduzione">Skip · press Enter</button>
+  </div>
+  <script>
+    // Failsafe: se lo script dell'intro non parte, non lasciare l'overlay bloccato.
+    window.setTimeout(function () {
+      var i = document.getElementById('intro');
+      if (i && !i.classList.contains('is-done')) {
+        i.classList.add('is-done');
+        document.documentElement.classList.remove('is-intro');
+      }
+    }, 9000);
+  </script>
 
   <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
     <svg class="sound-toggle__glyph sound-toggle__glyph--on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -332,6 +352,7 @@
     <div class="void__core" aria-hidden="true"></div>
   </div>
 
+  <script src="js/intro-eye.js?v=1"></script>
   <script src="js/main.js?v=11"></script>
 </body>
 </html>
