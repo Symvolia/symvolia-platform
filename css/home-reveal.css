@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════
-   Homepage (sigil) — reveal after intro iris wipe
+   Homepage (sigil) — reveal after intro iris wipe + true center
    ══════════════════════════════════════════════════════════════════════ */
 
 .stage__home-anchor {
@@ -12,7 +12,82 @@
   opacity: 0;
 }
 
-/* Initial hidden state for staged entrance — beat journey-alive defaults */
+/* True viewport center for seal + ouroboros (overrides desktop flex-start lift) */
+html.is-home .stage.stage--alive {
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+html.is-home .stage.stage--alive .stage__composition {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  animation: none !important;
+  max-height: min(var(--mandala-size), 86vmin);
+}
+
+html.is-home .stage.stage--alive .stage__living {
+  inset: 0;
+}
+
+html.is-home .stage.stage--alive .living__cross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--living-cross);
+  height: var(--living-cross);
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+html.is-home .stage.stage--alive .living__ouroboros {
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: none !important;
+  opacity: 1;
+  transform: none !important;
+}
+
+html.is-home .stage.stage--alive .living__ouroboros-canvas {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+html.is-home .stage.stage--alive .stage__composition .eye--requiem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+html.is-home .stage.stage--alive .stage__sigil {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+html.is-home .stage.stage--alive .stage__inscriptions {
+  inset: 0;
+}
+
+html.is-home .stage.stage--alive .stage__footer {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  bottom: clamp(1.2rem, 4.5vh, 2.8rem);
+  transform: translateX(-50%);
+  width: min(36rem, 92vw);
+  margin: 0;
+}
+
+/* Initial hidden state for staged entrance */
 html.is-home .stage--home-enter .stage__living,
 html.is-home .stage--home-enter .stage__sigil,
 html.is-home .stage--home-enter .stage__inscriptions,
@@ -20,39 +95,51 @@ html.is-home .stage--home-enter .stage__tagline,
 html.is-home .stage--home-enter .stage__enter,
 html.is-home .stage--home-enter .stage__social {
   opacity: 0;
-  transform: translate3d(0, 10px, 0) scale(0.98);
   will-change: transform, opacity;
 }
 
-html.is-home .stage--home-enter .stage__living,
-html.is-home .stage--home-enter .stage__sigil {
-  transform: scale(0.92);
+html.is-home .stage--home-enter .stage__living .living__cross,
+html.is-home .stage--home-enter .stage__composition .eye--requiem {
+  transform: translate(-50%, -50%) scale(0.92);
 }
 
 html.is-home .stage--home-enter .stage__inscriptions {
-  transform: rotate(-3deg) scale(0.98);
+  transform: rotate(-3deg);
+}
+
+html.is-home .stage--home-enter .stage__tagline,
+html.is-home .stage--home-enter .stage__enter,
+html.is-home .stage--home-enter .stage__social {
+  transform: translate3d(0, 10px, 0);
 }
 
 /* 1. Sigil / Ouroboros */
-html.is-home .stage--home-visible.stage--home-enter .stage__living,
-html.is-home .stage--home-visible.stage--home-enter .stage__sigil {
+html.is-home .stage--home-visible.stage--home-enter .stage__living {
   opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* 2. Runes / inscriptions */
+html.is-home .stage--home-visible.stage--home-enter .stage__living .living__cross,
+html.is-home .stage--home-visible.stage--home-enter .stage__composition .eye--requiem {
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+html.is-home .stage--home-visible.stage--home-enter .stage__sigil {
+  opacity: 1;
+  transition: opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 2. Runes */
 html.is-home .stage--home-visible.stage--home-enter .stage__inscriptions {
   opacity: 1;
-  transform: rotate(0deg) scale(1);
+  transform: rotate(0deg);
   transition:
     opacity 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 400ms,
     transform 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 400ms;
 }
 
-/* 3. Tagline / alchemical cue */
+/* 3. Tagline */
 html.is-home .stage--home-visible.stage--home-enter .stage__tagline {
   opacity: 1;
   transform: translate3d(0, 0, 0);
@@ -61,7 +148,7 @@ html.is-home .stage--home-visible.stage--home-enter .stage__tagline {
     transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 700ms;
 }
 
-/* 4. Nav to library + social */
+/* 4. Archive CTA + social */
 html.is-home .stage--home-visible.stage--home-enter .stage__enter,
 html.is-home .stage--home-visible.stage--home-enter .stage__social {
   opacity: 1;
@@ -71,15 +158,15 @@ html.is-home .stage--home-visible.stage--home-enter .stage__social {
     transform 600ms ease-out 1000ms;
 }
 
-/* Idle meditative motion on home (after reveal) */
-html.is-home .stage--alive .living__ouroboros {
-  animation: home-ouro-breathe 5000ms ease-in-out infinite;
+/* Idle breathe without breaking centering */
+html.is-home .stage--alive .living__cross {
+  animation: home-cross-breathe 5000ms ease-in-out infinite;
 }
 
-@keyframes home-ouro-breathe {
+@keyframes home-cross-breathe {
   0%,
-  100% { transform: scale(1); }
-  50% { transform: scale(1.012); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.012); }
 }
 
 html.is-home .stage--alive .living__script--runes {
@@ -91,7 +178,6 @@ html.is-home .stage--alive .living__script--runes {
   to { transform: rotate(-360deg); }
 }
 
-/* Archive button copy */
 .stage__enter-label--tap {
   display: none;
 }
@@ -102,19 +188,22 @@ html.is-home .stage--alive .living__script--runes {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.is-home .stage--alive .living__ouroboros,
+  html.is-home .stage--alive .living__cross,
   html.is-home .stage--alive .living__script--runes {
     animation: none !important;
   }
 
-  .stage--home-enter .stage__living,
-  .stage--home-enter .stage__sigil,
-  .stage--home-enter .stage__inscriptions,
-  .stage--home-enter .stage__tagline,
-  .stage--home-enter .stage__enter,
-  .stage--home-enter .stage__social {
+  html.is-home .stage--home-enter .stage__living,
+  html.is-home .stage--home-enter .stage__sigil,
+  html.is-home .stage--home-enter .stage__inscriptions,
+  html.is-home .stage--home-enter .stage__tagline,
+  html.is-home .stage--home-enter .stage__enter,
+  html.is-home .stage--home-enter .stage__social {
     opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
+  }
+
+  html.is-home .stage--home-enter .stage__living .living__cross,
+  html.is-home .stage--home-enter .stage__composition .eye--requiem {
+    transform: translate(-50%, -50%) scale(1) !important;
   }
 }
