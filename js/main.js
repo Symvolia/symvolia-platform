@@ -429,46 +429,38 @@
   }
 
   function returnToStage() {
-    if (!entered) return;
-
     entered = false;
+    document.documentElement.classList.add('is-home', 'is-journey-alive', 'is-journey-cta');
+    document.documentElement.classList.remove('is-journey-locked');
+    document.body.classList.remove('is-entered');
 
     if (enterBtn) enterBtn.disabled = false;
+
+    main.classList.remove('is-visible');
+    main.hidden = true;
+
+    stage.hidden = false;
+    stage.removeAttribute('aria-hidden');
+    stage.classList.remove('is-diving', 'is-leaving');
+    stage.classList.add('stage--home-enter', 'stage--home-visible');
+
+    window.scrollTo(0, 0);
+    try {
+      if (history.replaceState) history.replaceState(null, '', '#home');
+    } catch (err) { /* */ }
+
+    fadeAudio(mainAmbient, 0, FADE_MS);
+    startStageAmbient();
+    showEnterCta();
+    awaken({ silent: true });
 
     if (enterSound) {
       enterSound.pause();
       enterSound.currentTime = 0;
     }
-
-    fadeAudio(mainAmbient, 0, FADE_MS);
-    startStageAmbient();
-
     resetArchive();
-
-    document.documentElement.classList.remove('is-stage-alive');
-    document.body.classList.remove('is-stage-alive');
-    document.body.classList.remove('is-entered');
-    document.body.removeAttribute('data-mood');
-    document.documentElement.classList.add('is-journey-alive', 'is-journey-cta');
-    main.classList.remove('is-visible');
-    main.hidden = true;
-    showEnterCta();
-
     resetReveals();
-
-    stage.hidden = false;
-    stage.setAttribute('aria-hidden', 'false');
-    stage.classList.remove('is-leaving', 'is-diving');
-
     if (tunnel) tunnel.classList.remove('is-active');
-
-    window.scrollTo(0, 0);
-
-    if (history.replaceState) {
-      history.replaceState(null, '', window.location.pathname);
-    } else {
-      window.location.hash = '';
-    }
   }
 
   function enterSite(targetId = 'bio') {
@@ -485,6 +477,7 @@
       return;
     }
     entered = true;
+    document.documentElement.classList.remove('is-home', 'is-journey-cta');
 
     if (enterBtn) enterBtn.disabled = true;
 

@@ -1,0 +1,120 @@
+/* ══════════════════════════════════════════════════════════════════════
+   Homepage (sigil) — reveal after intro iris wipe
+   ══════════════════════════════════════════════════════════════════════ */
+
+.stage__home-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Initial hidden state for staged entrance — beat journey-alive defaults */
+html.is-home .stage--home-enter .stage__living,
+html.is-home .stage--home-enter .stage__sigil,
+html.is-home .stage--home-enter .stage__inscriptions,
+html.is-home .stage--home-enter .stage__tagline,
+html.is-home .stage--home-enter .stage__enter,
+html.is-home .stage--home-enter .stage__social {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0) scale(0.98);
+  will-change: transform, opacity;
+}
+
+html.is-home .stage--home-enter .stage__living,
+html.is-home .stage--home-enter .stage__sigil {
+  transform: scale(0.92);
+}
+
+html.is-home .stage--home-enter .stage__inscriptions {
+  transform: rotate(-3deg) scale(0.98);
+}
+
+/* 1. Sigil / Ouroboros */
+html.is-home .stage--home-visible.stage--home-enter .stage__living,
+html.is-home .stage--home-visible.stage--home-enter .stage__sigil {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 2. Runes / inscriptions */
+html.is-home .stage--home-visible.stage--home-enter .stage__inscriptions {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+  transition:
+    opacity 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 400ms,
+    transform 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 400ms;
+}
+
+/* 3. Tagline / alchemical cue */
+html.is-home .stage--home-visible.stage--home-enter .stage__tagline {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 700ms,
+    transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 700ms;
+}
+
+/* 4. Nav to library + social */
+html.is-home .stage--home-visible.stage--home-enter .stage__enter,
+html.is-home .stage--home-visible.stage--home-enter .stage__social {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 600ms ease-out 1000ms,
+    transform 600ms ease-out 1000ms;
+}
+
+/* Idle meditative motion on home (after reveal) */
+html.is-home .stage--alive .living__ouroboros {
+  animation: home-ouro-breathe 5000ms ease-in-out infinite;
+}
+
+@keyframes home-ouro-breathe {
+  0%,
+  100% { transform: scale(1); }
+  50% { transform: scale(1.012); }
+}
+
+html.is-home .stage--alive .living__script--runes {
+  animation: home-runes-drift 90s linear infinite;
+}
+
+@keyframes home-runes-drift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* Archive button copy */
+.stage__enter-label--tap {
+  display: none;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .stage__enter-label--desk { display: none; }
+  .stage__enter-label--tap { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.is-home .stage--alive .living__ouroboros,
+  html.is-home .stage--alive .living__script--runes {
+    animation: none !important;
+  }
+
+  .stage--home-enter .stage__living,
+  .stage--home-enter .stage__sigil,
+  .stage--home-enter .stage__inscriptions,
+  .stage--home-enter .stage__tagline,
+  .stage--home-enter .stage__enter,
+  .stage--home-enter .stage__social {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

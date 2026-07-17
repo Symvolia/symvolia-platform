@@ -407,31 +407,60 @@
 
     await delay(400);
 
-    // Step 5 — handoff under the wipe
+    // Step 5 — land on HOMEPAGE (sigil / ouroboros), NEVER the library
+    const stage = document.getElementById('stage');
+    const main = document.getElementById('main');
+
+    if (main) {
+      main.hidden = true;
+      main.classList.remove('is-visible');
+    }
+    if (stage) {
+      stage.hidden = false;
+      stage.removeAttribute('aria-hidden');
+      stage.classList.remove('is-diving', 'is-leaving');
+    }
+
+    window.scrollTo(0, 0);
+    try {
+      if (history.replaceState) history.replaceState(null, '', '#home');
+    } catch (_) { /* */ }
+
+    root.classList.remove('is-cine', 'is-intro');
+    root.classList.add('is-home', 'is-journey-alive', 'is-journey-cta');
+    body.style.overflow = '';
+    body.classList.remove('is-entered');
+    if (cursor) cursor.style.opacity = '0';
+
     if (window.Symvolia) {
       if (typeof window.Symvolia.awaken === 'function') {
         window.Symvolia.awaken({ silent: true });
       }
-      if (typeof window.Symvolia.enterSite === 'function') {
-        window.Symvolia.enterSite('bio');
+      if (typeof window.Symvolia.showEnterCta === 'function') {
+        window.Symvolia.showEnterCta();
+      }
+      if (typeof window.Symvolia.startStageAmbient === 'function') {
+        window.Symvolia.startStageAmbient();
       }
     }
 
-    root.classList.remove('is-cine', 'is-intro');
-    body.style.overflow = '';
-    if (cursor) cursor.style.opacity = '0';
-
-    const main = document.getElementById('main');
-    if (main) {
-      main.classList.add('is-visible');
+    if (stage) {
+      stage.classList.add('stage--home-enter');
+      requestAnimationFrame(() => {
+        stage.classList.add('stage--home-visible');
+      });
     }
 
-    await delay(400);
+    try {
+      window.dispatchEvent(new CustomEvent('symvolia:home-ready'));
+    } catch (_) { /* */ }
+
+    await delay(500);
     cine.classList.add('is-done');
     timeline.destroy();
     window.setTimeout(() => {
       if (cine && cine.parentNode) cine.parentNode.removeChild(cine);
-    }, 120);
+    }, 200);
   }
 
   /* ── Cursor ── */
