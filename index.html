@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#06040a">
+  <meta name="theme-color" content="#010101">
   <link rel="canonical" href="https://symvolia.github.io/symvolia-platform/">
   <meta name="description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
   <title>Symvolia — The Echo of your Own Soul</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=32">
-  <link rel="stylesheet" href="css/textures.css?v=32">
-  <link rel="stylesheet" href="css/alive.css?v=32">
-  <link rel="stylesheet" href="css/void.css?v=32">
-  <link rel="stylesheet" href="css/cinematic-intro.css?v=10">
-  <link rel="stylesheet" href="css/home-reveal.css?v=3">
-  <link rel="stylesheet" href="css/ouroboros.css?v=32">
-  <link rel="stylesheet" href="css/design-system.css?v=32">
-  <link rel="stylesheet" href="css/environment.css?v=32">
-  <link rel="stylesheet" href="css/responsive.css?v=32">
-  <style>html,body{background:#06040a!important}</style>
+  <link rel="stylesheet" href="css/style.css?v=33">
+  <link rel="stylesheet" href="css/textures.css?v=33">
+  <link rel="stylesheet" href="css/alive.css?v=33">
+  <link rel="stylesheet" href="css/void.css?v=33">
+  <link rel="stylesheet" href="css/cinematic-intro.css?v=11">
+  <link rel="stylesheet" href="css/home-reveal.css?v=4">
+  <link rel="stylesheet" href="css/ouroboros.css?v=33">
+  <link rel="stylesheet" href="css/design-system.css?v=33">
+  <link rel="stylesheet" href="css/environment.css?v=33">
+  <link rel="stylesheet" href="css/responsive.css?v=33">
+  <style>html,body{background:#010101!important}</style>
   <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
 </head>
 <body class="esoteric-surface">
@@ -34,31 +34,35 @@
     <div class="eye-container" id="cineEye" aria-hidden="true">
       <div class="eye__void" aria-hidden="true"></div>
 
-      <div class="eye__assembly">
+      <div class="eye__stage">
+        <div class="eye__breathe">
+          <div class="eye__assembly">
         <svg class="eye__iris-svg" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
           <defs>
-            <radialGradient id="irisGrad" cx="50%" cy="45%">
-              <stop offset="0%" stop-color="#3d2008"/>
-              <stop offset="25%" stop-color="#8B5E1A"/>
-              <stop offset="55%" stop-color="#7a7a2a"/>
-              <stop offset="75%" stop-color="#4a6741"/>
-              <stop offset="90%" stop-color="#2d3d20"/>
-              <stop offset="100%" stop-color="#1a1f10"/>
+            <radialGradient id="irisGrad" cx="48%" cy="46%">
+              <stop offset="0%" stop-color="#2a1506"/>
+              <stop offset="18%" stop-color="#6b3f12"/>
+              <stop offset="38%" stop-color="#8B5E1A"/>
+              <stop offset="58%" stop-color="#6d7a32"/>
+              <stop offset="78%" stop-color="#3f5634"/>
+              <stop offset="92%" stop-color="#1e2814"/>
+              <stop offset="100%" stop-color="#0c1008"/>
             </radialGradient>
             <radialGradient id="limbalRing" cx="50%" cy="50%">
-              <stop offset="70%" stop-color="transparent"/>
-              <stop offset="88%" stop-color="rgba(10,8,6,0.3)"/>
-              <stop offset="100%" stop-color="rgba(5,3,2,0.9)"/>
+              <stop offset="68%" stop-color="transparent"/>
+              <stop offset="84%" stop-color="rgba(8,6,4,0.25)"/>
+              <stop offset="94%" stop-color="rgba(4,3,2,0.72)"/>
+              <stop offset="100%" stop-color="rgba(1,1,1,0.95)"/>
             </radialGradient>
-            <radialGradient id="scleraGrad" cx="50%" cy="42%">
-              <stop offset="0%" stop-color="#e8ddd0"/>
-              <stop offset="40%" stop-color="#d4c8bc"/>
-              <stop offset="75%" stop-color="#b8a898"/>
-              <stop offset="100%" stop-color="#8a7060"/>
+            <radialGradient id="scleraGrad" cx="50%" cy="44%">
+              <stop offset="0%" stop-color="#ebe2d6"/>
+              <stop offset="45%" stop-color="#d8cdc0"/>
+              <stop offset="78%" stop-color="#b5a090"/>
+              <stop offset="100%" stop-color="#7a6558"/>
             </radialGradient>
             <radialGradient id="cornealGloss" cx="38%" cy="32%">
-              <stop offset="0%" stop-color="rgba(255,252,245,0.42)"/>
-              <stop offset="35%" stop-color="rgba(255,252,245,0.14)"/>
+              <stop offset="0%" stop-color="rgba(255,252,245,0.5)"/>
+              <stop offset="28%" stop-color="rgba(255,252,245,0.16)"/>
               <stop offset="100%" stop-color="rgba(255,252,245,0)"/>
             </radialGradient>
             <radialGradient id="pupilDepthGrad" cx="50%" cy="50%">
@@ -124,8 +128,10 @@
           <circle class="pupil-base" id="cinePupil" cx="200" cy="200" r="100" fill="#050303"/>
           <circle class="pupil-depth" cx="200" cy="200" r="82" fill="url(#pupilDepthGrad)" opacity="0.85"/>
           <ellipse class="corneal-gloss" cx="168" cy="155" rx="42" ry="28" fill="url(#cornealGloss)" transform="rotate(-15 168 155)"/>
-          <ellipse class="corneal-gloss-small" cx="228" cy="240" rx="8" ry="6" fill="rgba(255,252,245,0.05)"/>
+          <ellipse class="corneal-gloss-small" cx="228" cy="240" rx="8" ry="6" fill="rgba(255,252,245,0.08)"/>
         </svg>
+          </div>
+        </div>
       </div>
 
       <div class="eye__lids" aria-hidden="true">
@@ -133,27 +139,28 @@
           <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
             <defs>
               <linearGradient id="upperLidGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#06040a"/>
-                <stop offset="40%" stop-color="#120c10"/>
-                <stop offset="78%" stop-color="#1a100c"/>
-                <stop offset="100%" stop-color="#2a1a12"/>
+                <stop offset="0%" stop-color="#010101"/>
+                <stop offset="35%" stop-color="#0a080a"/>
+                <stop offset="72%" stop-color="#16100e"/>
+                <stop offset="100%" stop-color="#241810"/>
               </linearGradient>
             </defs>
-            <path d="M0 0 L1200 0 L1200 400 Q600 200 0 400 Z" fill="url(#upperLidGrad)"/>
-            <path d="M0 400 Q600 200 1200 400" stroke="rgba(8,5,12,0.55)" stroke-width="14" fill="none" opacity="0.7"/>
+            <path d="M0 0 L1200 0 L1200 400 Q600 210 0 400 Z" fill="url(#upperLidGrad)"/>
+            <path d="M0 400 Q600 210 1200 400" stroke="rgba(4,2,2,0.65)" stroke-width="18" fill="none" opacity="0.8"/>
           </svg>
         </div>
         <div class="eye__lid eye__lid--lower">
           <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
             <defs>
               <linearGradient id="lowerLidGrad" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0%" stop-color="#06040a"/>
-                <stop offset="55%" stop-color="#0f0a14"/>
-                <stop offset="100%" stop-color="#1a0f0a"/>
+                <stop offset="0%" stop-color="#010101"/>
+                <stop offset="35%" stop-color="#0a080a"/>
+                <stop offset="72%" stop-color="#16100e"/>
+                <stop offset="100%" stop-color="#241810"/>
               </linearGradient>
             </defs>
-            <path d="M0 400 L1200 400 L1200 0 Q600 200 0 0 Z" fill="url(#lowerLidGrad)"/>
-            <path d="M0 0 Q600 200 1200 0" stroke="rgba(8,5,12,0.5)" stroke-width="12" fill="none" opacity="0.65"/>
+            <path d="M0 400 L1200 400 L1200 0 Q600 190 0 0 Z" fill="url(#lowerLidGrad)"/>
+            <path d="M0 0 Q600 190 1200 0" stroke="rgba(4,2,2,0.6)" stroke-width="16" fill="none" opacity="0.75"/>
           </svg>
         </div>
       </div>
@@ -510,6 +517,6 @@
   <script src="js/main.js?v=16" defer></script>
   <script src="js/environment.js?v=4" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
-  <script src="js/cinematic-intro.js?v=10" defer></script>
+  <script src="js/cinematic-intro.js?v=11" defer></script>
 </body>
 </html>

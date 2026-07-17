@@ -1,31 +1,21 @@
 /* ══════════════════════════════════════════════════════════════════════
    Symvolia — Cinematic Eye Opening
-   Requiem for a Dream · biological weight · amber–olive iris
+   One continuous breath: void → lids → iris → settle → brand → enter → home
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --void: #06040a;
-  --iris-core: #3d2008;
-  --iris-mid: #8b5e1a;
-  --iris-outer: #4a6741;
-  --iris-edge: #1a1f10;
+  --void: #010101;
   --iris-gold: #c4922a;
-  --iris-green: #6b8c3e;
-  --lid-shadow: #1a0f0a;
-  --lid-skin: #2d1e14;
-  --lash-dark: #0a0806;
-  --sclera-base: #e8ddd0;
-  --pupil-black: #050303;
   --color-text: rgba(255, 252, 245, 0.92);
-  --ease-organic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-mass: cubic-bezier(0.33, 0.1, 0.2, 1);
-  --ease-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
-  --ease-micro-spring: cubic-bezier(0.34, 1.15, 0.64, 1);
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-close: cubic-bezier(0.4, 0, 1, 1);
-  --dur-lid: 2200ms;
-  --dur-iris: 1600ms;
-  --dur-pupil: 900ms;
+  --ease-cine: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-mass: cubic-bezier(0.33, 0.05, 0.15, 1);
+  --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-close: cubic-bezier(0.55, 0.05, 0.85, 0.35);
+  --dur-lid: 2800ms;
+  --dur-reveal: 2400ms;
+  --dur-settle: 1600ms;
+  --dur-pupil: 1200ms;
 }
 
 html,
@@ -62,7 +52,7 @@ html.is-cine .scroll-progress {
 }
 
 html.is-cine .sound-toggle {
-  opacity: 0.45;
+  opacity: 0.4;
   pointer-events: auto;
   cursor: pointer;
   z-index: 10050;
@@ -80,12 +70,20 @@ html.is-cine .sound-toggle {
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 700ms var(--ease-soft);
+}
+
+.cine.is-shown {
+  opacity: 1;
+  visibility: visible;
 }
 
 .cine.is-done {
   pointer-events: none;
   opacity: 0;
-  transition: opacity 400ms var(--ease-organic);
+  transition: opacity 900ms var(--ease-soft);
 }
 
 .cine__vignette {
@@ -95,7 +93,17 @@ html.is-cine .sound-toggle {
   pointer-events: none;
   opacity: 0;
   background:
-    radial-gradient(ellipse 55% 48% at 50% 48%, transparent 20%, rgba(6, 4, 10, 0.35) 55%, rgba(6, 4, 10, 0.92) 100%);
+    radial-gradient(
+      ellipse 58% 50% at 50% 46%,
+      transparent 12%,
+      rgba(1, 1, 1, 0.28) 52%,
+      rgba(1, 1, 1, 0.88) 100%
+    );
+  transition: opacity 1400ms var(--ease-soft);
+}
+
+.cine__vignette.is-shown {
+  opacity: 1;
 }
 
 .eye__noise-layer {
@@ -105,11 +113,16 @@ html.is-cine .sound-toggle {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.14;
+  opacity: 0;
   mix-blend-mode: soft-light;
+  transition: opacity 1800ms var(--ease-soft);
 }
 
-/* ── Eye container — extreme close-up ── */
+.cine.is-grain .eye__noise-layer {
+  opacity: 0.11;
+}
+
+/* ── Eye container ── */
 .eye-container {
   position: absolute;
   inset: 0;
@@ -118,10 +131,11 @@ html.is-cine .sound-toggle {
   place-items: center;
   opacity: 0;
   visibility: hidden;
-  transform: scale(1.08);
+  transition: opacity 900ms var(--ease-soft);
 }
 
 .eye-container.is-shown {
+  opacity: 1;
   visibility: visible;
 }
 
@@ -132,24 +146,71 @@ html.is-cine .sound-toggle {
   z-index: 0;
 }
 
-.eye__assembly {
+/* Stage: extreme close-up → settle back for brand */
+.eye__stage {
   position: relative;
   z-index: 1;
-  width: min(110vmin, 880px);
-  height: min(110vmin, 880px);
-  transform: scale(0.78);
-  opacity: 0.12;
-  filter: brightness(0.12) contrast(1.1) saturate(0.7);
+  width: min(118vmin, 920px);
+  height: min(118vmin, 920px);
+  display: grid;
+  place-items: center;
+  transform: scale(1.12) translate3d(0, 2%, 0);
+  transition: transform var(--dur-settle) var(--ease-cine);
+  will-change: transform;
+}
+
+.eye-container.is-settled .eye__stage {
+  transform: scale(0.62) translate3d(0, -18%, 0);
+}
+
+.eye-container.is-closing .eye__stage {
+  transform: scale(0.9) translate3d(0, 0, 0);
+  transition-duration: 700ms;
+  transition-timing-function: var(--ease-close);
+}
+
+/* Breathe lives on its own layer — never fights settle scale */
+.eye__breathe {
+  width: 100%;
+  height: 100%;
+  transform: scale(1);
+  will-change: transform;
+}
+
+.eye-container.is-breathing:not(.is-closing) .eye__breathe {
+  animation: eye-breathe 6s var(--ease-soft) infinite;
+}
+
+@keyframes eye-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.014);
+  }
+}
+
+.eye__assembly {
+  width: 100%;
+  height: 100%;
+  opacity: 0.08;
+  filter: brightness(0.08) saturate(0.55);
   transition:
-    transform var(--dur-iris) var(--ease-mass),
-    opacity var(--dur-iris) var(--ease-organic),
-    filter var(--dur-iris) var(--ease-organic);
+    opacity var(--dur-reveal) var(--ease-cine),
+    filter var(--dur-reveal) var(--ease-cine);
 }
 
 .eye-container.is-open .eye__assembly {
-  transform: scale(1.05);
   opacity: 1;
-  filter: brightness(1.05) contrast(1.18) saturate(1.15);
+  filter: brightness(1.04) saturate(1.12) contrast(1.12);
+}
+
+.eye-container.is-closing .eye__assembly {
+  opacity: 0.25;
+  filter: brightness(0.28) saturate(0.6);
+  transition-duration: 650ms;
+  transition-timing-function: var(--ease-close);
 }
 
 .eye__iris-svg {
@@ -159,38 +220,56 @@ html.is-cine .sound-toggle {
   overflow: visible;
 }
 
+/* Pupil — origin fixed for SVG circles */
 .pupil-base,
 .pupil-depth {
-  transform-origin: 200px 200px;
   transform-box: fill-box;
+  transform-origin: center;
   transform: scale(1);
-  transition: transform var(--dur-pupil) var(--ease-standard);
+  transition: transform var(--dur-pupil) var(--ease-cine);
 }
 
 .eye-container.is-open.is-pupil-ready .pupil-base,
 .eye-container.is-open.is-pupil-ready .pupil-depth {
-  transform: scale(0.58);
+  transform: scale(0.56);
 }
 
 .eye-container.is-closing .pupil-base,
 .eye-container.is-closing .pupil-depth {
-  transform: scale(1.15);
-  transition: transform 400ms var(--ease-close);
+  transform: scale(1.18);
+  transition-duration: 550ms;
+  transition-timing-function: var(--ease-close);
+  animation: none !important;
+}
+
+.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-base,
+.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-depth {
+  animation: pupil-micro 5.2s var(--ease-soft) infinite;
+}
+
+@keyframes pupil-micro {
+  0%,
+  100% {
+    transform: scale(0.56);
+  }
+  50% {
+    transform: scale(0.535);
+  }
 }
 
 .iris-fibers {
-  opacity: 0.35;
-  transition: opacity 1400ms var(--ease-organic);
+  opacity: 0.28;
+  transition: opacity 1800ms var(--ease-soft) 400ms;
 }
 
 .eye-container.is-open .iris-fibers {
-  opacity: 0.65;
+  opacity: 0.62;
 }
 
 .corneal-gloss,
 .corneal-gloss-small {
   opacity: 0;
-  transition: opacity 1200ms var(--ease-organic) 600ms;
+  transition: opacity 1400ms var(--ease-soft) 900ms;
 }
 
 .eye-container.is-open .corneal-gloss,
@@ -198,51 +277,7 @@ html.is-cine .sound-toggle {
   opacity: 1;
 }
 
-/* Breathing */
-@keyframes eye-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.012);
-  }
-}
-
-@keyframes iris-breathe {
-  0%,
-  100% {
-    filter: brightness(1) contrast(1.08);
-  }
-  50% {
-    filter: brightness(1.04) contrast(1.1);
-  }
-}
-
-@keyframes pupil-micro {
-  0%,
-  100% {
-    transform: scale(0.58);
-  }
-  50% {
-    transform: scale(0.555);
-  }
-}
-
-.eye-container.is-breathing .eye__assembly {
-  animation: eye-breathe 5.5s var(--ease-organic) infinite;
-}
-
-.eye-container.is-iris-breathing .eye__assembly {
-  animation: eye-breathe 5.5s var(--ease-organic) infinite, iris-breathe 6.2s var(--ease-organic) infinite;
-}
-
-.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-base,
-.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-depth {
-  animation: pupil-micro 4.8s var(--ease-organic) infinite;
-}
-
-/* ── Eyelids — biological mass ── */
+/* ── Eyelids ── */
 .eye__lids {
   position: absolute;
   inset: 0;
@@ -269,47 +304,41 @@ html.is-cine .sound-toggle {
 .eye__lid--upper {
   top: 0;
   transform: translate3d(0, 0, 0);
-  box-shadow: 0 18px 40px rgba(6, 4, 10, 0.55);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.65);
 }
 
 .eye__lid--lower {
   bottom: 0;
   transform: translate3d(0, 0, 0);
-  box-shadow: 0 -14px 36px rgba(6, 4, 10, 0.5);
+  box-shadow: 0 -18px 42px rgba(0, 0, 0, 0.55);
 }
 
-/* Rest open — partial retract = almond aperture, not lids off-frame */
-.eye-container.is-open .eye__lid--upper {
-  transform: translate3d(0, -42%, 0);
+/* Almond aperture — keep lids in frame */
+.eye-container.is-open:not(.is-closing) .eye__lid--upper {
+  transform: translate3d(0, -40%, 0);
 }
 
-.eye-container.is-open .eye__lid--lower {
-  transform: translate3d(0, 44%, 0);
-  transition-delay: 140ms;
+.eye-container.is-open:not(.is-closing) .eye__lid--lower {
+  transform: translate3d(0, 42%, 0);
+  transition-delay: 160ms;
 }
 
+/* Closing must win over open without removing is-open */
 .eye-container.is-closing .eye__lid--upper {
   transform: translate3d(0, 0, 0);
-  transition-duration: 520ms;
+  transition-duration: 680ms;
+  transition-delay: 0ms;
   transition-timing-function: var(--ease-close);
 }
 
 .eye-container.is-closing .eye__lid--lower {
   transform: translate3d(0, 0, 0);
-  transition-duration: 520ms;
-  transition-delay: 40ms;
+  transition-duration: 680ms;
+  transition-delay: 60ms;
   transition-timing-function: var(--ease-close);
 }
 
-.eye-container.is-closing .eye__assembly {
-  transform: scale(0.88);
-  opacity: 0.35;
-  filter: brightness(0.35);
-  transition-duration: 500ms;
-  transition-timing-function: var(--ease-close);
-}
-
-/* ── Brand ── */
+/* ── Brand — appears as eye settles ── */
 .cine__brand {
   position: absolute;
   left: 50%;
@@ -318,18 +347,27 @@ html.is-cine .sound-toggle {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.65rem;
-  transform: translate3d(-50%, 0, 0);
+  gap: 0.55rem;
+  transform: translate3d(-50%, 8px, 0);
   pointer-events: none;
   text-align: center;
+  opacity: 0;
+  transition:
+    opacity 1000ms var(--ease-soft),
+    transform 1000ms var(--ease-cine);
+}
+
+.cine.is-brand .cine__brand {
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0);
 }
 
 .cine__mark {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   opacity: 0;
-  transform: translate3d(0, 14px, 0);
-  filter: drop-shadow(0 0 18px rgba(139, 94, 26, 0.25));
+  transform: translate3d(0, 16px, 0) scale(0.94);
+  filter: drop-shadow(0 0 16px rgba(139, 94, 26, 0.22));
 }
 
 .cine__mark img {
@@ -343,9 +381,9 @@ html.is-cine .sound-toggle {
   margin: 0;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(1.35rem, 3.2vw, 2rem);
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
+  font-size: clamp(1.25rem, 3vw, 1.85rem);
+  letter-spacing: 0.38em;
+  text-indent: 0.38em;
   text-transform: uppercase;
   color: rgba(255, 248, 238, 0.9);
 }
@@ -353,19 +391,18 @@ html.is-cine .sound-toggle {
 .cine__letter {
   display: inline-block;
   opacity: 0;
-  transform: translate3d(0, 12px, 0);
+  transform: translate3d(0, 14px, 0);
 }
 
 .cine__tagline {
-  margin: 0.15rem 0 0;
+  margin: 0.2rem 0 0;
   font-family: 'Nothing You Could Do', cursive;
-  font-size: clamp(0.85rem, 2vw, 1.05rem);
-  color: rgba(196, 146, 42, 0.55);
+  font-size: clamp(0.82rem, 1.9vw, 1rem);
+  color: rgba(196, 146, 42, 0.5);
   opacity: 0;
   transform: translate3d(0, 10px, 0);
 }
 
-.cine__brand.is-shown .cine__mark,
 .cine__mark.is-shown,
 .cine__letter.is-shown,
 .cine__tagline.is-shown {
@@ -376,29 +413,30 @@ html.is-cine .sound-toggle {
 .cine__enter {
   position: absolute;
   left: 50%;
-  bottom: max(7vh, 2.5rem);
+  bottom: max(6.5vh, 2.2rem);
   z-index: 9;
-  transform: translate3d(-50%, 12px, 0) scale(0.94);
+  transform: translate3d(-50%, 14px, 0) scale(0.96);
   opacity: 0;
   visibility: hidden;
   appearance: none;
-  border: 1px solid rgba(196, 146, 42, 0.35);
-  background: rgba(6, 4, 10, 0.35);
+  border: 1px solid rgba(196, 146, 42, 0.32);
+  background: rgba(1, 1, 1, 0.4);
   color: rgba(255, 248, 238, 0.88);
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   letter-spacing: 0.28em;
   text-indent: 0.28em;
   text-transform: uppercase;
-  padding: 0.85rem 1.8rem;
+  padding: 0.85rem 1.85rem;
   cursor: pointer;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition:
-    opacity 700ms var(--ease-micro-spring),
-    transform 700ms var(--ease-micro-spring),
-    border-color 300ms ease,
-    background 300ms ease;
+    opacity 800ms var(--ease-out),
+    transform 800ms var(--ease-out),
+    border-color 320ms ease,
+    background 320ms ease,
+    box-shadow 320ms ease;
 }
 
 .cine__enter.is-shown,
@@ -406,10 +444,17 @@ html.is-cine .sound-toggle {
   visibility: visible;
 }
 
+.cine__enter.is-visible {
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0) scale(1);
+  box-shadow: 0 0 28px rgba(196, 146, 42, 0.08);
+}
+
 .cine__enter:hover,
 .cine__enter:focus-visible {
-  border-color: rgba(196, 146, 42, 0.7);
-  background: rgba(26, 15, 10, 0.55);
+  border-color: rgba(196, 146, 42, 0.72);
+  background: rgba(20, 14, 10, 0.55);
+  box-shadow: 0 0 36px rgba(196, 146, 42, 0.16);
   outline: none;
 }
 
@@ -426,42 +471,46 @@ html.is-cine .sound-toggle {
   }
 }
 
-/* ── Wipe + cursor ── */
+/* ── Iris wipe → homepage (same void as stage) ── */
 .cine__wipe {
   position: absolute;
   left: 50%;
-  top: 48%;
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
+  top: 46%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
   border-radius: 50%;
-  background: radial-gradient(circle, #1a1208 0%, var(--void) 70%);
+  background: radial-gradient(circle, #1a1210 0%, #010101 55%, #010101 100%);
   transform: scale(0);
   opacity: 0;
   z-index: 12;
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .cine__cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
+  width: 9px;
+  height: 9px;
+  margin: -4px 0 0 -4px;
   border-radius: 50%;
-  background: rgba(196, 146, 42, 0.55);
-  box-shadow: 0 0 12px rgba(196, 146, 42, 0.35);
+  background: rgba(196, 146, 42, 0.5);
+  box-shadow: 0 0 14px rgba(196, 146, 42, 0.3);
   pointer-events: none;
   z-index: 10060;
   opacity: 0;
   mix-blend-mode: screen;
+  transition: opacity 400ms ease;
 }
 
 /* Reduced motion */
 .cine--static .eye__assembly,
 .cine--static .pupil-base,
-.cine--static .pupil-depth {
+.cine--static .pupil-depth,
+.cine--static .eye__stage,
+.cine--static .eye__breathe {
   transition: none !important;
   animation: none !important;
 }
@@ -471,19 +520,22 @@ html.is-cine .sound-toggle {
 }
 
 @media (max-width: 640px) {
-  .eye__assembly {
-    width: min(108vmin, 100vw);
-    height: min(108vmin, 100vw);
+  .eye__stage {
+    width: min(120vmin, 100vw);
+    height: min(120vmin, 100vw);
+  }
+
+  .eye-container.is-settled .eye__stage {
+    transform: scale(0.58) translate3d(0, -14%, 0);
   }
 
   .cine__brand {
-    top: 62%;
+    top: 56%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .eye-container.is-breathing .eye__assembly,
-  .eye-container.is-iris-breathing .eye__assembly,
+  .eye-container.is-breathing .eye__breathe,
   .eye-container.is-pupil-breathing .pupil-base,
   .eye-container.is-pupil-breathing .pupil-depth {
     animation: none !important;

@@ -88,6 +88,10 @@ html.is-home .stage.stage--alive .stage__footer {
 }
 
 /* Initial hidden state for staged entrance */
+html.is-home .stage--home-enter {
+  background: #010101;
+}
+
 html.is-home .stage--home-enter .stage__living,
 html.is-home .stage--home-enter .stage__sigil,
 html.is-home .stage--home-enter .stage__inscriptions,
