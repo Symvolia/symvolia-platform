@@ -60,6 +60,20 @@ html.is-home .stage.stage--alive .stage__sigil {
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
+  opacity: 1;
+  visibility: visible;
+  z-index: 6;
+}
+
+html.is-home .stage.stage--alive .stage__sigil-reveal,
+html.is-home .stage.stage--alive .stage__sigil-img {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  transform: none !important;
+  animation: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
 }
 
 html.is-home .stage.stage--alive .stage__inscriptions {
