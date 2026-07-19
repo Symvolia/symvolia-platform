@@ -203,10 +203,12 @@ html.is-cine .sound-toggle {
 .eye-container.is-shown .eye__assembly,
 .eye-container.is-open .eye__assembly {
   opacity: 1;
+  filter: contrast(1.28) brightness(1.08);
 }
 
 .eye-container.is-closing .eye__assembly {
   opacity: 0.15;
+  filter: contrast(1) brightness(0.4);
   transition-duration: 650ms;
   transition-timing-function: var(--ease-close);
 }
@@ -223,9 +225,14 @@ html.is-cine .sound-toggle {
 
 .eye__lightning path {
   mix-blend-mode: screen;
+  stroke: #ffffff !important;
 }
 
-/* Seal fades from pupil center after lids open */
+.eye__brush path {
+  mix-blend-mode: soft-light;
+}
+
+/* Seal = full iris diameter (r 168 / 800 ≈ 42%) */
 .eye__seal {
   position: absolute;
   inset: 0;
@@ -234,23 +241,23 @@ html.is-cine .sound-toggle {
   place-items: center;
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.12);
-  filter: blur(14px);
+  transform: scale(0.18);
+  filter: blur(16px);
   transition:
-    opacity 1600ms var(--ease-cine),
-    transform 1600ms var(--ease-cine),
-    filter 1600ms var(--ease-cine);
+    opacity 1700ms var(--ease-cine),
+    transform 1700ms var(--ease-cine),
+    filter 1700ms var(--ease-cine);
 }
 
 .eye__seal img {
   display: block;
-  width: min(19%, 6.5rem);
+  width: 42%;
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
   border-radius: 50%;
   mix-blend-mode: screen;
-  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.4));
+  filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.55)) contrast(1.15);
 }
 
 .eye-container.is-seal .eye__seal {
@@ -261,8 +268,8 @@ html.is-cine .sound-toggle {
 
 .eye-container.is-closing .eye__seal {
   opacity: 0;
-  transform: scale(0.4);
-  filter: blur(10px);
+  transform: scale(0.5);
+  filter: blur(12px);
   transition-duration: 450ms;
 }
 
@@ -516,7 +523,7 @@ html.is-cine .sound-toggle {
   }
 
   .eye__seal img {
-    width: min(22%, 5.5rem);
+    width: 42%;
   }
 
   .cine__brand {
