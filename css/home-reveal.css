@@ -33,32 +33,11 @@ html.is-home .stage.stage--alive .stage__composition {
 }
 
 html.is-home .stage.stage--alive .stage__living {
-  inset: 0;
+  display: none;
 }
 
 html.is-home .stage.stage--alive .living__cross {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--living-cross);
-  height: var(--living-cross);
-  transform: translate(-50%, -50%);
-  margin: 0;
-}
-
-html.is-home .stage.stage--alive .living__ouroboros {
-  inset: 0;
-  display: grid;
-  place-items: center;
-  animation: none !important;
-  opacity: 1;
-  transform: none !important;
-}
-
-html.is-home .stage.stage--alive .living__ouroboros-canvas {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: none;
 }
 
 /* Eye disc = sigil disc — same center as intro pupil */
@@ -103,7 +82,6 @@ html.is-home .stage--home-enter {
   background: #010101;
 }
 
-html.is-home .stage--home-enter .stage__living,
 html.is-home .stage--home-enter .stage__sigil,
 html.is-home .stage--home-enter .stage__inscriptions,
 html.is-home .stage--home-enter .stage__tagline,
@@ -113,7 +91,6 @@ html.is-home .stage--home-enter .stage__social {
   will-change: transform, opacity;
 }
 
-html.is-home .stage--home-enter .stage__living .living__cross,
 html.is-home .stage--home-enter .stage__composition .eye--requiem {
   transform: translate(-50%, -50%) scale(0.94);
 }
@@ -129,12 +106,6 @@ html.is-home .stage--home-enter .stage__social {
 }
 
 /* Reveal — preserve centering in every transform */
-html.is-home .stage--home-visible.stage--home-enter .stage__living {
-  opacity: 1;
-  transition: opacity 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-html.is-home .stage--home-visible.stage--home-enter .stage__living .living__cross,
 html.is-home .stage--home-visible.stage--home-enter .stage__composition .eye--requiem {
   transform: translate(-50%, -50%) scale(1);
   transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -170,12 +141,12 @@ html.is-home .stage--home-visible.stage--home-enter .stage__social {
     transform 600ms ease-out 950ms;
 }
 
-/* Breathe only after reveal — never fights enter scale */
-html.is-home .stage--home-visible.stage--alive .living__cross {
-  animation: home-cross-breathe 5.5s ease-in-out 1.3s infinite;
+/* Idle breathe on sigil disc after reveal */
+html.is-home .stage--home-visible.stage--alive .stage__composition .eye--requiem {
+  animation: home-sigil-breathe 5.5s ease-in-out 1.3s infinite;
 }
 
-@keyframes home-cross-breathe {
+@keyframes home-sigil-breathe {
   0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
@@ -212,12 +183,11 @@ html.is-home .stage--alive .living__script--runes {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.is-home .stage--home-visible.stage--alive .living__cross,
+  html.is-home .stage--home-visible.stage--alive .stage__composition .eye--requiem,
   html.is-home .stage--alive .living__script--runes {
     animation: none !important;
   }
 
-  html.is-home .stage--home-enter .stage__living,
   html.is-home .stage--home-enter .stage__sigil,
   html.is-home .stage--home-enter .stage__inscriptions,
   html.is-home .stage--home-enter .stage__tagline,
@@ -226,7 +196,6 @@ html.is-home .stage--alive .living__script--runes {
     opacity: 1 !important;
   }
 
-  html.is-home .stage--home-enter .stage__living .living__cross,
   html.is-home .stage--home-enter .stage__composition .eye--requiem {
     transform: translate(-50%, -50%) scale(1) !important;
   }
