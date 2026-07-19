@@ -204,7 +204,7 @@ html.is-cine .sound-toggle {
 
 .eye-container.is-open .eye__assembly {
   opacity: 1;
-  filter: brightness(1.04) saturate(1.12) contrast(1.12);
+  filter: brightness(1.06) saturate(1.25) contrast(1.14);
 }
 
 .eye-container.is-closing .eye__assembly {
@@ -223,7 +223,8 @@ html.is-cine .sound-toggle {
 
 /* Pupil — origin fixed for SVG circles */
 .pupil-base,
-.pupil-depth {
+.pupil-depth,
+.pupil-edge-soft {
   transform-box: fill-box;
   transform-origin: center;
   transform: scale(1);
@@ -231,12 +232,14 @@ html.is-cine .sound-toggle {
 }
 
 .eye-container.is-open.is-pupil-ready .pupil-base,
-.eye-container.is-open.is-pupil-ready .pupil-depth {
+.eye-container.is-open.is-pupil-ready .pupil-depth,
+.eye-container.is-open.is-pupil-ready .pupil-edge-soft {
   transform: scale(0.56);
 }
 
 .eye-container.is-closing .pupil-base,
-.eye-container.is-closing .pupil-depth {
+.eye-container.is-closing .pupil-depth,
+.eye-container.is-closing .pupil-edge-soft {
   transform: scale(1.18);
   transition-duration: 550ms;
   transition-timing-function: var(--ease-close);
@@ -244,7 +247,8 @@ html.is-cine .sound-toggle {
 }
 
 .eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-base,
-.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-depth {
+.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-depth,
+.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-edge-soft {
   animation: pupil-micro 5.2s var(--ease-soft) infinite;
 }
 
@@ -259,22 +263,24 @@ html.is-cine .sound-toggle {
 }
 
 .iris-fibers {
-  opacity: 0.28;
+  opacity: 0.32;
   transition: opacity 1800ms var(--ease-soft) 400ms;
 }
 
 .eye-container.is-open .iris-fibers {
-  opacity: 0.62;
+  opacity: 0.72;
 }
 
 .corneal-gloss,
-.corneal-gloss-small {
+.corneal-gloss-small,
+.corneal-gloss-tiny {
   opacity: 0;
   transition: opacity 1400ms var(--ease-soft) 900ms;
 }
 
 .eye-container.is-open .corneal-gloss,
-.eye-container.is-open .corneal-gloss-small {
+.eye-container.is-open .corneal-gloss-small,
+.eye-container.is-open .corneal-gloss-tiny {
   opacity: 1;
 }
 
