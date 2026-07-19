@@ -393,11 +393,25 @@ html.is-cine .sound-toggle {
 
 .cine__tagline {
   margin: 0.4rem 0 0;
-  font-family: 'Nothing You Could Do', cursive;
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  color: rgba(196, 146, 42, 0.55);
   opacity: 0;
   transform: translate3d(0, 10px, 0);
+}
+
+/* Match homepage .stage__tagline span */
+.cine__tagline span {
+  display: inline-block;
+  font-family: var(--font-elegant);
+  font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--silver);
+  opacity: 0.75;
+  text-shadow:
+    0 0 36px rgba(70, 60, 50, 0.12),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 0 18px rgba(255, 255, 255, 0.06);
 }
 
 .cine__mark.is-shown,
@@ -552,10 +566,6 @@ html.is-cine .sound-toggle {
     letter-spacing: 0.01em;
   }
 
-  .cine__tagline {
-    font-size: clamp(1rem, 5vw, 1.25rem);
-  }
-
   .cine__enter {
     bottom: max(4.5vh, 1.4rem);
     left: 50%;
@@ -577,9 +587,6 @@ html.is-cine .sound-toggle {
     letter-spacing: 0.02em;
   }
 
-  .cine__tagline {
-    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
