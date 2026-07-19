@@ -96,13 +96,19 @@ html.is-home .stage--home-enter {
   background: #010101;
 }
 
-html.is-home .stage--home-enter .stage__sigil,
+/* Keep the seal visible immediately — only orbit / CTA fade in */
 html.is-home .stage--home-enter .stage__inscriptions,
 html.is-home .stage--home-enter .stage__tagline,
 html.is-home .stage--home-enter .stage__enter,
 html.is-home .stage--home-enter .stage__social {
   opacity: 0;
   will-change: transform, opacity;
+}
+
+html.is-home .stage--home-enter .stage__sigil,
+html.is-home .stage--home-enter .stage__sigil-img {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 html.is-home .stage--home-enter .stage__composition .eye--requiem {
@@ -202,7 +208,6 @@ html.is-home .stage--alive .living__script--runes {
     animation: none !important;
   }
 
-  html.is-home .stage--home-enter .stage__sigil,
   html.is-home .stage--home-enter .stage__inscriptions,
   html.is-home .stage--home-enter .stage__tagline,
   html.is-home .stage--home-enter .stage__enter,

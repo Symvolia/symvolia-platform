@@ -226,9 +226,11 @@
     window.setTimeout(beginJourney, reduced ? 50 : 200);
   }
 
-  // Failsafe: never leave the journey locked.
+  // Failsafe: never leave the journey locked — but don't awaken under the cine veil.
   window.setTimeout(() => {
-    if (!orchestrated) beginJourney();
+    if (!orchestrated && !html.classList.contains('is-cine') && !html.classList.contains('is-intro')) {
+      beginJourney();
+    }
     html.classList.remove('is-journey-locked');
   }, 12000);
 

@@ -258,6 +258,15 @@
 
 /* ─── Alive: eye dissolves, sigil remains centered ─── */
 
+/* After cine, .eye can stay at opacity:0 (presence anim never filled). Force seal. */
+.stage--alive .eye,
+.stage--alive .eye--requiem {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  animation: none !important;
+}
+
 .stage--alive .eye__halo,
 .stage--alive .eye__orbit,
 .stage--alive .eye__iris,
@@ -375,11 +384,19 @@
 .stage--alive .stage__sigil-img {
   position: relative;
   z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   background: #010101;
-  opacity: 1;
-  filter: none;
-  transform: none;
-  animation: none;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  transform: none !important;
+  animation: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
 }
 
 .stage--alive .living__code {
