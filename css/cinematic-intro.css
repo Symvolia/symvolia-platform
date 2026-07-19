@@ -232,7 +232,7 @@ html.is-cine .sound-toggle {
   mix-blend-mode: soft-light;
 }
 
-/* Seal = full iris diameter (r 168 / 800 ≈ 42%) */
+/* Seal = pupil disc only (r 78 / 800 ≈ 19.5%) */
 .eye__seal {
   position: absolute;
   inset: 0;
@@ -241,23 +241,23 @@ html.is-cine .sound-toggle {
   place-items: center;
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.18);
-  filter: blur(16px);
+  transform: scale(0.15);
+  filter: blur(12px);
   transition:
-    opacity 1700ms var(--ease-cine),
-    transform 1700ms var(--ease-cine),
-    filter 1700ms var(--ease-cine);
+    opacity 1600ms var(--ease-cine),
+    transform 1600ms var(--ease-cine),
+    filter 1600ms var(--ease-cine);
 }
 
 .eye__seal img {
   display: block;
-  width: 42%;
+  width: 18.5%;
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
   border-radius: 50%;
   mix-blend-mode: screen;
-  filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.55)) contrast(1.15);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
 }
 
 .eye-container.is-seal .eye__seal {
@@ -268,8 +268,8 @@ html.is-cine .sound-toggle {
 
 .eye-container.is-closing .eye__seal {
   opacity: 0;
-  transform: scale(0.5);
-  filter: blur(12px);
+  transform: scale(0.35);
+  filter: blur(10px);
   transition-duration: 450ms;
 }
 
@@ -523,7 +523,7 @@ html.is-cine .sound-toggle {
   }
 
   .eye__seal img {
-    width: 42%;
+    width: 18.5%;
   }
 
   .cine__brand {
