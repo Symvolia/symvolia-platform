@@ -378,23 +378,25 @@ html.is-cine .sound-toggle {
   margin: 0;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(1.25rem, 3vw, 1.85rem);
-  letter-spacing: 0.38em;
-  text-indent: 0.38em;
+  font-size: clamp(1.55rem, 4.2vw, 2.35rem);
+  letter-spacing: 0.02em;
+  text-indent: 0;
   text-transform: uppercase;
-  color: rgba(255, 248, 238, 0.9);
+  color: rgba(255, 248, 238, 0.92);
+  white-space: nowrap;
 }
 
 .cine__letter {
   display: inline-block;
   opacity: 0;
   transform: translate3d(0, 14px, 0);
+  letter-spacing: 0;
 }
 
 .cine__tagline {
-  margin: 0.2rem 0 0;
+  margin: 0.35rem 0 0;
   font-family: 'Nothing You Could Do', cursive;
-  font-size: clamp(0.82rem, 1.9vw, 1rem);
+  font-size: clamp(0.78rem, 1.8vw, 0.98rem);
   color: rgba(196, 146, 42, 0.5);
   opacity: 0;
   transform: translate3d(0, 10px, 0);
@@ -527,11 +529,33 @@ html.is-cine .sound-toggle {
   }
 
   .cine__brand {
-    top: calc(50% + min(28vmin, 200px));
+    top: calc(50% + min(26vmin, 180px));
+    width: min(92vw, 22rem);
+    padding: 0 0.75rem;
+  }
+
+  .cine__wordmark {
+    font-size: clamp(1.4rem, 7.5vw, 1.85rem);
+    letter-spacing: 0.01em;
+  }
+
+  .cine__tagline {
+    font-size: clamp(0.72rem, 3.6vw, 0.9rem);
   }
 
   .cine__enter {
     bottom: max(5vh, 1.6rem);
+  }
+}
+
+@media (min-width: 641px) {
+  .cine__brand {
+    top: calc(50% + min(28vmin, 220px));
+  }
+
+  .cine__wordmark {
+    font-size: clamp(1.75rem, 3.4vw, 2.4rem);
+    letter-spacing: 0.02em;
   }
 }
 
