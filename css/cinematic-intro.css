@@ -155,18 +155,18 @@ html.is-cine .sound-toggle {
   height: auto;
   display: grid;
   place-items: center;
-  transform: translate(-50%, -50%) scale(1.51);
+  transform: translate(-50%, calc(-50% - 5cm)) scale(1.51);
   transform-origin: center center;
   transition: transform var(--dur-settle) var(--ease-cine);
   will-change: transform;
 }
 
 .eye-container.is-settled .eye__stage {
-  transform: translate(-50%, -50%) scale(0.98);
+  transform: translate(-50%, calc(-50% - 5cm)) scale(0.98);
 }
 
 .eye-container.is-closing .eye__stage {
-  transform: translate(-50%, -50%) scale(1.23);
+  transform: translate(-50%, calc(-50% - 5cm)) scale(1.23);
   transition-duration: 700ms;
   transition-timing-function: var(--ease-close);
 }
@@ -345,7 +345,7 @@ html.is-cine .sound-toggle {
   flex-direction: column;
   align-items: center;
   gap: 0.55rem;
-  transform: translate(-50%, calc(min(34vmin, 270px) + 12px));
+  transform: translate(-50%, calc(min(34vmin, 270px) - 5cm + 12px));
   pointer-events: none;
   text-align: center;
   opacity: 0;
@@ -357,7 +357,7 @@ html.is-cine .sound-toggle {
 
 .cine.is-brand .cine__brand {
   opacity: 1;
-  transform: translate(-50%, min(34vmin, 270px));
+  transform: translate(-50%, calc(min(34vmin, 270px) - 5cm));
 }
 
 .cine__mark {
@@ -520,15 +520,15 @@ html.is-cine .sound-toggle {
     width: 100vw;
     aspect-ratio: 800 / 600;
     height: auto;
-    transform: translate(-50%, -50%) scale(1.35);
+    transform: translate(-50%, calc(-50% - 5cm)) scale(1.35);
   }
 
   .eye-container.is-settled .eye__stage {
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: translate(-50%, calc(-50% - 5cm)) scale(1.05);
   }
 
   .eye-container.is-closing .eye__stage {
-    transform: translate(-50%, -50%) scale(1.15);
+    transform: translate(-50%, calc(-50% - 5cm)) scale(1.15);
   }
 
   .eye__seal img {
@@ -539,11 +539,11 @@ html.is-cine .sound-toggle {
     width: min(94vw, 26rem);
     padding: 0 0.5rem;
     gap: 0.4rem;
-    transform: translate(-50%, calc(min(30vmin, 200px) + 10px));
+    transform: translate(-50%, calc(min(30vmin, 200px) - 5cm + 10px));
   }
 
   .cine.is-brand .cine__brand {
-    transform: translate(-50%, min(30vmin, 200px));
+    transform: translate(-50%, calc(min(30vmin, 200px) - 5cm));
   }
 
   .cine__wordmark {
@@ -564,11 +564,11 @@ html.is-cine .sound-toggle {
 
 @media (min-width: 641px) {
   .cine__brand {
-    transform: translate(-50%, calc(min(36vmin, 290px) + 12px));
+    transform: translate(-50%, calc(min(36vmin, 290px) - 5cm + 12px));
   }
 
   .cine.is-brand .cine__brand {
-    transform: translate(-50%, min(36vmin, 290px));
+    transform: translate(-50%, calc(min(36vmin, 290px) - 5cm));
   }
 
   .cine__wordmark {
