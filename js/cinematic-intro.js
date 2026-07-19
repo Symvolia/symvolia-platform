@@ -158,7 +158,7 @@
     body.style.overflow = 'hidden';
 
     await Promise.all(
-      ['assets/logo.png', 'assets/logo.svg', 'assets/logo-sigil.png'].map(
+      ['assets/logo.png', 'assets/logo.svg', 'assets/logo-sigil.png', 'assets/logo-seal.png'].map(
         (src) =>
           new Promise((resolve) => {
             const img = new Image();
