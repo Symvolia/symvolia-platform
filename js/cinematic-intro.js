@@ -158,7 +158,7 @@
     body.style.overflow = 'hidden';
 
     await Promise.all(
-      ['assets/logo.png', 'assets/logo.svg', 'assets/logo-sigil.png'].map(
+      ['assets/logo.png', 'assets/logo.svg', 'assets/logo-sigil.png', 'assets/eye-open.png'].map(
         (src) =>
           new Promise((resolve) => {
             const img = new Image();
@@ -192,14 +192,14 @@
     await delay(180);
     if (timeline.skipped) return;
 
-    // Lids part + iris emerges together
+    // Lids part — reveal the painted eye
     eye.classList.add('is-open');
     cine.classList.add('is-grain');
 
-    // Light reaches the retina — pupil contracts mid-open
-    await delay(1300);
+    // After lids open: seal fades from pupil center
+    await delay(2000);
     if (timeline.skipped) return;
-    eye.classList.add('is-pupil-ready');
+    eye.classList.add('is-seal');
 
     // Soft vignette as world settles into view
     await delay(900);
@@ -209,12 +209,12 @@
       vignette.classList.add('is-shown');
     }
 
-    // Hold the open close-up briefly
-    await delay(700);
+    // Hold on the open eye + seal
+    await delay(800);
     if (timeline.skipped) return;
 
     // Pull back — make space for the word
-    eye.classList.add('is-settled', 'is-breathing', 'is-pupil-breathing');
+    eye.classList.add('is-settled', 'is-breathing');
     timeline.currentPhase = 2;
 
     await delay(900);
@@ -273,7 +273,7 @@
     unlockSkip = false;
 
     show(eye);
-    eye.classList.add('is-open', 'is-pupil-ready', 'is-settled', 'is-breathing', 'is-pupil-breathing');
+    eye.classList.add('is-open', 'is-seal', 'is-settled', 'is-breathing');
     cine.classList.add('is-grain', 'is-brand', 'is-shown');
     if (vignette) {
       show(vignette);
@@ -295,7 +295,7 @@
   async function reducedPath() {
     cine.classList.add('cine--static', 'is-shown', 'is-brand', 'is-grain');
     show(eye);
-    eye.classList.add('is-open', 'is-pupil-ready', 'is-settled');
+    eye.classList.add('is-open', 'is-seal', 'is-settled');
     if (vignette) {
       show(vignette);
       vignette.classList.add('is-shown');
@@ -343,7 +343,7 @@
     await delay(240);
 
     // Keep is-open; is-closing overrides lids — pupil stays centered
-    eye.classList.remove('is-breathing', 'is-pupil-breathing', 'is-settled');
+    eye.classList.remove('is-breathing', 'is-settled');
     eye.classList.add('is-closing');
 
     await delay(360);

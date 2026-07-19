@@ -146,26 +146,26 @@ html.is-cine .sound-toggle {
   z-index: 0;
 }
 
-/* Stage: ECU → settle — pupil stays on true viewport center */
+/* Stage: wide ECU matching reference eye photo */
 .eye__stage {
   position: relative;
   z-index: 1;
-  width: min(118vmin, 920px);
-  height: min(118vmin, 920px);
+  width: min(100vw, 1280px);
+  aspect-ratio: 2048 / 1152;
+  height: auto;
   display: grid;
   place-items: center;
-  transform: scale(1.1);
+  transform: scale(1.06);
   transition: transform var(--dur-settle) var(--ease-cine);
   will-change: transform;
 }
 
-/* ~iris diameter ≈ --sigil-alive so handoff lands on the seal */
 .eye-container.is-settled .eye__stage {
-  transform: scale(0.5);
+  transform: scale(0.72);
 }
 
 .eye-container.is-closing .eye__stage {
-  transform: scale(0.72);
+  transform: scale(0.88);
   transition-duration: 700ms;
   transition-timing-function: var(--ease-close);
 }
@@ -188,7 +188,7 @@ html.is-cine .sound-toggle {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.014);
+    transform: scale(1.012);
   }
 }
 
@@ -196,96 +196,35 @@ html.is-cine .sound-toggle {
   position: relative;
   width: 100%;
   height: 100%;
-  opacity: 0.08;
-  filter: brightness(0.08) saturate(0.55);
-  transition:
-    opacity var(--dur-reveal) var(--ease-cine),
-    filter var(--dur-reveal) var(--ease-cine);
+  opacity: 0;
+  transition: opacity 900ms var(--ease-cine);
 }
 
+.eye-container.is-shown .eye__assembly,
 .eye-container.is-open .eye__assembly {
   opacity: 1;
-  filter: brightness(1.06) saturate(1.25) contrast(1.14);
 }
 
 .eye-container.is-closing .eye__assembly {
-  opacity: 0.25;
-  filter: brightness(0.28) saturate(0.6);
+  opacity: 0.2;
   transition-duration: 650ms;
   transition-timing-function: var(--ease-close);
 }
 
-.eye__iris-svg {
+/* Reference eye — exact attached artwork */
+.eye__photo {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  object-fit: cover;
+  object-position: center center;
+  user-select: none;
+  pointer-events: none;
 }
 
-/* Pupil — origin fixed for SVG circles */
-.pupil-base,
-.pupil-depth,
-.pupil-edge-soft {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: scale(1);
-  transition: transform var(--dur-pupil) var(--ease-cine);
-}
-
-.eye-container.is-open.is-pupil-ready .pupil-base,
-.eye-container.is-open.is-pupil-ready .pupil-depth,
-.eye-container.is-open.is-pupil-ready .pupil-edge-soft {
-  transform: scale(0.56);
-}
-
-.eye-container.is-closing .pupil-base,
-.eye-container.is-closing .pupil-depth,
-.eye-container.is-closing .pupil-edge-soft {
-  transform: scale(1.18);
-  transition-duration: 550ms;
-  transition-timing-function: var(--ease-close);
-  animation: none !important;
-}
-
-.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-base,
-.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-depth,
-.eye-container.is-pupil-breathing.is-pupil-ready:not(.is-closing) .pupil-edge-soft {
-  animation: pupil-micro 5.2s var(--ease-soft) infinite;
-}
-
-@keyframes pupil-micro {
-  0%,
-  100% {
-    transform: scale(0.56);
-  }
-  50% {
-    transform: scale(0.535);
-  }
-}
-
-.iris-fibers {
-  opacity: 0.32;
-  transition: opacity 1800ms var(--ease-soft) 400ms;
-}
-
-.eye-container.is-open .iris-fibers {
-  opacity: 0.72;
-}
-
-.corneal-gloss,
-.corneal-gloss-small,
-.corneal-gloss-tiny {
-  opacity: 0;
-  transition: opacity 1400ms var(--ease-soft) 900ms;
-}
-
-.eye-container.is-open .corneal-gloss,
-.eye-container.is-open .corneal-gloss-small,
-.eye-container.is-open .corneal-gloss-tiny {
-  opacity: 1;
-}
-
-/* Sigil locked to pupil center */
+/* Seal fades from pupil center after lids open */
 .eye__seal {
   position: absolute;
   inset: 0;
@@ -294,31 +233,36 @@ html.is-cine .sound-toggle {
   place-items: center;
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.72);
+  transform: scale(0.12);
+  filter: blur(14px);
   transition:
-    opacity 1100ms var(--ease-cine) 200ms,
-    transform 1100ms var(--ease-cine) 200ms;
+    opacity 1600ms var(--ease-cine),
+    transform 1600ms var(--ease-cine),
+    filter 1600ms var(--ease-cine);
 }
 
 .eye__seal img {
   display: block;
-  width: 26%;
-  height: 26%;
+  width: min(18%, 7.5rem);
+  height: auto;
+  aspect-ratio: 1;
   object-fit: contain;
   border-radius: 50%;
-  filter: drop-shadow(0 0 10px rgba(180, 140, 255, 0.25));
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.35));
 }
 
-.eye-container.is-open.is-pupil-ready .eye__seal {
+.eye-container.is-seal .eye__seal {
   opacity: 1;
   transform: scale(1);
+  filter: blur(0);
 }
 
 .eye-container.is-closing .eye__seal {
   opacity: 0;
-  transform: scale(0.85);
-  transition-duration: 400ms;
-  transition-delay: 0ms;
+  transform: scale(0.4);
+  filter: blur(10px);
+  transition-duration: 450ms;
 }
 
 /* ── Eyelids ── */
@@ -355,13 +299,13 @@ html.is-cine .sound-toggle {
   transform: translate3d(0, 0, 0);
 }
 
-/* Almond aperture — keep lids in frame */
+/* Fully reveal the painted eye — lids leave the frame */
 .eye-container.is-open:not(.is-closing) .eye__lid--upper {
-  transform: translate3d(0, -40%, 0);
+  transform: translate3d(0, -100%, 0);
 }
 
 .eye-container.is-open:not(.is-closing) .eye__lid--lower {
-  transform: translate3d(0, 42%, 0);
+  transform: translate3d(0, 100%, 0);
   transition-delay: 160ms;
 }
 
@@ -384,7 +328,7 @@ html.is-cine .sound-toggle {
 .cine__brand {
   position: absolute;
   left: 50%;
-  top: calc(50% + min(30vmin, 230px));
+  top: calc(50% + min(22vmin, 170px));
   z-index: 8;
   display: flex;
   flex-direction: column;
@@ -561,16 +505,21 @@ html.is-cine .sound-toggle {
 
 @media (max-width: 640px) {
   .eye__stage {
-    width: min(120vmin, 100vw);
-    height: min(120vmin, 100vw);
+    width: 100vw;
+    aspect-ratio: 2048 / 1152;
+    height: auto;
   }
 
   .eye-container.is-settled .eye__stage {
-    transform: scale(0.48);
+    transform: scale(0.78);
+  }
+
+  .eye__seal img {
+    width: min(22%, 5.5rem);
   }
 
   .cine__brand {
-    top: calc(50% + min(26vmin, 180px));
+    top: calc(50% + min(20vmin, 140px));
     width: min(92vw, 22rem);
     padding: 0 0.75rem;
   }
@@ -591,7 +540,7 @@ html.is-cine .sound-toggle {
 
 @media (min-width: 641px) {
   .cine__brand {
-    top: calc(50% + min(28vmin, 220px));
+    top: calc(50% + min(20vmin, 160px));
   }
 
   .cine__wordmark {
