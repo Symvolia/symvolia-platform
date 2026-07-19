@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════
-   Homepage — sigil / pupil share one viewport center
+   Homepage — fullscreen alchemical game menu
    ══════════════════════════════════════════════════════════════════════ */
 
 .stage__home-anchor {
@@ -12,43 +12,193 @@
   opacity: 0;
 }
 
-/* Single mandala center — composition, eye (pupil→sigil), cross, ouroboros */
+/* Fullscreen shell */
 html.is-home .stage.stage--alive {
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding:
+    max(1rem, env(safe-area-inset-top))
+    max(1rem, env(safe-area-inset-right))
+    max(1rem, env(safe-area-inset-bottom))
+    max(1rem, env(safe-area-inset-left)) !important;
+  overflow: hidden !important;
+  background: #010101;
 }
 
-html.is-home .stage.stage--alive .stage__composition {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: 0 !important;
-  transform: translate(-50%, -50%);
-  animation: none !important;
-  width: min(var(--mandala-size), 86vmin);
-  height: min(var(--mandala-size), 86vmin);
-  max-width: min(var(--mandala-size), 86vmin);
-  max-height: min(var(--mandala-size), 86vmin);
-}
-
-html.is-home .stage.stage--alive .stage__living {
-  display: none;
-}
-
+html.is-home .stage.stage--alive .stage__living,
 html.is-home .stage.stage--alive .living__cross {
   display: none;
 }
 
-/* Eye disc = sigil disc — same center as intro pupil */
+/* Menu grid: left | seal | right */
+html.is-home .stage.stage--alive .stage__menu {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) auto minmax(10rem, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 2.5vw, 2.5rem);
+  width: 100%;
+  min-height: 0;
+  z-index: 6;
+  padding: 0 clamp(0.25rem, 1.5vw, 1rem);
+}
+
+html.is-home .stage.stage--alive .stage__menu-col {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--left {
+  justify-content: flex-end;
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--right {
+  justify-content: flex-start;
+}
+
+html.is-home .stage.stage--alive .stage__menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 3.2vh, 1.85rem);
+  width: min(100%, 18rem);
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-list {
+  align-items: flex-end;
+  text-align: right;
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-list {
+  align-items: flex-start;
+  text-align: left;
+}
+
+html.is-home .stage.stage--alive .stage__menu-item {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  font-family: var(--font-elegant);
+  font-size: clamp(0.72rem, 1.35vw, 0.95rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(210, 200, 188, 0.72);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+  transition:
+    color 280ms var(--ease-open),
+    text-shadow 280ms var(--ease-open),
+    letter-spacing 280ms var(--ease-open),
+    transform 280ms var(--ease-open);
+  outline: none;
+  cursor: pointer;
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item:hover,
+html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item:focus-visible,
+html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item.is-selected {
+  transform: translateX(-4px);
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item:hover,
+html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item:focus-visible,
+html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item.is-selected {
+  transform: translateX(4px);
+}
+
+html.is-home .stage.stage--alive .stage__menu-item:hover,
+html.is-home .stage.stage--alive .stage__menu-item:focus-visible,
+html.is-home .stage.stage--alive .stage__menu-item.is-selected {
+  color: #ffffff;
+  letter-spacing: 0.18em;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.7),
+    0 0 28px rgba(255, 255, 255, 0.28);
+}
+
+html.is-home .stage.stage--alive .stage__menu-item:focus-visible::before,
+html.is-home .stage.stage--alive .stage__menu-item.is-selected::before {
+  content: '›';
+  position: absolute;
+  top: 50%;
+  font-style: normal;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.75);
+  transform: translateY(-50%);
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item:focus-visible::before,
+html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item.is-selected::before {
+  right: -1.1em;
+  content: '‹';
+}
+
+html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item:focus-visible::before,
+html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item.is-selected::before {
+  left: -1.1em;
+}
+
+/* Sigil + ritual rune ring */
+html.is-home .stage.stage--alive .stage__sigil-wrap {
+  position: relative;
+  width: min(var(--home-sigil, 52vmin), 480px);
+  height: min(var(--home-sigil, 52vmin), 480px);
+  --home-sigil: min(52vmin, 480px);
+  --home-runes: calc(var(--home-sigil) * 1.18);
+  --living-runes: var(--home-runes);
+  --living-runes-r: calc(var(--home-runes) / 2);
+  flex-shrink: 0;
+}
+
+html.is-home .stage.stage--alive .stage__composition {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+html.is-home .stage.stage--alive .stage__inscriptions {
+  inset: 50%;
+  width: var(--home-runes);
+  height: var(--home-runes);
+  margin: calc(var(--home-runes) / -2);
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  z-index: 5;
+}
+
+html.is-home .stage.stage--alive .living__script--runes {
+  width: 100%;
+  height: 100%;
+}
+
 html.is-home .stage.stage--alive .stage__composition .eye--requiem {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: var(--sigil-alive);
-  height: var(--sigil-alive);
-  max-width: var(--sigil-alive);
-  max-height: var(--sigil-alive);
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
   margin: 0;
   transform: translate(-50%, -50%);
 }
@@ -76,19 +226,37 @@ html.is-home .stage.stage--alive .stage__sigil-img {
   mask-image: none !important;
 }
 
-html.is-home .stage.stage--alive .stage__inscriptions {
-  inset: 0;
+/* Footer — fixed bottom band */
+html.is-home .stage.stage--alive .stage__footer {
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  transform: none;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0.35rem 1rem 0.15rem;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
 }
 
-html.is-home .stage.stage--alive .stage__footer {
-  position: absolute;
-  left: 50%;
-  right: auto;
-  bottom: clamp(1.2rem, 4.5vh, 2.8rem);
-  transform: translateX(-50%);
-  width: min(36rem, 92vw);
-  margin: 0;
-  z-index: 8;
+html.is-home .stage.stage--alive .stage__tagline {
+  opacity: 1;
+  animation: none;
+}
+
+html.is-home .stage.stage--alive .stage__enter {
+  margin-top: 0.15rem;
+}
+
+html.is-home .stage.stage--alive .stage__social {
+  margin-top: 0.35rem;
+  margin-bottom: 0.15rem;
 }
 
 /* Staged entrance */
@@ -96,7 +264,7 @@ html.is-home .stage--home-enter {
   background: #010101;
 }
 
-/* Keep the seal visible immediately — only orbit / CTA fade in */
+html.is-home .stage--home-enter .stage__menu-col,
 html.is-home .stage--home-enter .stage__inscriptions,
 html.is-home .stage--home-enter .stage__tagline,
 html.is-home .stage--home-enter .stage__enter,
@@ -115,6 +283,14 @@ html.is-home .stage--home-enter .stage__composition .eye--requiem {
   transform: translate(-50%, -50%) scale(0.94);
 }
 
+html.is-home .stage--home-enter .stage__menu-col--left {
+  transform: translate3d(-16px, 0, 0);
+}
+
+html.is-home .stage--home-enter .stage__menu-col--right {
+  transform: translate3d(16px, 0, 0);
+}
+
 html.is-home .stage--home-enter .stage__inscriptions {
   transform: rotate(-2deg);
 }
@@ -125,7 +301,6 @@ html.is-home .stage--home-enter .stage__social {
   transform: translate3d(0, 12px, 0);
 }
 
-/* Reveal — preserve centering in every transform */
 html.is-home .stage--home-visible.stage--home-enter .stage__composition .eye--requiem {
   transform: translate(-50%, -50%) scale(1);
   transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -134,6 +309,15 @@ html.is-home .stage--home-visible.stage--home-enter .stage__composition .eye--re
 html.is-home .stage--home-visible.stage--home-enter .stage__sigil {
   opacity: 1;
   transition: opacity 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+html.is-home .stage--home-visible.stage--home-enter .stage__menu-col--left,
+html.is-home .stage--home-visible.stage--home-enter .stage__menu-col--right {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 280ms,
+    transform 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 280ms;
 }
 
 html.is-home .stage--home-visible.stage--home-enter .stage__inscriptions {
@@ -202,17 +386,90 @@ html.is-home .stage--alive .living__script--runes {
   }
 }
 
+/* Mobile: seal → single menu list → footer */
+@media (max-width: 820px) {
+  html.is-home .stage.stage--alive {
+    padding:
+      max(0.75rem, env(safe-area-inset-top))
+      max(0.85rem, env(safe-area-inset-right))
+      max(0.75rem, env(safe-area-inset-bottom))
+      max(0.85rem, env(safe-area-inset-left)) !important;
+  }
+
+  html.is-home .stage.stage--alive .stage__menu {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    align-content: center;
+    gap: 0.85rem;
+    overflow: auto;
+  }
+
+  html.is-home .stage.stage--alive .stage__sigil-wrap {
+    order: 1;
+    width: min(58vmin, 280px);
+    height: min(58vmin, 280px);
+    --home-sigil: min(58vmin, 280px);
+  }
+
+  html.is-home .stage.stage--alive .stage__menu-col--left,
+  html.is-home .stage.stage--alive .stage__menu-col--right {
+    order: 2;
+    justify-content: center;
+    width: 100%;
+  }
+
+  html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-list,
+  html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-list {
+    align-items: center;
+    text-align: center;
+    width: min(100%, 22rem);
+    gap: 0.85rem;
+  }
+
+  /* Stack both columns as one continuous menu */
+  html.is-home .stage.stage--alive .stage__menu-col--left {
+    margin-bottom: -0.35rem;
+  }
+
+  html.is-home .stage.stage--alive .stage__menu-item {
+    font-size: clamp(0.78rem, 3.4vw, 0.95rem);
+  }
+
+  html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item:hover,
+  html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item:focus-visible,
+  html.is-home .stage.stage--alive .stage__menu-col--left .stage__menu-item.is-selected,
+  html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item:hover,
+  html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item:focus-visible,
+  html.is-home .stage.stage--alive .stage__menu-col--right .stage__menu-item.is-selected {
+    transform: none;
+  }
+
+  html.is-home .stage.stage--alive .stage__menu-item:focus-visible::before,
+  html.is-home .stage.stage--alive .stage__menu-item.is-selected::before {
+    left: -1.05em;
+    right: auto;
+    content: '›';
+  }
+
+  html.is-home .stage.stage--alive .stage__footer {
+    gap: 0.45rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html.is-home .stage--home-visible.stage--alive .stage__composition .eye--requiem,
   html.is-home .stage--alive .living__script--runes {
     animation: none !important;
   }
 
+  html.is-home .stage--home-enter .stage__menu-col,
   html.is-home .stage--home-enter .stage__inscriptions,
   html.is-home .stage--home-enter .stage__tagline,
   html.is-home .stage--home-enter .stage__enter,
   html.is-home .stage--home-enter .stage__social {
     opacity: 1 !important;
+    transform: none !important;
   }
 
   html.is-home .stage--home-enter .stage__composition .eye--requiem {

@@ -339,9 +339,105 @@
     const living = document.getElementById('stageLiving');
     const sigil = document.getElementById('sigilCore');
     const inscriptions = document.querySelector('.stage__inscriptions');
+    const stageMenu = document.getElementById('stageMenu');
     if (living) living.setAttribute('aria-hidden', 'false');
     if (sigil) sigil.setAttribute('aria-hidden', 'false');
     if (inscriptions) inscriptions.setAttribute('aria-hidden', 'false');
+    if (stageMenu) stageMenu.removeAttribute('aria-hidden');
+  }
+
+  function getStageMenuItems() {
+    return Array.from(stage.querySelectorAll('.stage__menu-item'));
+  }
+
+  function setMenuSelection(index) {
+    const items = getStageMenuItems();
+    items.forEach((item, i) => {
+      item.classList.toggle('is-selected', i === index);
+    });
+    return items[index] || null;
+  }
+
+  function activateMenuItem(item) {
+    if (!item || entered) return;
+    const target = item.getAttribute('data-enter');
+    if (target) {
+      enterSite(target.replace(/^#/, ''));
+      return;
+    }
+    // External / plain links
+    if (item.target === '_blank') {
+      window.open(item.href, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    item.click();
+  }
+
+  function bindStageMenu() {
+    const items = getStageMenuItems();
+    if (!items.length) return;
+
+    let selected = 0;
+    setMenuSelection(selected);
+
+    items.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        const target = item.getAttribute('data-enter');
+        if (!target) return; // let external links work natively
+        e.preventDefault();
+        selected = index;
+        setMenuSelection(selected);
+        if (!entered) enterSite(target.replace(/^#/, ''));
+      });
+
+      item.addEventListener('mouseenter', () => {
+        selected = index;
+        setMenuSelection(selected);
+      });
+
+      item.addEventListener('focus', () => {
+        selected = index;
+        setMenuSelection(selected);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (entered || !document.documentElement.classList.contains('is-home')) return;
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter') return;
+
+      const active = document.activeElement;
+      const onMenu =
+        active &&
+        (active.classList?.contains('stage__menu-item') ||
+          stage.contains(active) && active.closest?.('.stage__menu'));
+      const onEnterBtn = active === enterBtn;
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        // Don't steal arrows from text fields
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+        e.preventDefault();
+        const list = getStageMenuItems();
+        if (!list.length) return;
+        if (e.key === 'ArrowDown') selected = (selected + 1) % list.length;
+        else selected = (selected - 1 + list.length) % list.length;
+        const next = setMenuSelection(selected);
+        if (next) next.focus({ preventScroll: true });
+        return;
+      }
+
+      // Enter: activate selected menu item when focusing menu; else CTA
+      if (e.key === 'Enter') {
+        if (onEnterBtn) return; // button handles itself
+        if (onMenu || document.activeElement === document.body || active === stage) {
+          const list = getStageMenuItems();
+          const current = list[selected];
+          if (current && (onMenu || !enterCta?.classList.contains('is-active'))) {
+            e.preventDefault();
+            activateMenuItem(current);
+          }
+        }
+      }
+    });
   }
 
   function showEnterCta() {
@@ -554,6 +650,7 @@
   bindAmbientLifecycle();
   bindSectionNavigation();
   bindArchivePortal();
+  bindStageMenu();
   // Enter CTA is revealed by environment.js after the opening journey.
 
   if (enterBtn) {
@@ -565,10 +662,13 @@
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !entered && enterCta?.classList.contains('is-active')) {
-      e.preventDefault();
-      handleEnter();
-    }
+    if (e.key !== 'Enter' || entered || !enterCta?.classList.contains('is-active')) return;
+    const active = document.activeElement;
+    // Menu items / focused controls handle Enter themselves
+    if (active && active.classList?.contains('stage__menu-item')) return;
+    if (active === enterBtn) return;
+    e.preventDefault();
+    handleEnter();
   });
 
   setupMailMenu();
