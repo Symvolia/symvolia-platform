@@ -34,9 +34,12 @@
 
   let entered = false;
   let livingAwake = false;
+  let libraryUnlocked = false;
+  let homeUnlockTimer = null;
   let soundMuted = false;
   let revealObserver = null;
   const fadeTimers = new WeakMap();
+  const HOME_SETTLE_MS = 1400;
 
   function prefersReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -314,14 +317,86 @@
   }
 
   function handleEnter() {
-    // Opening journey auto-awakens the living symbol; Enter always dives in.
-    // Fallback: if somehow still asleep, awaken first then wait for a second press.
+    // Archive dive is locked until the homepage sigil has settled.
+    if (!libraryUnlocked) return;
     if (!livingAwake) {
       awaken({ silent: false });
       showEnterCta();
       return;
     }
     enterSite('bio');
+  }
+
+  function unlockLibraryNav() {
+    libraryUnlocked = true;
+    document.documentElement.classList.add('is-journey-cta');
+    showEnterCta();
+    if (enterBtn) enterBtn.disabled = false;
+  }
+
+  /**
+   * Land on the homepage sigil (ouroboros / runes / seal).
+   * NEVER opens the library — that requires a deliberate second action.
+   */
+  function enterHome(opts) {
+    const silent = !opts || opts.silent !== false;
+
+    entered = false;
+    libraryUnlocked = false;
+    if (homeUnlockTimer) {
+      window.clearTimeout(homeUnlockTimer);
+      homeUnlockTimer = null;
+    }
+
+    document.documentElement.classList.add('is-home', 'is-journey-alive');
+    document.documentElement.classList.remove(
+      'is-journey-locked',
+      'is-journey-cta',
+      'is-cine',
+      'is-intro'
+    );
+    document.body.classList.remove('is-entered');
+    document.body.style.overflow = '';
+
+    if (enterBtn) enterBtn.disabled = true;
+    if (enterCta) enterCta.classList.remove('is-active');
+
+    main.classList.remove('is-visible');
+    main.hidden = true;
+
+    stage.hidden = false;
+    stage.removeAttribute('aria-hidden');
+    stage.classList.remove('is-diving', 'is-leaving');
+    stage.style.visibility = 'visible';
+    stage.style.opacity = '1';
+
+    window.scrollTo(0, 0);
+    try {
+      if (history.replaceState) history.replaceState(null, '', '#home');
+    } catch (err) {
+      /* */
+    }
+
+    awaken({ silent: true });
+    if (!silent) playEnterSound();
+    startStageAmbient();
+
+    stage.classList.add('stage--alive', 'stage--home-enter');
+    stage.classList.remove('stage--home-visible');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        stage.classList.add('stage--home-visible');
+      });
+    });
+
+    const settle = prefersReducedMotion() ? 80 : HOME_SETTLE_MS;
+    homeUnlockTimer = window.setTimeout(unlockLibraryNav, settle);
+
+    try {
+      window.dispatchEvent(new CustomEvent('symvolia:home-ready'));
+    } catch (err) {
+      /* */
+    }
   }
 
   function setAmbientLevel(level) {
@@ -359,7 +434,7 @@
   }
 
   function activateMenuItem(item) {
-    if (!item || entered) return;
+    if (!item || entered || !libraryUnlocked) return;
     const target = item.getAttribute('data-enter');
     if (target) {
       enterSite(target.replace(/^#/, ''));
@@ -387,7 +462,7 @@
         e.preventDefault();
         selected = index;
         setMenuSelection(selected);
-        if (!entered) enterSite(target.replace(/^#/, ''));
+        if (!entered && libraryUnlocked) enterSite(target.replace(/^#/, ''));
       });
 
       item.addEventListener('mouseenter', () => {
@@ -402,7 +477,8 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if (entered || !document.documentElement.classList.contains('is-home')) return;
+      if (entered || !libraryUnlocked) return;
+      if (!document.documentElement.classList.contains('is-home')) return;
       if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter') return;
 
       const active = document.activeElement;
@@ -524,8 +600,47 @@
     });
   }
 
+  function setHomeChromeVisible(visible) {
+    const menu = document.getElementById('stageMenu');
+    const footer = stage.querySelector('.stage__footer');
+    const inscriptions = stage.querySelector('.stage__inscriptions');
+    const targets = [menu, footer, inscriptions].filter(Boolean);
+
+    targets.forEach((el) => {
+      if (visible) {
+        el.hidden = false;
+        el.removeAttribute('aria-hidden');
+        el.style.removeProperty('display');
+        el.style.removeProperty('opacity');
+        el.style.removeProperty('visibility');
+      } else {
+        el.hidden = true;
+        el.setAttribute('aria-hidden', 'true');
+        el.style.display = 'none';
+        el.style.opacity = '0';
+        el.style.visibility = 'hidden';
+      }
+    });
+
+    stage.querySelectorAll('.stage__menu-item').forEach((item) => {
+      if (visible) {
+        item.style.removeProperty('opacity');
+        item.style.removeProperty('visibility');
+      } else {
+        item.style.opacity = '0';
+        item.style.visibility = 'hidden';
+      }
+    });
+  }
+
   function returnToStage() {
     entered = false;
+    libraryUnlocked = true;
+    if (homeUnlockTimer) {
+      window.clearTimeout(homeUnlockTimer);
+      homeUnlockTimer = null;
+    }
+
     document.documentElement.classList.add('is-home', 'is-journey-alive', 'is-journey-cta');
     document.documentElement.classList.remove('is-journey-locked');
     document.body.classList.remove('is-entered');
@@ -538,7 +653,10 @@
     stage.hidden = false;
     stage.removeAttribute('aria-hidden');
     stage.classList.remove('is-diving', 'is-leaving');
-    stage.classList.add('stage--home-enter', 'stage--home-visible');
+    stage.classList.add('stage--alive', 'stage--home-enter', 'stage--home-visible');
+    stage.style.visibility = 'visible';
+    stage.style.opacity = '1';
+    setHomeChromeVisible(true);
 
     window.scrollTo(0, 0);
     try {
@@ -560,6 +678,9 @@
   }
 
   function enterSite(targetId = 'bio') {
+    // Critical: never dive to library until homepage has been revealed.
+    if (!entered && !libraryUnlocked) return;
+
     if (entered) {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       scrollToSection(targetId, reducedMotion ? 'auto' : 'smooth');
@@ -573,9 +694,13 @@
       return;
     }
     entered = true;
-    document.documentElement.classList.remove('is-home', 'is-journey-cta');
+    document.documentElement.classList.remove('is-journey-cta', 'is-journey-locked');
 
     if (enterBtn) enterBtn.disabled = true;
+    if (enterCta) enterCta.classList.remove('is-active');
+
+    // Hard-remove alchemical menu / homepage chrome immediately
+    setHomeChromeVisible(false);
 
     playEnterSound();
 
@@ -587,8 +712,6 @@
       fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
     }
 
-    document.documentElement.classList.remove('is-journey-locked', 'is-journey-cta');
-
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!reducedMotion) {
@@ -596,6 +719,7 @@
       if (tunnel) tunnel.classList.add('is-active');
     } else {
       stage.classList.add('is-leaving');
+      document.documentElement.classList.remove('is-home');
     }
 
     main.hidden = false;
@@ -623,11 +747,13 @@
 
     window.setTimeout(() => {
       stage.classList.add('is-leaving');
+      document.documentElement.classList.remove('is-home');
     }, leaveDelay);
 
     window.setTimeout(() => {
       stage.hidden = true;
       stage.setAttribute('aria-hidden', 'true');
+      document.documentElement.classList.remove('is-home');
       main.removeAttribute('hidden');
     }, hideDelay);
   }
@@ -636,12 +762,14 @@
   window.Symvolia = {
     awaken,
     showEnterCta,
+    enterHome,
     enterSite,
     setAmbientLevel,
     startStageAmbient,
     isMuted: () => soundMuted,
     isAwake: () => livingAwake,
     isEntered: () => entered,
+    isLibraryUnlocked: () => libraryUnlocked,
   };
 
   bindSoundToggle();
@@ -662,11 +790,14 @@
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter' || entered || !enterCta?.classList.contains('is-active')) return;
+    if (e.key !== 'Enter' || entered || !libraryUnlocked) return;
+    if (!enterCta?.classList.contains('is-active')) return;
     const active = document.activeElement;
     // Menu items / focused controls handle Enter themselves
     if (active && active.classList?.contains('stage__menu-item')) return;
     if (active === enterBtn) return;
+    // Ignore while cinematic intro still owns the viewport
+    if (document.documentElement.classList.contains('is-cine')) return;
     e.preventDefault();
     handleEnter();
   });

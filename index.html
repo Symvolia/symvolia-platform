@@ -10,15 +10,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=34">
-  <link rel="stylesheet" href="css/textures.css?v=34">
-  <link rel="stylesheet" href="css/alive.css?v=37">
-  <link rel="stylesheet" href="css/void.css?v=34">
-  <link rel="stylesheet" href="css/cinematic-intro.css?v=28">
-  <link rel="stylesheet" href="css/home-reveal.css?v=9">
-  <link rel="stylesheet" href="css/design-system.css?v=34">
-  <link rel="stylesheet" href="css/environment.css?v=34">
-  <link rel="stylesheet" href="css/responsive.css?v=34">
+  <link rel="stylesheet" href="css/style.css?v=37">
+  <link rel="stylesheet" href="css/textures.css?v=37">
+  <link rel="stylesheet" href="css/alive.css?v=40">
+  <link rel="stylesheet" href="css/void.css?v=37">
+  <link rel="stylesheet" href="css/cinematic-intro.css?v=31">
+  <link rel="stylesheet" href="css/home-reveal.css?v=12">
+  <link rel="stylesheet" href="css/ouroboros.css?v=37">
+  <link rel="stylesheet" href="css/design-system.css?v=37">
+  <link rel="stylesheet" href="css/environment.css?v=37">
+  <link rel="stylesheet" href="css/responsive.css?v=37">
   <style>html,body{background:#010101!important}</style>
   <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
 </head>
@@ -380,7 +381,15 @@
 
       <div class="stage__sigil-wrap">
         <div class="stage__composition" id="composition">
-          <div class="stage__living" id="stageLiving" aria-hidden="true"></div>
+          <div class="stage__living" id="stageLiving" aria-hidden="true">
+            <div class="living__cross">
+              <div class="living__axis living__axis--h" aria-hidden="true"></div>
+              <div class="living__axis living__axis--v" aria-hidden="true"></div>
+              <div class="living__ouroboros" aria-hidden="true">
+                <canvas class="living__ouroboros-canvas" id="ouroborosCanvas" aria-hidden="true"></canvas>
+              </div>
+            </div>
+          </div>
 
           <div class="stage__inscriptions" aria-hidden="true">
             <div class="living__script living__script--runes">
@@ -661,9 +670,10 @@
     <div class="void__core" aria-hidden="true"></div>
   </div>
 
-  <script src="js/main.js?v=17" defer></script>
-  <script src="js/environment.js?v=5" defer></script>
+  <script src="js/ouroboros.js?v=4" defer></script>
+  <script src="js/main.js?v=20" defer></script>
+  <script src="js/environment.js?v=6" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
-  <script src="js/cinematic-intro.js?v=21" defer></script>
+  <script src="js/cinematic-intro.js?v=22" defer></script>
 </body>
 </html>

@@ -211,19 +211,34 @@
   bindNavVeil();
 
   window.addEventListener('symvolia:intro-complete', (e) => {
-    // Cinematic intro owns Enter; only unlock journey classes.
+    // Cinematic intro owns Enter → homepage. Do NOT unlock library CTA yet.
     if (e && e.detail && (e.detail.cine || e.detail.portal)) {
       orchestrated = true;
-      html.classList.add('is-journey-alive', 'is-journey-cta');
-      html.classList.remove('is-journey-locked');
+      html.classList.add('is-journey-alive');
+      html.classList.remove('is-journey-locked', 'is-journey-cta');
       return;
     }
     beginJourney();
   });
 
-  // If intro was skipped / reduced / already gone when we load.
-  if ((!html.classList.contains('is-intro') && !html.classList.contains('is-cine')) || reduced) {
-    window.setTimeout(beginJourney, reduced ? 50 : 200);
+  window.addEventListener('symvolia:home-ready', () => {
+    orchestrated = true;
+    html.classList.add('is-journey-alive');
+    html.classList.remove('is-journey-locked');
+    // Library CTA is unlocked by Symvolia.enterHome after settle.
+  });
+
+  // If cinematic intro is absent, land on homepage (never library).
+  // While is-cine / is-intro, cinematic-intro.js owns ENTER → enterHome.
+  if (!html.classList.contains('is-intro') && !html.classList.contains('is-cine')) {
+    window.setTimeout(() => {
+      if (window.Symvolia && typeof window.Symvolia.enterHome === 'function') {
+        orchestrated = true;
+        window.Symvolia.enterHome({ silent: true });
+        return;
+      }
+      beginJourney();
+    }, reduced ? 50 : 200);
   }
 
   // Failsafe: never leave the journey locked — but don't awaken under the cine veil.

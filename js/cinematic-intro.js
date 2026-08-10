@@ -358,7 +358,7 @@
 
     await delay(480);
 
-    // Prepare homepage under the wipe — awaken first so sigil = pupil center
+    // Homepage under the wipe — NEVER dive to library from intro ENTER
     const stage = document.getElementById('stage');
     const main = document.getElementById('main');
 
@@ -366,52 +366,32 @@
       main.hidden = true;
       main.classList.remove('is-visible');
     }
-    if (stage) {
-      stage.hidden = false;
-      stage.removeAttribute('aria-hidden');
-      stage.classList.remove('is-diving', 'is-leaving');
-      stage.style.visibility = 'visible';
-      stage.style.opacity = '1';
-    }
-
-    window.scrollTo(0, 0);
-    try {
-      if (history.replaceState) history.replaceState(null, '', '#home');
-    } catch (_) {
-      /* */
-    }
 
     root.classList.remove('is-cine', 'is-intro');
-    root.classList.add('is-home', 'is-journey-alive', 'is-journey-cta');
+    root.classList.add('is-home');
     body.style.overflow = '';
     body.classList.remove('is-entered');
     if (cursor) cursor.style.opacity = '0';
 
-    if (window.Symvolia) {
-      if (typeof window.Symvolia.awaken === 'function') {
-        window.Symvolia.awaken({ silent: true });
+    if (window.Symvolia && typeof window.Symvolia.enterHome === 'function') {
+      window.Symvolia.enterHome({ silent: true });
+    } else {
+      // Fallback if main.js not ready — still land on #home only
+      if (stage) {
+        stage.hidden = false;
+        stage.removeAttribute('aria-hidden');
+        stage.classList.remove('is-diving', 'is-leaving');
+        stage.style.visibility = 'visible';
+        stage.style.opacity = '1';
+        stage.classList.add('stage--alive', 'stage--home-enter', 'stage--home-visible');
       }
-      if (typeof window.Symvolia.showEnterCta === 'function') {
-        window.Symvolia.showEnterCta();
+      window.scrollTo(0, 0);
+      try {
+        if (history.replaceState) history.replaceState(null, '', '#home');
+      } catch (_) {
+        /* */
       }
-      if (typeof window.Symvolia.startStageAmbient === 'function') {
-        window.Symvolia.startStageAmbient();
-      }
-    }
-
-    if (stage) {
-      stage.classList.add('stage--alive', 'stage--home-enter');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          stage.classList.add('stage--home-visible');
-        });
-      });
-    }
-
-    try {
-      window.dispatchEvent(new CustomEvent('symvolia:home-ready'));
-    } catch (_) {
-      /* */
+      root.classList.add('is-journey-alive');
     }
 
     await delay(480);

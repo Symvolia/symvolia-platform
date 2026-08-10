@@ -149,16 +149,57 @@ section#stage.stage {
   display: none !important;
 }
 
-/* Dive into eye — zoom through the pupil */
+/* Dive / archive — kill every homepage chrome layer (incl. alchemical menu) */
 .stage.is-diving .stage__tagline,
 .stage.is-diving .stage__enter,
 .stage.is-diving .stage__footer,
 .stage.is-diving .stage__depth,
 .stage.is-diving .stage__pulse,
 .stage.is-diving .stage__haze,
-.stage.is-diving .stage__living {
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-open);
+.stage.is-diving .stage__living,
+.stage.is-diving .stage__menu,
+.stage.is-diving .stage__menu-col,
+.stage.is-diving .stage__menu-list,
+.stage.is-diving .stage__menu-item,
+.stage.is-diving .stage__inscriptions,
+.stage.is-diving .stage__social,
+.stage.is-diving .stage__waveform,
+.stage.is-diving .stage__sub,
+.stage.is-diving .stage__grain,
+.stage.is-leaving .stage__menu,
+.stage.is-leaving .stage__menu-col,
+.stage.is-leaving .stage__menu-item,
+.stage.is-leaving .stage__inscriptions,
+.stage.is-leaving .stage__footer,
+.stage.is-leaving .stage__tagline,
+.stage.is-leaving .stage__enter,
+.stage.is-leaving .stage__social,
+body.is-entered .stage__menu,
+body.is-entered .stage__menu-col,
+body.is-entered .stage__menu-item,
+body.is-entered .stage__inscriptions,
+body.is-entered .stage__footer,
+body.is-entered .stage__tagline,
+body.is-entered .stage__enter,
+body.is-entered .stage__social,
+html.is-home .stage.is-diving .stage__menu,
+html.is-home .stage.is-diving.stage--home-enter .stage__menu,
+html.is-home .stage.is-diving.stage--home-visible.stage--home-enter .stage__menu-col,
+html.is-home .stage.is-diving.stage--home-visible.stage--home-enter .stage__menu-col--left,
+html.is-home .stage.is-diving.stage--home-visible.stage--home-enter .stage__menu-col--right,
+html.is-home .stage.is-diving.stage--home-visible.stage--home-enter .stage__menu-item {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.stage.is-diving .stage__menu,
+.stage.is-leaving .stage__menu,
+body.is-entered .stage__menu,
+.stage__menu[hidden],
+html.is-home .stage.is-diving .stage__menu,
+html.is-home .stage.is-diving.stage--home-visible.stage--home-enter .stage__menu {
+  display: none !important;
 }
 
 .stage.is-diving .eye__halo {
