@@ -485,7 +485,7 @@
       const onMenu =
         active &&
         (active.classList?.contains('stage__menu-item') ||
-          stage.contains(active) && active.closest?.('.stage__menu'));
+          stage.contains(active) && active.closest?.('.stage__orbit, .stage__menu'));
       const onEnterBtn = active === enterBtn;
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {

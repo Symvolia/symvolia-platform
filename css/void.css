@@ -75,7 +75,7 @@
 .archive-portal {
   display: flex;
   justify-content: center;
-  padding: 1rem 1.5rem 2rem;
+  padding: 1.5rem 1.5rem 2.5rem;
 }
 
 .archive-portal__btn {
@@ -84,88 +84,139 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  width: min(88vw, 30rem);
-  min-height: 13rem;
-  padding: 2.5rem 2rem;
-  border-radius: 1.25rem;
-  border: 1px solid rgba(124, 58, 237, 0.28);
-  background:
-    radial-gradient(120% 120% at 50% 40%, rgba(74, 20, 140, 0.28) 0%, rgba(8, 5, 12, 0.9) 62%, rgba(2, 1, 3, 0.96) 100%);
-  color: rgba(216, 208, 196, 0.96);
+  gap: 0.75rem;
+  width: min(90vw, 32rem);
+  min-height: 14rem;
+  padding: 3rem 2rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(198, 189, 177, 0.82);
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 20px 60px rgba(0, 0, 0, 0.55);
+  box-shadow: none;
   transition:
-    transform 0.6s var(--ease-flow),
-    border-color 0.6s var(--ease-open),
-    box-shadow 0.6s var(--ease-open);
+    transform 1s var(--ease-flow),
+    color 0.9s var(--ease-open);
+}
+
+/* Sfumato veil — dissolves into the void, no visible edge */
+.archive-portal__btn::before {
+  content: '';
+  position: absolute;
+  inset: -12% -6%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 60% 66% at 50% 50%,
+      rgba(22, 15, 32, 0.78) 0%,
+      rgba(10, 7, 15, 0.52) 44%,
+      rgba(3, 2, 5, 0.2) 72%,
+      transparent 100%
+    );
+  -webkit-mask-image: radial-gradient(ellipse 58% 64% at 50% 50%, #000 36%, rgba(0, 0, 0, 0.5) 66%, transparent 100%);
+  mask-image: radial-gradient(ellipse 58% 64% at 50% 50%, #000 36%, rgba(0, 0, 0, 0.5) 66%, transparent 100%);
+  opacity: 0.85;
+  transition: opacity 0.9s var(--ease-open);
+}
+
+.archive-portal__btn:hover::before,
+.archive-portal__btn:focus-visible::before {
+  opacity: 1;
 }
 
 .archive-portal__btn:hover,
 .archive-portal__btn:focus-visible {
-  transform: translateY(-3px) scale(1.01);
-  border-color: rgba(124, 58, 237, 0.6);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 26px 70px rgba(74, 20, 140, 0.35);
+  transform: scale(1.015);
+  color: rgba(228, 221, 210, 0.96);
   outline: none;
 }
 
-/* Aura viola che pulsa dietro al testo */
+/* Aura — deep violet ember breathing behind the words */
 .archive-portal__aura {
   position: absolute;
-  inset: -30% -10%;
+  inset: -35% -18%;
   z-index: -1;
-  background: radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.45) 0%, rgba(74, 20, 140, 0.18) 38%, transparent 70%);
-  filter: blur(18px);
-  opacity: 0.55;
-  animation: portalAura 5.5s var(--ease-breathe) infinite;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(88, 44, 170, 0.3) 0%, rgba(46, 18, 92, 0.14) 34%, transparent 68%);
+  filter: blur(34px);
+  opacity: 0.42;
+  animation: portalAura 8s var(--ease-breathe) infinite;
 }
 
+.archive-portal__btn:hover .archive-portal__aura,
+.archive-portal__btn:focus-visible .archive-portal__aura {
+  opacity: 0.68;
+}
+
+/* Ring — a faint halo, edges dissolved */
 .archive-portal__ring {
   position: absolute;
-  width: 9rem;
-  height: 9rem;
+  width: 13rem;
+  height: 13rem;
   z-index: -1;
   border-radius: 50%;
-  border: 1px solid rgba(124, 58, 237, 0.35);
-  box-shadow: 0 0 40px rgba(124, 58, 237, 0.25) inset;
-  opacity: 0.5;
-  animation: portalRing 6s linear infinite;
+  border: 0;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 58%, rgba(124, 58, 237, 0.16) 71%, transparent 84%);
+  filter: blur(3px);
+  opacity: 0.34;
+  animation: portalRing 22s linear infinite;
+}
+
+.archive-portal__btn:hover .archive-portal__ring,
+.archive-portal__btn:focus-visible .archive-portal__ring {
+  opacity: 0.52;
 }
 
 .archive-portal__label {
   font-family: var(--font-elegant);
-  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  font-size: clamp(1.35rem, 4.2vw, 1.85rem);
   font-weight: 300;
   font-style: italic;
-  letter-spacing: 0.14em;
-  color: var(--void-white);
-  text-shadow: 0 0 26px rgba(124, 58, 237, 0.5);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(224, 216, 205, 0.92);
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 34px rgba(124, 58, 237, 0.22);
+  transition: letter-spacing 0.9s var(--ease-open), text-shadow 0.9s var(--ease-open);
+}
+
+.archive-portal__btn:hover .archive-portal__label,
+.archive-portal__btn:focus-visible .archive-portal__label {
+  letter-spacing: 0.34em;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 44px rgba(140, 88, 245, 0.34);
 }
 
 .archive-portal__sub {
   font-family: var(--font-elegant);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 300;
   font-style: italic;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
+  color: rgba(168, 158, 146, 0.5);
+  transition: color 0.9s var(--ease-open);
+}
+
+.archive-portal__btn:hover .archive-portal__sub,
+.archive-portal__btn:focus-visible .archive-portal__sub {
   color: rgba(198, 189, 177, 0.72);
 }
 
 @keyframes portalAura {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.75; transform: scale(1.08); }
+  0%, 100% { opacity: 0.32; transform: scale(1); }
+  50% { opacity: 0.58; transform: scale(1.05); }
 }
 
 @keyframes portalRing {
   from { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.06); }
+  50% { transform: rotate(180deg) scale(1.03); }
   to { transform: rotate(360deg) scale(1); }
 }
 
