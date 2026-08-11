@@ -25,7 +25,11 @@ body {
 
 .main__header {
   padding-left: max(2rem, env(safe-area-inset-left, 0));
-  padding-right: max(2rem, env(safe-area-inset-right, 0));
+  /* Keeps the nav clear of the floating sound toggle */
+  padding-right: calc(
+    max(2rem, env(safe-area-inset-right, 0px)) +
+    var(--sound-toggle-size) + var(--sound-toggle-gap)
+  );
   padding-top: max(1.5rem, env(safe-area-inset-top, 0));
 }
 
@@ -41,6 +45,37 @@ body {
 /* Archive grid: same auto-fit rule as desktop at all widths */
 .archive-grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+/* Phones — tighter header so back arrow, nav and sound toggle all fit one row */
+@media (max-width: 560px) {
+  :root {
+    --sound-toggle-size: 2.4rem;
+    --sound-toggle-gap: 0.5rem;
+  }
+
+  .main__header {
+    gap: 0.75rem;
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0));
+    padding-right: calc(
+      max(1.25rem, env(safe-area-inset-right, 0px)) +
+      var(--sound-toggle-size) + var(--sound-toggle-gap)
+    );
+  }
+
+  .main__back {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .main__nav {
+    gap: 0.9rem;
+  }
+
+  .main__nav a {
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+  }
 }
 
 @media (min-width: 1024px) {

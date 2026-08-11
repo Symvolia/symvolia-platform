@@ -13,13 +13,13 @@
   <link rel="stylesheet" href="css/style.css?v=38">
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=41">
-  <link rel="stylesheet" href="css/void.css?v=39">
+  <link rel="stylesheet" href="css/void.css?v=40">
   <link rel="stylesheet" href="css/cinematic-intro.css?v=32">
-  <link rel="stylesheet" href="css/home-reveal.css?v=18">
+  <link rel="stylesheet" href="css/home-reveal.css?v=20">
   <link rel="stylesheet" href="css/ouroboros.css?v=38">
   <link rel="stylesheet" href="css/design-system.css?v=38">
   <link rel="stylesheet" href="css/environment.css?v=38">
-  <link rel="stylesheet" href="css/responsive.css?v=38">
+  <link rel="stylesheet" href="css/responsive.css?v=39">
   <style>html,body{background:#010101!important}</style>
   <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
 </head>
@@ -424,23 +424,26 @@
 
         <nav class="stage__orbit" aria-label="Alchemical inscriptions">
           <ul class="stage__orbit-list">
-            <!-- Left 11 · 9 · 7 · Right 1 · 3 · 5 -->
-            <li class="stage__orbit-item stage__orbit-item--left" style="--a: -30deg; --d: 0">
+            <!-- Six clock marks 60° apart: 11 · 9 · 7 on the left, 1 · 3 · 5 on
+                 the right. --sx / --cy are sin/cos of each angle, so the items
+                 trace the seal's circle; each is anchored by its inner edge and
+                 therefore never crosses onto the sigil. -->
+            <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 0.5; --cy: 0.866; --d: 0">
               <a class="stage__menu-item" href="#vision" data-enter="vision">Quod superius sicut inferius</a>
             </li>
-            <li class="stage__orbit-item stage__orbit-item--left" style="--a: -90deg; --d: 1">
+            <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 1; --cy: 0; --d: 1">
               <a class="stage__menu-item" href="#bio" data-enter="bio">Visita interiora terrae</a>
             </li>
-            <li class="stage__orbit-item stage__orbit-item--left" style="--a: -150deg; --d: 2">
+            <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 0.5; --cy: -0.866; --d: 2">
               <a class="stage__menu-item" href="https://soundcloud.com/symvolia/sets/track" target="_blank" rel="noopener noreferrer">Solve et coagula</a>
             </li>
-            <li class="stage__orbit-item stage__orbit-item--right" style="--a: 30deg; --d: 3">
+            <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 0.5; --cy: 0.866; --d: 3">
               <a class="stage__menu-item" href="#archive" data-enter="archive">In sterquiliniis invenitur</a>
             </li>
-            <li class="stage__orbit-item stage__orbit-item--right" style="--a: 90deg; --d: 4">
+            <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 1; --cy: 0; --d: 4">
               <a class="stage__menu-item" id="podcastLink" href="https://soundcloud.com/symvolia/sets/podcast" target="_blank" rel="noopener noreferrer">Nosce te ipsum</a>
             </li>
-            <li class="stage__orbit-item stage__orbit-item--right" style="--a: 150deg; --d: 5">
+            <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 0.5; --cy: -0.866; --d: 5">
               <a class="stage__menu-item" href="#contact" data-enter="contact">Omne unum</a>
             </li>
           </ul>

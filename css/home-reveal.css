@@ -89,12 +89,16 @@ html.is-home .stage.stage--alive .stage__menu {
 /* Sigil disc + orbital ring of inscriptions */
 html.is-home .stage.stage--alive .stage__sigil-wrap {
   position: relative;
-  width: min(var(--home-sigil, 46vmin), 420px);
-  height: min(var(--home-sigil, 46vmin), 420px);
-  --home-sigil: min(46vmin, 420px);
+  width: var(--home-sigil);
+  height: var(--home-sigil);
+  --home-sigil: min(40vmin, 360px);
   --home-runes: calc(var(--home-sigil) * 1.14);
-  /* Radius to text centers — like clock hour marks outside the seal */
-  --home-orbit: calc(var(--home-sigil) * 0.5 + clamp(2.4rem, 5.5vmin, 3.6rem));
+  /* Rune ring radius + clearance = the circle the phrases sit on */
+  --home-radius: calc(var(--home-sigil) * 0.58);
+  --home-gutter: clamp(1.6rem, 3.4vmin, 2.6rem);
+  --home-orbit: calc(var(--home-radius) + var(--home-gutter));
+  /* Whatever room is left between that circle and the viewport edge */
+  --home-phrase: min(12rem, 50vw - var(--home-orbit) - 1.5rem);
   --living-runes: var(--home-runes);
   --living-runes-r: calc(var(--home-runes) / 2);
   flex-shrink: 0;
@@ -155,6 +159,23 @@ html.is-home .stage.stage--alive .stage__sigil {
   z-index: 6;
 }
 
+/* Eye decorations belong to the intro only. They are merely faded out when the
+   stage awakens, and their `forwards` animations (white iris rays, seal glow)
+   can win over that fade and flash a pale box behind the seal — so drop them
+   from the layout entirely once we are home. */
+html.is-home .stage.stage--alive .eye__halo,
+html.is-home .stage.stage--alive .eye__orbit,
+html.is-home .stage.stage--alive .eye__sclera,
+html.is-home .stage.stage--alive .eye__sclera-depth,
+html.is-home .stage.stage--alive .eye__iris,
+html.is-home .stage.stage--alive .eye__iris-rays,
+html.is-home .stage.stage--alive .eye__cornea,
+html.is-home .stage.stage--alive .eye__shine,
+html.is-home .stage.stage--alive .eye__shutter,
+html.is-home .stage.stage--alive .stage__sigil-glow {
+  display: none !important;
+}
+
 html.is-home .stage.stage--alive .stage__sigil-reveal,
 html.is-home .stage.stage--alive .stage__sigil-img {
   opacity: 1 !important;
@@ -182,29 +203,25 @@ html.is-home .stage.stage--alive .stage__orbit-list {
   inset: 0;
 }
 
+/* Every phrase puts its inner edge on the orbit circle, at its own clock angle,
+   and grows outwards from there — evenly spaced, never over the sigil. */
 html.is-home .stage.stage--alive .stage__orbit-item {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: calc(50% - var(--home-orbit) * var(--cy, 0));
   width: max-content;
-  max-width: min(14rem, 38vw);
+  max-width: var(--home-phrase);
   margin: 0;
-  /* Left cluster ~11/9/7 · Right cluster ~1/3/5 */
-  transform:
-    translate(-50%, -50%)
-    rotate(var(--a, 0deg))
-    translateY(calc(var(--home-orbit) * -1))
-    rotate(calc(var(--a, 0deg) * -1));
-  transform-origin: center center;
+  transform: translateY(-50%);
   pointer-events: auto;
-  text-align: center;
 }
 
 html.is-home .stage.stage--alive .stage__orbit-item--left {
+  right: calc(50% + var(--home-orbit) * var(--sx, 1));
   text-align: right;
 }
 
 html.is-home .stage.stage--alive .stage__orbit-item--right {
+  left: calc(50% + var(--home-orbit) * var(--sx, 1));
   text-align: left;
 }
 
@@ -453,14 +470,9 @@ html.is-home .stage--alive .living__script--runes {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    width: min(50vmin, 270px);
-    height: min(50vmin, 270px);
-    --home-sigil: min(50vmin, 270px);
-    --home-orbit: calc(var(--home-sigil) * 0.5 + clamp(1.8rem, 5vw, 2.6rem));
-  }
-
-  html.is-home .stage.stage--alive .stage__orbit-item {
-    max-width: min(8.8rem, 34vw);
+    --home-sigil: min(34vmin, 220px);
+    --home-gutter: clamp(0.85rem, 2.6vw, 1.4rem);
+    --home-phrase: min(8.6rem, 50vw - var(--home-orbit) - 0.9rem);
   }
 
   html.is-home .stage.stage--alive .stage__menu-item {
@@ -483,24 +495,12 @@ html.is-home .stage--alive .living__script--runes {
   }
 }
 
-/* Narrow phones — elliptical orbit so phrases clear the edges */
+/* Narrow phones — smaller seal so the two phrase columns keep their margins */
 @media (max-width: 480px) {
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    width: min(46vmin, 230px);
-    height: min(46vmin, 230px);
-    --home-sigil: min(46vmin, 230px);
-    --home-orbit-x: calc(var(--home-sigil) * 0.5 + 1.55rem);
-    --home-orbit-y: calc(var(--home-sigil) * 0.5 + 1.85rem);
-  }
-
-  html.is-home .stage.stage--alive .stage__orbit-item {
-    max-width: min(8.2rem, 44vw);
-    transform:
-      translate(-50%, -50%)
-      translate(
-        calc(sin(var(--a, 0deg)) * var(--home-orbit-x)),
-        calc(cos(var(--a, 0deg)) * var(--home-orbit-y) * -1)
-      );
+    --home-sigil: min(34vmin, 170px);
+    --home-gutter: 0.9rem;
+    --home-phrase: min(7.6rem, 50vw - var(--home-orbit) - 0.7rem);
   }
 
   html.is-home .stage.stage--alive .stage__menu-item {
@@ -524,11 +524,7 @@ html.is-home .stage--alive .living__script--runes {
   }
 
   html.is-home .stage--home-enter:not(.is-diving):not(.is-leaving) .stage__orbit-item {
-    transform:
-      translate(-50%, -50%)
-      rotate(var(--a, 0deg))
-      translateY(calc(var(--home-orbit, 40vmin) * -1))
-      rotate(calc(var(--a, 0deg) * -1)) !important;
+    transform: translateY(-50%) !important;
   }
 
   html.is-home .stage--home-enter:not(.is-diving):not(.is-leaving) .stage__tagline,
