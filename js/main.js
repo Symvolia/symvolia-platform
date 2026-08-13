@@ -29,7 +29,7 @@
   const FADE_MS = 1400;
   const CROSSFADE_MS = 500;
 
-  const VOID_MS = 2600;
+  const VOID_MS = 2800;
 
   let entered = false;
   let livingAwake = false;
@@ -239,7 +239,7 @@
 
     window.setTimeout(() => {
       if (onMid) onMid();
-    }, Math.round(VOID_MS * 0.46));
+    }, Math.round(VOID_MS * 0.74));
 
     window.setTimeout(() => {
       voidPortal.classList.remove('is-active', 'is-closing');
@@ -259,16 +259,18 @@
       return;
     }
 
-    fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.46));
+    main.classList.add('is-void-sucked');
+    fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.74));
 
     runVoid(false, () => {
-      // Handed over while the void is fully opaque — the page swap is invisible.
+      // Handed over once the horizon has swallowed the frame.
       window.location.href = target;
     });
   }
 
   function resetArchive() {
     if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving');
+    if (main) main.classList.remove('is-void-sucked');
     voidBusy = false;
   }
 

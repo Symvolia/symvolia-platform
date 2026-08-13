@@ -1,12 +1,14 @@
 /* ─── Symvolia — sound toggle · archive portal · void dive ─── */
 
-/* Palette locale del void */
+/* Palette locale del void — black hole: horizon, photon ring, accretion disk */
 :root {
   --void-black: #000000;
-  --void-purple-deep: #4a148c;
+  --void-purple-deep: #2a0a4a;
   --void-purple: #7c3aed;
+  --void-ember: #c45a12;
+  --void-plasma: #f2c14e;
   --void-white: #ffffff;
-  --void-ms: 2600ms;
+  --void-ms: 2800ms;
 
   /* Shared with .main__header, which reserves this much room on its right
      so the floating toggle can never sit on top of the nav. */
@@ -225,6 +227,19 @@ body.is-entered .sound-toggle {
   color: rgba(198, 189, 177, 0.72);
 }
 
+/* The library is pulled toward the hole while the overlay opens over it */
+.main.is-void-sucked {
+  transform: scale(0.48);
+  filter: blur(12px) brightness(0.4);
+  opacity: 0.35;
+  transform-origin: 50% 42%;
+  transition:
+    transform 1.6s cubic-bezier(0.55, 0, 0.25, 1),
+    filter 1.4s var(--ease-open),
+    opacity 1.1s var(--ease-open);
+  pointer-events: none;
+}
+
 @keyframes portalAura {
   0%, 100% { opacity: 0.32; transform: scale(1); }
   50% { opacity: 0.58; transform: scale(1.05); }
@@ -236,7 +251,9 @@ body.is-entered .sound-toggle {
   to { transform: rotate(360deg) scale(1); }
 }
 
-/* ─────────────────────────  Void dive overlay  ───────────────────────── */
+/* ─────────────────────────  Void dive overlay — black hole  ─────────────────────────
+   Inspired by an accretion disk + event horizon: you fall into a dark center
+   ringed by a bright photon rim and a spinning plasma disk. */
 
 .void {
   position: fixed;
@@ -245,14 +262,10 @@ body.is-entered .sound-toggle {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: var(--void-black);
+  background: transparent;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  /* trama sottile sul nero iniziale */
-  background-image:
-    radial-gradient(circle at 50% 50%, rgba(20, 12, 30, 0.4) 0%, #000 70%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 .void.is-active,
@@ -262,17 +275,17 @@ body.is-entered .sound-toggle {
   pointer-events: auto;
 }
 
-/* Arrival: the page is born already inside the void, which then dissolves
-   outwards. Opaque from the very first paint — no flash of content.
+/* Arrival: the page is born already inside the darkness, which then dissolves.
    `is-void-arrival` is set in the document head before the overlay is parsed;
    the `is-arriving` animation (fill: forwards) later wins over both. */
 html.is-void-arrival .void,
 .void.is-arriving {
   opacity: 1;
   visibility: visible;
+  background: var(--void-black);
 }
 
-/* Layer centrali condivisi */
+/* Shared centering for every layer of the hole */
 .void__gradient,
 .void__vortex,
 .void__glow,
@@ -285,56 +298,93 @@ html.is-void-arrival .void,
   will-change: transform, opacity, filter;
 }
 
-/* Gradiente di profondità nero → viola → bianco */
+/* Gravitational lensing veil — warped space around the horizon */
 .void__gradient {
-  width: 120vmax;
-  height: 120vmax;
-  background: radial-gradient(circle at center,
-    var(--void-white) 0%,
-    var(--void-purple) 16%,
-    var(--void-purple-deep) 40%,
-    #150a24 62%,
-    var(--void-black) 78%);
+  width: 140vmax;
+  height: 140vmax;
+  background:
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 12%,
+      rgba(124, 58, 237, 0.18) 18%,
+      rgba(196, 90, 18, 0.12) 24%,
+      rgba(10, 4, 18, 0.55) 42%,
+      rgba(0, 0, 0, 0.92) 68%,
+      #000 100%);
   opacity: 0;
+  filter: blur(2px);
 }
 
-/* Vortice di colori viola */
+/* Accretion disk — hot plasma spinning into the hole */
 .void__vortex {
-  width: 100vmax;
-  height: 100vmax;
-  background: conic-gradient(from 0deg,
-    transparent 0deg,
-    rgba(124, 58, 237, 0.55) 40deg,
-    transparent 90deg,
-    rgba(74, 20, 140, 0.6) 150deg,
-    transparent 200deg,
-    rgba(124, 58, 237, 0.5) 270deg,
-    transparent 320deg,
-    rgba(74, 20, 140, 0.55) 360deg);
+  width: 78vmax;
+  height: 78vmax;
+  background:
+    conic-gradient(from 0deg,
+      transparent 0deg,
+      rgba(242, 193, 78, 0.55) 18deg,
+      rgba(196, 90, 18, 0.35) 42deg,
+      transparent 70deg,
+      rgba(124, 58, 237, 0.5) 110deg,
+      rgba(74, 20, 140, 0.28) 150deg,
+      transparent 185deg,
+      rgba(242, 193, 78, 0.45) 220deg,
+      rgba(196, 90, 18, 0.3) 255deg,
+      transparent 290deg,
+      rgba(168, 85, 247, 0.4) 330deg,
+      transparent 360deg);
+  -webkit-mask-image: radial-gradient(circle at center,
+    transparent 0%,
+    transparent 22%,
+    #000 30%,
+    #000 48%,
+    transparent 62%);
+  mask-image: radial-gradient(circle at center,
+    transparent 0%,
+    transparent 22%,
+    #000 30%,
+    #000 48%,
+    transparent 62%);
   mix-blend-mode: screen;
   opacity: 0;
+  filter: blur(1.5px);
 }
 
-/* Glow viola pulsante */
+/* Photon ring — the bright rim just outside the event horizon */
 .void__glow {
-  width: 40vmax;
-  height: 40vmax;
-  background: radial-gradient(circle at center, rgba(124, 58, 237, 0.9) 0%, rgba(74, 20, 140, 0.35) 45%, transparent 72%);
-  filter: blur(30px);
+  width: 28vmax;
+  height: 28vmax;
+  background:
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 54%,
+      rgba(255, 236, 200, 0.95) 58%,
+      rgba(242, 193, 78, 0.75) 61%,
+      rgba(196, 90, 18, 0.35) 66%,
+      rgba(124, 58, 237, 0.25) 72%,
+      transparent 80%);
+  filter: blur(2px);
   mix-blend-mode: screen;
   opacity: 0;
+  box-shadow:
+    0 0 40px rgba(242, 193, 78, 0.35),
+    0 0 90px rgba(124, 58, 237, 0.25);
 }
 
-/* Nucleo luminoso: il punto in cui si sprofonda */
+/* Event horizon — pure black. Grows until it swallows the frame. */
 .void__core {
-  width: 8vmax;
-  height: 8vmax;
-  background: radial-gradient(circle at center, #ffffff 0%, #d8b4fe 30%, var(--void-purple) 60%, transparent 78%);
-  box-shadow: 0 0 60px rgba(255, 255, 255, 0.5), 0 0 120px rgba(124, 58, 237, 0.6);
+  width: 18vmax;
+  height: 18vmax;
+  background: #000;
+  box-shadow:
+    0 0 0 1px rgba(255, 220, 160, 0.35),
+    0 0 24px 4px rgba(242, 193, 78, 0.45),
+    0 0 60px 12px rgba(124, 58, 237, 0.3),
+    inset 0 0 40px rgba(0, 0, 0, 1);
   opacity: 0;
 }
 
-/* Contenitore particelle */
+/* Matter falling into the hole */
 .void__particles {
   position: absolute;
   top: 50%;
@@ -351,40 +401,45 @@ html.is-void-arrival .void,
   height: var(--size, 5px);
   margin: calc(var(--size, 5px) / -2) 0 0 calc(var(--size, 5px) / -2);
   border-radius: 50%;
-  background: radial-gradient(circle at center, #ffffff 0%, var(--void-purple) 55%, transparent 100%);
+  background: radial-gradient(circle at center,
+    #fff7e0 0%,
+    var(--void-plasma) 35%,
+    var(--void-ember) 65%,
+    transparent 100%);
   opacity: 0;
   will-change: transform, opacity;
+  box-shadow: 0 0 6px rgba(242, 193, 78, 0.6);
 }
 
-/* ── Animazione di ingresso (dive nel void) ── */
+/* ── Dive: fall into the black hole ── */
 .void.is-active {
-  animation: voidFade var(--void-ms) var(--ease-open) forwards;
+  animation: voidDiveVeil var(--void-ms) var(--ease-open) forwards;
 }
 
 .void.is-active .void__gradient {
-  animation: voidGradientIn var(--void-ms) var(--ease-open) forwards;
+  animation: voidLensingIn var(--void-ms) var(--ease-open) forwards;
 }
 
 .void.is-active .void__vortex {
-  animation: voidVortexIn var(--void-ms) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: voidDiskIn var(--void-ms) cubic-bezier(0.45, 0, 0.2, 1) forwards;
 }
 
 .void.is-active .void__glow {
-  animation: voidGlowPulse 1.3s var(--ease-breathe) infinite;
+  animation: voidPhotonIn var(--void-ms) cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .void.is-active .void__core {
-  animation: voidCoreIn var(--void-ms) cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation: voidHorizonIn var(--void-ms) cubic-bezier(0.55, 0, 0.25, 1) forwards;
 }
 
 .void.is-active .void__particle {
-  animation: voidParticleIn var(--void-ms) cubic-bezier(0.5, 0, 0.3, 1) forwards;
+  animation: voidParticleIn var(--void-ms) cubic-bezier(0.5, 0, 0.25, 1) forwards;
   animation-delay: var(--delay, 0ms);
 }
 
-/* ── Animazione di uscita (ritorno) ── */
+/* ── Closing / arrival: soft dissolve out of the darkness (no reverse black hole) ── */
 .void.is-closing {
-  animation: voidFade var(--void-ms) var(--ease-open) forwards;
+  animation: voidDiveVeil var(--void-ms) var(--ease-open) forwards;
 }
 
 .void.is-arriving {
@@ -392,81 +447,82 @@ html.is-void-arrival .void,
 }
 
 .void.is-closing .void__gradient,
-.void.is-arriving .void__gradient {
-  animation: voidGradientIn var(--void-ms) var(--ease-open) reverse forwards;
-}
-
 .void.is-closing .void__vortex,
-.void.is-arriving .void__vortex {
-  animation: voidVortexIn var(--void-ms) cubic-bezier(0.4, 0, 0.2, 1) reverse forwards;
-}
-
 .void.is-closing .void__glow,
-.void.is-arriving .void__glow {
-  animation: voidGlowPulse 1.3s var(--ease-breathe) infinite;
-}
-
 .void.is-closing .void__core,
-.void.is-arriving .void__core {
-  animation: voidCoreIn var(--void-ms) cubic-bezier(0.65, 0, 0.35, 1) reverse forwards;
+.void.is-arriving .void__gradient,
+.void.is-arriving .void__vortex,
+.void.is-arriving .void__glow,
+.void.is-arriving .void__core,
+.void.is-arriving .void__particle {
+  opacity: 0 !important;
+  animation: none !important;
 }
 
-.void.is-closing .void__particle,
-.void.is-arriving .void__particle {
+.void.is-closing .void__particle {
   animation: voidParticleOut var(--void-ms) cubic-bezier(0.5, 0, 0.3, 1) forwards;
   animation-delay: var(--delay, 0ms);
 }
 
-/* Fade generale dell'overlay: entra, resta, esce rivelando il contenuto */
-@keyframes voidFade {
-  0% { opacity: 0; visibility: visible; }
-  12% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; visibility: hidden; }
+/* Dive veil: the frame darkens as the hole opens, then stays black for the handoff */
+@keyframes voidDiveVeil {
+  0% { opacity: 0; visibility: visible; background: transparent; }
+  8% { opacity: 1; background: transparent; }
+  55% { opacity: 1; background: rgba(0, 0, 0, 0.55); }
+  78% { opacity: 1; background: #000; }
+  100% { opacity: 1; visibility: visible; background: #000; }
 }
 
-/* Arrivo: si parte immersi nel void, che si dirada rivelando la pagina */
+/* Arrivo: si parte immersi nel nero, che si dirada rivelando la pagina */
 @keyframes voidArrive {
-  0% { opacity: 1; visibility: visible; }
-  55% { opacity: 0.72; }
-  100% { opacity: 0; visibility: hidden; }
+  0% { opacity: 1; visibility: visible; background: #000; }
+  45% { opacity: 0.85; background: #000; }
+  100% { opacity: 0; visibility: hidden; background: #000; }
 }
 
-/* Il gradiente scala verso l'osservatore (effetto sprofondamento) + blur graduale */
-@keyframes voidGradientIn {
-  0% { transform: translate(-50%, -50%) scale(0.12) rotate(0deg); filter: blur(16px); opacity: 0; }
-  22% { opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(3.6) rotate(40deg); filter: blur(3px); opacity: 1; }
+/* Lensing halo expands as space warps around the growing hole */
+@keyframes voidLensingIn {
+  0% { transform: translate(-50%, -50%) scale(0.18); opacity: 0; filter: blur(18px); }
+  18% { opacity: 0.85; }
+  55% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; filter: blur(4px); }
+  100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; filter: blur(2px); }
 }
 
-@keyframes voidVortexIn {
-  0% { transform: translate(-50%, -50%) scale(0.2) rotate(0deg); opacity: 0; }
-  18% { opacity: 0.95; }
-  100% { transform: translate(-50%, -50%) scale(2.9) rotate(460deg); opacity: 0.12; }
+/* Disk spins and collapses into the horizon */
+@keyframes voidDiskIn {
+  0% { transform: translate(-50%, -50%) scale(1.35) rotate(0deg); opacity: 0; }
+  14% { opacity: 0.95; }
+  55% { transform: translate(-50%, -50%) scale(0.55) rotate(280deg); opacity: 0.85; }
+  100% { transform: translate(-50%, -50%) scale(0.08) rotate(720deg); opacity: 0; }
 }
 
-@keyframes voidGlowPulse {
-  0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.3); }
+/* Photon ring brightens, then is swallowed */
+@keyframes voidPhotonIn {
+  0% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+  12% { opacity: 1; }
+  45% { transform: translate(-50%, -50%) scale(0.85); opacity: 1; }
+  78% { transform: translate(-50%, -50%) scale(0.22); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 }
 
-@keyframes voidCoreIn {
-  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-  30% { opacity: 1; }
-  72% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(7); opacity: 0; }
+/* Event horizon grows until nothing remains outside it */
+@keyframes voidHorizonIn {
+  0% { transform: translate(-50%, -50%) scale(0.08); opacity: 0; }
+  10% { opacity: 1; }
+  40% { transform: translate(-50%, -50%) scale(0.55); opacity: 1; }
+  72% { transform: translate(-50%, -50%) scale(1.8); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(9); opacity: 1; }
 }
 
-/* Particelle che convergono verso il centro */
+/* Matter spirals into the center */
 @keyframes voidParticleIn {
-  0% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
-  18% { opacity: 1; }
-  100% { transform: translate(0, 0) scale(0.15); opacity: 0; }
+  0% { transform: translate(var(--tx), var(--ty)) scale(1) rotate(0deg); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translate(0, 0) scale(0.05) rotate(220deg); opacity: 0; }
 }
 
-/* Particelle che si allontanano dal centro (uscita) */
 @keyframes voidParticleOut {
-  0% { transform: translate(0, 0) scale(0.15); opacity: 0; }
+  0% { transform: translate(0, 0) scale(0.05); opacity: 0; }
   18% { opacity: 1; }
   100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
 }
@@ -491,5 +547,13 @@ html.is-void-arrival .void,
   .archive-portal__aura,
   .archive-portal__ring {
     animation: none !important;
+  }
+
+  .main.is-void-sucked,
+  .archive-page.is-leaving {
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 0 !important;
   }
 }
