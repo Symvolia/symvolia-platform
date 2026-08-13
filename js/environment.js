@@ -18,7 +18,10 @@
   };
 
   const html = document.documentElement;
-  let orchestrated = false;
+  // Returning from the archive page: main.js lands straight in the library,
+  // so the opening journey must not run at all.
+  const direct = html.classList.contains('is-direct');
+  let orchestrated = direct;
 
   /* ── Cosmic dust ─────────────────────────────────────────────────── */
   function mountCosmicDust() {
@@ -230,7 +233,7 @@
 
   // If cinematic intro is absent, land on homepage (never library).
   // While is-cine / is-intro, cinematic-intro.js owns ENTER → enterHome.
-  if (!html.classList.contains('is-intro') && !html.classList.contains('is-cine')) {
+  if (!direct && !html.classList.contains('is-intro') && !html.classList.contains('is-cine')) {
     window.setTimeout(() => {
       if (window.Symvolia && typeof window.Symvolia.enterHome === 'function') {
         orchestrated = true;

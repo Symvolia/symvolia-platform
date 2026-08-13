@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="is-archive-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#010101">
+  <link rel="canonical" href="https://symvolia.github.io/symvolia-platform/archive.html">
+  <meta name="description" content="Symvolia — Sound Archive. Works, collaborations and passages: podcast, single tracks, albums, soundtracks.">
+  <title>Sound Archive — Symvolia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=38">
+  <link rel="stylesheet" href="css/textures.css?v=38">
+  <link rel="stylesheet" href="css/void.css?v=41">
+  <link rel="stylesheet" href="css/design-system.css?v=38">
+  <link rel="stylesheet" href="css/environment.css?v=38">
+  <link rel="stylesheet" href="css/responsive.css?v=39">
+  <link rel="stylesheet" href="css/archive-page.css?v=3">
+  <style>html,body{background:#010101!important}</style>
+</head>
+<body class="esoteric-surface is-entered archive-body">
+
+  <!-- The void is already at full opacity on first paint: the page emerges from it. -->
+  <div class="void is-arriving" id="voidPortal" aria-hidden="true">
+    <div class="void__gradient" aria-hidden="true"></div>
+    <div class="void__vortex" aria-hidden="true"></div>
+    <div class="void__glow" aria-hidden="true"></div>
+    <div class="void__particles" id="voidParticles" aria-hidden="true"></div>
+    <div class="void__core" aria-hidden="true"></div>
+  </div>
+
+  <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
+    <svg class="sound-toggle__glyph sound-toggle__glyph--on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 8.5a5 5 0 0 1 0 7M18.8 6.2a8.2 8.2 0 0 1 0 11.6"/>
+    </svg>
+    <svg class="sound-toggle__glyph sound-toggle__glyph--off" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/>
+    </svg>
+  </button>
+
+  <div class="main is-visible archive-page">
+    <div class="main__grain" aria-hidden="true"></div>
+    <div class="main__sub" aria-hidden="true"></div>
+    <div class="main__depth" aria-hidden="true"></div>
+    <div class="main__waveform" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <header class="main__header archive-page__header">
+      <a class="main__back" id="archiveBack" href="index.html?from=archive#archive" aria-label="Torna al sito" title="Torna al sito">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/>
+        </svg>
+      </a>
+      <p class="archive-page__wordmark">Symvolia · Sound Archive</p>
+    </header>
+
+    <main class="archive-page__body" id="archivePage">
+      <section class="archive-page__hero reveal" data-reveal>
+        <p class="main__eyebrow">The Echo of your Own Soul</p>
+        <h1 class="archive-page__title" tabindex="-1">Sound Archive</h1>
+        <p class="main__section-sub">Works · Collaborations · Passages</p>
+        <p class="archive-page__lead">
+          Every passage recorded here is a descent — sound used as a threshold
+          toward what the ego keeps in the dark.
+        </p>
+        <span class="archive-page__rule" aria-hidden="true"></span>
+      </section>
+
+      <div class="archive-grid archive-page__grid">
+        <a class="archive-card archive-gate reveal" data-reveal id="albums" href="archive-albums.html">
+          <span class="archive-gate__index" aria-hidden="true">I</span>
+          <h2 class="archive-card__title">Album</h2>
+          <p class="archive-card__desc">Catharsis [2026] · VūMantra Records, and Nibiru [2024] · Capital Corpse Records.</p>
+          <span class="archive-gate__covers" aria-hidden="true">
+            <img src="assets/covers/catharsis.jpg" alt="" loading="lazy" decoding="async" width="112" height="112">
+            <img src="assets/covers/nibiru.jpg" alt="" loading="lazy" decoding="async" width="112" height="112">
+          </span>
+          <span class="archive-gate__cue">Enter the passage</span>
+        </a>
+
+        <a class="archive-card archive-gate reveal" data-reveal id="tracks" href="archive-tracks.html">
+          <span class="archive-gate__index" aria-hidden="true">II</span>
+          <h2 class="archive-card__title">Releases</h2>
+          <p class="archive-card__desc">Single tracks, premieres and compilation appearances — one link each.</p>
+          <span class="archive-gate__cue">Enter the passage</span>
+        </a>
+
+        <a class="archive-card archive-gate reveal" data-reveal id="poetic-beingness" href="archive-poetic.html">
+          <span class="archive-gate__index" aria-hidden="true">III</span>
+          <h2 class="archive-card__title">Poetic Beingness</h2>
+          <p class="archive-card__desc">Collaborations with Poetic Beingness — Huldra and Stone by Stone.</p>
+          <span class="archive-gate__cue">Enter the passage</span>
+        </a>
+
+        <a class="archive-card archive-gate reveal" data-reveal id="soundtrack" href="archive-soundtrack.html">
+          <span class="archive-gate__index" aria-hidden="true">IV</span>
+          <h2 class="archive-card__title">Soundtrack</h2>
+          <p class="archive-card__desc">Oppenheimer Soundtrack — Symvolia Rework. Cinematic reimagining.</p>
+          <span class="archive-gate__cue">Enter the passage</span>
+        </a>
+
+        <a class="archive-card archive-gate reveal" data-reveal id="podcast" href="archive-podcast.html">
+          <span class="archive-gate__index" aria-hidden="true">V</span>
+          <h2 class="archive-card__title">Podcast</h2>
+          <p class="archive-card__desc">Eight hours of mixes and guest sessions — each one with its own link.</p>
+          <span class="archive-gate__cue">Enter the passage</span>
+        </a>
+      </div>
+
+      <footer class="archive-page__foot reveal" data-reveal>
+        <p class="main__section-sub">Listen elsewhere</p>
+        <nav class="main__social" aria-label="Social links">
+          <a class="main__social-link" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener noreferrer" aria-label="SoundCloud">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c0-.057-.045-.1-.09-.1m-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.06.045.093.09.093.06 0 .09-.037.09-.093l.24-1.308-.24-1.332c0-.057-.045-.09-.09-.09m1.83-1.229c-.061 0-.12.045-.12.104l-.21 2.563.225 2.458c0 .06.045.104.119.104.061 0 .105-.044.119-.104l.24-2.458-.24-2.563c-.014-.06-.062-.104-.121-.104m.945-.089c-.075 0-.135.06-.15.135l-.193 2.64.21 2.544c.016.077.075.138.149.138.075 0 .135-.061.15-.15l.24-2.532-.24-2.623c0-.075-.06-.135-.135-.135m1.155.36c-.006-.09-.075-.149-.159-.149-.09 0-.158.06-.164.149l-.217 2.43.2 2.563c0 .09.075.157.159.157.074 0 .148-.068.148-.158l.227-2.563-.227-2.442m.809-1.709c-.101 0-.18.09-.18.194l-.21 3.855.187 2.563c0 .09.08.179.18.179.107 0 .18-.08.18-.18l.209-2.563-.209-3.855c0-.104-.074-.187-.18-.187m.899-.914c-.104 0-.194.089-.194.194l-.21 4.784.194 2.548c0 .12.089.194.209.194.104 0 .193-.089.193-.209l.211-2.533-.211-4.784c0-.105-.089-.194-.192-.194m.989-.226c-.12 0-.209.104-.209.225l-.194 5.005.194 2.518c0 .12.089.225.209.225.119 0 .209-.104.209-.225l.225-2.518-.225-5.005c0-.121-.09-.225-.211-.225m1.245.045c0-.135-.105-.24-.24-.24-.119 0-.24.105-.24.24l-.194 5.184.194 2.503c.016.135.121.24.256.24.135 0 .24-.105.24-.24l.209-2.503-.225-5.184m.749-.914c-.15 0-.255.12-.255.255l-.18 6.098.18 2.473c0 .149.12.254.255.254s.24-.12.255-.27l.209-2.457-.209-6.098c-.016-.148-.135-.253-.271-.253m1.005.166c-.164 0-.284.135-.284.285l-.18 5.746.18 2.443c0 .149.135.284.285.284.149 0 .284-.135.284-.299l.194-2.428-.194-5.746c0-.165-.135-.285-.285-.285m1.184-.945c-.045-.03-.105-.044-.164-.044-.061 0-.121.014-.164.044-.091.045-.15.135-.15.24l-.18 6.75.164 2.428c0 .18.15.314.33.314.164 0 .314-.135.314-.329l.18-2.428-.18-6.735c0-.135-.075-.24-.196-.285m9.481 3.474c-.494 0-.96.104-1.395.284-.285-3.284-3.028-5.858-6.383-5.858-.824 0-1.634.166-2.354.435-.283.104-.36.21-.36.42v11.245c0 .225.166.39.375.42h9.517c1.888 0 3.42-1.53 3.42-3.42s-1.53-3.435-3.42-3.435"/>
+            </svg>
+          </a>
+          <a class="main__social-link" href="https://www.instagram.com/symvolia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0m0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324M12 16a4 4 0 110-8 4 4 0 010 8m6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881"/>
+            </svg>
+          </a>
+          <a class="main__social-link" href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener noreferrer" aria-label="Bandcamp">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M0 18.75l7.437-13.5H24l-7.437 13.5H0z"/>
+            </svg>
+          </a>
+          <button type="button" class="main__social-link mail-trigger" data-email="symvolia@gmail.com" aria-label="Email" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M2.5 5.5h19v13h-19z"/>
+              <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 6.2l9 6.3 9-6.3"/>
+            </svg>
+          </button>
+        </nav>
+        <a class="archive-page__return" id="archiveReturn" href="index.html?from=archive#archive">Return through the void</a>
+        <p class="main__footer-note">Symvolia · Verona, Italy</p>
+      </footer>
+    </main>
+  </div>
+
+  <audio id="mainAmbient" preload="auto" loop src="assets/audio/ancient-chants-live.m4a?v=1" aria-hidden="true"></audio>
+
+  <script src="js/archive-page.js?v=3" defer></script>
+</body>
+</html>

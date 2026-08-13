@@ -15,6 +15,13 @@
   const cine = document.getElementById('cineIntro');
   if (!cine) return;
 
+  // Direct entry (returning from the archive page): the film has no business here.
+  if (root.classList.contains('is-direct')) {
+    if (cine.parentNode) cine.parentNode.removeChild(cine);
+    root.classList.remove('loading');
+    return;
+  }
+
   const eye = document.getElementById('cineEye');
   const vignette = cine.querySelector('.cine__vignette');
   const noiseCanvas = document.getElementById('eyeNoise');

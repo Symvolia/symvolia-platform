@@ -96,6 +96,7 @@ body.is-entered .sound-toggle {
 .archive-portal__btn {
   position: relative;
   display: flex;
+  text-decoration: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -235,64 +236,6 @@ body.is-entered .sound-toggle {
   to { transform: rotate(360deg) scale(1); }
 }
 
-/* Nasconde il pulsante mentre il pannello è aperto */
-.main__archive.is-open .archive-portal {
-  display: none;
-}
-
-/* ─────────────────────────  Archive panel  ───────────────────────── */
-
-.archive-panel {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.9s var(--ease-open), transform 0.9s var(--ease-flow);
-}
-
-.archive-panel[hidden] {
-  display: none;
-}
-
-.main__archive.is-open .archive-panel {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.archive-panel__head {
-  position: relative;
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.archive-panel__close {
-  position: absolute;
-  top: -0.4rem;
-  right: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  color: rgba(198, 189, 177, 0.85);
-  background: rgba(8, 5, 12, 0.6);
-  border: 1px solid rgba(124, 58, 237, 0.3);
-  cursor: pointer;
-  transition: color 0.3s var(--ease-open), border-color 0.3s var(--ease-open), transform 0.3s var(--ease-open);
-}
-
-.archive-panel__close svg {
-  width: 1.1rem;
-  height: 1.1rem;
-}
-
-.archive-panel__close:hover,
-.archive-panel__close:focus-visible {
-  color: var(--void-white);
-  border-color: rgba(124, 58, 237, 0.65);
-  transform: rotate(90deg);
-  outline: none;
-}
-
 /* ─────────────────────────  Void dive overlay  ───────────────────────── */
 
 .void {
@@ -313,9 +256,20 @@ body.is-entered .sound-toggle {
 }
 
 .void.is-active,
-.void.is-closing {
+.void.is-closing,
+.void.is-arriving {
   visibility: visible;
   pointer-events: auto;
+}
+
+/* Arrival: the page is born already inside the void, which then dissolves
+   outwards. Opaque from the very first paint — no flash of content.
+   `is-void-arrival` is set in the document head before the overlay is parsed;
+   the `is-arriving` animation (fill: forwards) later wins over both. */
+html.is-void-arrival .void,
+.void.is-arriving {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Layer centrali condivisi */
@@ -433,23 +387,32 @@ body.is-entered .sound-toggle {
   animation: voidFade var(--void-ms) var(--ease-open) forwards;
 }
 
-.void.is-closing .void__gradient {
+.void.is-arriving {
+  animation: voidArrive var(--void-ms) var(--ease-open) forwards;
+}
+
+.void.is-closing .void__gradient,
+.void.is-arriving .void__gradient {
   animation: voidGradientIn var(--void-ms) var(--ease-open) reverse forwards;
 }
 
-.void.is-closing .void__vortex {
+.void.is-closing .void__vortex,
+.void.is-arriving .void__vortex {
   animation: voidVortexIn var(--void-ms) cubic-bezier(0.4, 0, 0.2, 1) reverse forwards;
 }
 
-.void.is-closing .void__glow {
+.void.is-closing .void__glow,
+.void.is-arriving .void__glow {
   animation: voidGlowPulse 1.3s var(--ease-breathe) infinite;
 }
 
-.void.is-closing .void__core {
+.void.is-closing .void__core,
+.void.is-arriving .void__core {
   animation: voidCoreIn var(--void-ms) cubic-bezier(0.65, 0, 0.35, 1) reverse forwards;
 }
 
-.void.is-closing .void__particle {
+.void.is-closing .void__particle,
+.void.is-arriving .void__particle {
   animation: voidParticleOut var(--void-ms) cubic-bezier(0.5, 0, 0.3, 1) forwards;
   animation-delay: var(--delay, 0ms);
 }
@@ -459,6 +422,13 @@ body.is-entered .sound-toggle {
   0% { opacity: 0; visibility: visible; }
   12% { opacity: 1; }
   80% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Arrivo: si parte immersi nel void, che si dirada rivelando la pagina */
+@keyframes voidArrive {
+  0% { opacity: 1; visibility: visible; }
+  55% { opacity: 0.72; }
   100% { opacity: 0; visibility: hidden; }
 }
 
@@ -506,9 +476,17 @@ body.is-entered .sound-toggle {
   .void,
   .void.is-active,
   .void.is-closing,
+  .void.is-arriving,
   .void.is-active *,
-  .void.is-closing * {
+  .void.is-closing *,
+  .void.is-arriving * {
     animation: none !important;
+  }
+
+  /* Without the dissolve animation the arrival veil would stay opaque forever */
+  .void.is-arriving {
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   .archive-portal__aura,
   .archive-portal__ring {

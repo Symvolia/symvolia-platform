@@ -14,10 +14,9 @@
 
   const voidPortal = document.getElementById('voidPortal');
   const voidParticles = document.getElementById('voidParticles');
-  const archiveSection = document.getElementById('archive');
   const archivePortalBtn = document.getElementById('archivePortalBtn');
-  const archivePanel = document.getElementById('archivePanel');
-  const archivePanelClose = document.getElementById('archivePanelClose');
+
+  const ARCHIVE_PAGE = 'archive.html';
 
   if (!stage || !main) return;
 
@@ -195,7 +194,6 @@
 
   /* ── Void dive animation + Sound Archive portal ── */
   let voidBusy = false;
-  let archiveOpen = false;
   let particlesBuilt = false;
 
   function buildVoidParticles() {
@@ -249,62 +247,91 @@
     }, VOID_MS);
   }
 
-  function revealArchiveCards() {
-    if (!archivePanel) return;
-    const items = archivePanel.querySelectorAll('[data-reveal]');
-    items.forEach((el, i) => {
-      el.style.setProperty('--reveal-delay', `${(i * 0.08).toFixed(2)}s`);
-      el.classList.add('is-revealed');
-    });
-  }
-
-  function openArchive() {
-    if (voidBusy || archiveOpen || !archiveSection || !archivePanel) return;
+  /* The archive lives on its own page: dive into the void here, surface there. */
+  function diveToArchivePage(href) {
+    if (voidBusy) return;
     voidBusy = true;
+
+    const target = href || ARCHIVE_PAGE;
+
+    if (!voidPortal || prefersReducedMotion()) {
+      window.location.href = target;
+      return;
+    }
+
+    fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.46));
 
     runVoid(false, () => {
-      archivePanel.hidden = false;
-      void archivePanel.offsetWidth;
-      archiveSection.classList.add('is-open');
-      archiveOpen = true;
-      if (archivePortalBtn) archivePortalBtn.setAttribute('aria-expanded', 'true');
-      revealArchiveCards();
-    }, () => {
-      voidBusy = false;
-      if (archivePanelClose) archivePanelClose.focus({ preventScroll: true });
-    });
-  }
-
-  function closeArchive() {
-    if (voidBusy || !archiveOpen || !archiveSection || !archivePanel) return;
-    voidBusy = true;
-
-    runVoid(true, () => {
-      archiveSection.classList.remove('is-open');
-      archivePanel.hidden = true;
-      archiveOpen = false;
-      if (archivePortalBtn) archivePortalBtn.setAttribute('aria-expanded', 'false');
-    }, () => {
-      voidBusy = false;
-      if (archivePortalBtn) archivePortalBtn.focus({ preventScroll: true });
+      // Handed over while the void is fully opaque — the page swap is invisible.
+      window.location.href = target;
     });
   }
 
   function resetArchive() {
-    if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing');
-    if (archiveSection) archiveSection.classList.remove('is-open');
-    if (archivePanel) archivePanel.hidden = true;
-    if (archivePortalBtn) archivePortalBtn.setAttribute('aria-expanded', 'false');
-    archiveOpen = false;
+    if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving');
     voidBusy = false;
   }
 
   function bindArchivePortal() {
-    if (archivePortalBtn) archivePortalBtn.addEventListener('click', openArchive);
-    if (archivePanelClose) archivePanelClose.addEventListener('click', closeArchive);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && archiveOpen && !voidBusy) closeArchive();
+    if (!archivePortalBtn) return;
+    archivePortalBtn.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      diveToArchivePage(archivePortalBtn.getAttribute('href'));
     });
+  }
+
+  /* Returning from the archive page: surface directly into the library,
+     skipping intro and homepage, with the void dissolving over it. */
+  function enterLibraryDirect(targetId) {
+    entered = true;
+    libraryUnlocked = true;
+
+    document.documentElement.classList.remove(
+      'is-home', 'is-intro', 'is-cine', 'is-journey-locked', 'is-journey-cta'
+    );
+    document.documentElement.classList.add('is-journey-alive');
+
+    setHomeChromeVisible(false);
+    stage.hidden = true;
+    stage.setAttribute('aria-hidden', 'true');
+    if (enterCta) enterCta.classList.remove('is-active');
+
+    main.hidden = false;
+    document.body.classList.add('is-entered');
+    main.classList.add('is-visible');
+    revealMainContent();
+
+    if (mainAmbient) {
+      mainAmbient.volume = 0;
+      const p = mainAmbient.play();
+      if (p !== undefined) p.catch(() => {});
+      fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
+    }
+
+    scrollToSection(targetId, 'auto');
+    // Reveals and web fonts settle a few frames later — land the anchor precisely.
+    window.setTimeout(() => scrollToSection(targetId, 'auto'), 320);
+    window.setTimeout(() => scrollToSection(targetId, 'auto'), 900);
+
+    try {
+      // Drop the ?from=archive marker without touching history depth.
+      if (history.replaceState) {
+        history.replaceState(null, '', `${window.location.pathname}#${targetId}`);
+      }
+    } catch (err) { /* ignore */ }
+
+    // Dissolve the arrival veil that covered the page swap.
+    if (voidPortal && !prefersReducedMotion()) {
+      buildVoidParticles();
+      voidPortal.classList.add('is-arriving');
+      window.setTimeout(() => {
+        voidPortal.classList.remove('is-arriving');
+        document.documentElement.classList.remove('is-void-arrival');
+      }, VOID_MS);
+    } else {
+      document.documentElement.classList.remove('is-void-arrival');
+    }
   }
 
   function awaken(opts) {
@@ -560,11 +587,64 @@
     });
   }
 
+  /* Native smooth scrolling never completes in this document — the animation is
+     dropped the moment the library fades in — so we drive it ourselves. */
+  let scrollAnim = 0;
+
+  function jumpTo(top) {
+    if (scrollAnim) {
+      window.cancelAnimationFrame(scrollAnim);
+      scrollAnim = 0;
+    }
+    try {
+      window.scrollTo({ top, left: 0, behavior: 'instant' });
+    } catch (err) {
+      window.scrollTo(0, top);
+    }
+  }
+
+  function glideTo(top, duration) {
+    const start = window.scrollY || document.documentElement.scrollTop || 0;
+    const delta = top - start;
+    if (Math.abs(delta) < 2) {
+      jumpTo(top);
+      return;
+    }
+
+    if (scrollAnim) window.cancelAnimationFrame(scrollAnim);
+
+    const span = duration || 900;
+    const t0 = performance.now();
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / span);
+      const y = Math.round(start + delta * ease(t));
+      try {
+        window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+      } catch (err) {
+        window.scrollTo(0, y);
+      }
+      scrollAnim = t < 1 ? window.requestAnimationFrame(step) : 0;
+    };
+
+    scrollAnim = window.requestAnimationFrame(step);
+  }
+
+  function sectionOffset(section) {
+    const margin = parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0;
+    const y = section.getBoundingClientRect().top + (window.scrollY || 0) - margin;
+    const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    return Math.max(0, Math.min(Math.round(y), max));
+  }
+
   function scrollToSection(id, behavior) {
     const section = document.getElementById(id);
     if (!section) return;
 
-    section.scrollIntoView({ behavior, block: 'start' });
+    const top = sectionOffset(section);
+    if (behavior === 'smooth' && !prefersReducedMotion()) glideTo(top);
+    else jumpTo(top);
   }
 
   function bindSectionNavigation() {
@@ -772,14 +852,18 @@
     isLibraryUnlocked: () => libraryUnlocked,
   };
 
+  const directEntry = document.documentElement.classList.contains('is-direct');
+
   bindSoundToggle();
-  startStageAmbient();
+  if (!directEntry) startStageAmbient();
   bindAmbientFallback();
   bindAmbientLifecycle();
   bindSectionNavigation();
   bindArchivePortal();
   bindStageMenu();
   // Enter CTA is revealed by environment.js after the opening journey.
+
+  if (directEntry) enterLibraryDirect('archive');
 
   if (enterBtn) {
     enterBtn.addEventListener('click', handleEnter);
