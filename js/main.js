@@ -272,6 +272,29 @@
     voidBusy = false;
   }
 
+  /* Coming back from the archive with the browser's own back gesture: the page
+     was frozen mid-dive, void wide open over it. Surface it again — otherwise
+     it reappears as a black screen where nothing answers. */
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+
+    resetArchive();
+
+    if (voidPortal && !prefersReducedMotion()) {
+      buildVoidParticles();
+      voidPortal.classList.add('is-arriving');
+      window.setTimeout(() => {
+        voidPortal.classList.remove('is-arriving');
+        document.documentElement.classList.remove('is-void-arrival');
+      }, VOID_MS);
+    } else {
+      document.documentElement.classList.remove('is-void-arrival');
+    }
+
+    if (entered) fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
+    else if (livingAwake) startStageAmbient();
+  });
+
   function bindArchivePortal() {
     if (!archivePortalBtn) return;
     archivePortalBtn.addEventListener('click', (e) => {

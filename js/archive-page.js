@@ -61,12 +61,12 @@
   /* ── Departure: dive back into the void, then hand over to the next page ── */
   let leaving = false;
 
-  function leaveTo(href) {
+  function leaveThrough(go) {
     if (leaving) return;
     leaving = true;
 
     if (!voidPortal || reduced()) {
-      window.location.href = href;
+      go();
       return;
     }
 
@@ -78,10 +78,35 @@
     if (mainAmbient) fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.46));
 
     // Hand over while the void is fully opaque: the page swap stays invisible.
-    window.setTimeout(() => {
-      window.location.href = href;
-    }, Math.round(VOID_MS * 0.46));
+    window.setTimeout(go, Math.round(VOID_MS * 0.46));
   }
+
+  function leaveTo(href) {
+    leaveThrough(() => {
+      window.location.href = href;
+    });
+  }
+
+  /* ── Return: a page restored from the back/forward cache comes back exactly
+     as it was left — sunk in the void, with every link already spent. It has to
+     be lifted out, or the reader lands on a black, unresponsive page. ── */
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+
+    leaving = false;
+    if (page) page.classList.remove('is-leaving');
+
+    if (voidPortal) {
+      voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving');
+      if (!reduced()) {
+        void voidPortal.offsetWidth; // restart the animations
+        voidPortal.classList.add('is-arriving');
+        window.setTimeout(() => voidPortal.classList.remove('is-arriving'), VOID_MS);
+      }
+    }
+
+    startAmbient();
+  });
 
   // Every move inside the archive — hub, passages, way back to the site —
   // travels through the void.
@@ -106,6 +131,34 @@
 
       e.preventDefault();
       leaveTo(url.href);
+    });
+  }
+
+  const ARCHIVE_PATH = /(^|\/)archive[\w-]*\.html$/;
+
+  function isArchiveUrl(value) {
+    if (!value) return false;
+    try {
+      const url = new URL(value, window.location.href);
+      return url.origin === window.location.origin && ARCHIVE_PATH.test(url.pathname);
+    } catch (err) {
+      return false;
+    }
+  }
+
+  // The arrow retraces the reader's own steps rather than always climbing back
+  // to the hub — but only within the archive. The one that leaves for the site
+  // keeps its written destination, which carries the marker that skips the intro.
+  function bindBackLink() {
+    const back = document.querySelector('.main__back');
+    if (!back || !isArchiveUrl(back.getAttribute('href'))) return;
+
+    back.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (window.history.length < 2 || !isArchiveUrl(document.referrer)) return;
+
+      e.preventDefault();
+      leaveThrough(() => window.history.back());
     });
   }
 
@@ -349,6 +402,7 @@
   bindSoundToggle();
   bindAmbientLifecycle();
   bindVoidExits();
+  bindBackLink();
   bindReveals();
   bindMailMenu();
   bindPlayerDucking();
