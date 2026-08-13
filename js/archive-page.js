@@ -12,7 +12,7 @@
   const mainAmbient = document.getElementById('mainAmbient');
   const page = document.querySelector('.archive-page');
 
-  const VOID_MS = 2600;
+  const VOID_MS = 2800;
   const FADE_MS = 1400;
   const MUTE_KEY = 'symvolia-muted';
 
@@ -75,10 +75,10 @@
     voidPortal.classList.add('is-active');
     if (page) page.classList.add('is-leaving');
 
-    if (mainAmbient) fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.46));
+    if (mainAmbient) fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.74));
 
-    // Hand over while the void is fully opaque: the page swap stays invisible.
-    window.setTimeout(go, Math.round(VOID_MS * 0.46));
+    // Hand over once the event horizon has swallowed the frame.
+    window.setTimeout(go, Math.round(VOID_MS * 0.74));
   }
 
   function leaveTo(href) {
@@ -108,8 +108,8 @@
     startAmbient();
   });
 
-  // Every move inside the archive — hub, passages, way back to the site —
-  // travels through the void.
+  // Forward moves inside the archive — hub → passages → next passage —
+  // travel through the black hole. The back arrow does not.
   function bindVoidExits() {
     document.addEventListener('click', (e) => {
       if (e.defaultPrevented) return;
@@ -117,6 +117,7 @@
 
       const link = e.target.closest && e.target.closest('a[href]');
       if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+      if (link.classList.contains('main__back') || link.closest('.main__back')) return;
 
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('mailto:')) return;
@@ -146,19 +147,27 @@
     }
   }
 
-  // The arrow retraces the reader's own steps rather than always climbing back
-  // to the hub — but only within the archive. The one that leaves for the site
-  // keeps its written destination, which carries the marker that skips the intro.
+  // The arrow goes straight back — no black hole, no delay. Within the archive
+  // it retraces history; leaving for the site it follows its written href,
+  // which carries the marker that skips the intro.
   function bindBackLink() {
     const back = document.querySelector('.main__back');
-    if (!back || !isArchiveUrl(back.getAttribute('href'))) return;
+    if (!back) return;
 
     back.addEventListener('click', (e) => {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      if (window.history.length < 2 || !isArchiveUrl(document.referrer)) return;
+
+      const href = back.getAttribute('href');
+      const useHistory = isArchiveUrl(href)
+        && window.history.length >= 2
+        && isArchiveUrl(document.referrer);
+
+      if (!useHistory && !href) return;
 
       e.preventDefault();
-      leaveThrough(() => window.history.back());
+      leaving = true;
+      if (useHistory) window.history.back();
+      else window.location.href = href;
     });
   }
 
