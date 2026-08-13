@@ -29,7 +29,7 @@
   const FADE_MS = 1400;
   const CROSSFADE_MS = 500;
 
-  const VOID_MS = 2800;
+  const VOID_MS = 3200;
 
   let entered = false;
   let livingAwake = false;
@@ -231,9 +231,25 @@
       return;
     }
 
+    // Dive into the archive uses the canvas black hole. Soft closing stays CSS.
+    if (!closing && window.SymvoliaVoid) {
+      window.SymvoliaVoid.start({
+        duration: VOID_MS,
+        interactive: true,
+        onMid() {
+          if (onMid) onMid();
+          window.setTimeout(() => {
+            if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
+            if (onDone) onDone();
+          }, Math.round(VOID_MS * 0.26));
+        },
+      });
+      return;
+    }
+
     buildVoidParticles();
 
-    voidPortal.classList.remove('is-active', 'is-closing');
+    voidPortal.classList.remove('is-active', 'is-closing', 'void--canvas');
     void voidPortal.offsetWidth; // restart animations
     voidPortal.classList.add(closing ? 'is-closing' : 'is-active');
 
@@ -242,7 +258,7 @@
     }, Math.round(VOID_MS * 0.74));
 
     window.setTimeout(() => {
-      voidPortal.classList.remove('is-active', 'is-closing');
+      voidPortal.classList.remove('is-active', 'is-closing', 'void--canvas');
       if (onDone) onDone();
     }, VOID_MS);
   }
@@ -269,7 +285,8 @@
   }
 
   function resetArchive() {
-    if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving');
+    if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
+    if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
     if (main) main.classList.remove('is-void-sucked');
     voidBusy = false;
   }

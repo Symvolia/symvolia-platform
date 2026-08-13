@@ -12,7 +12,7 @@
   const mainAmbient = document.getElementById('mainAmbient');
   const page = document.querySelector('.archive-page');
 
-  const VOID_MS = 2800;
+  const VOID_MS = 3200;
   const FADE_MS = 1400;
   const MUTE_KEY = 'symvolia-muted';
 
@@ -70,14 +70,22 @@
       return;
     }
 
-    voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving');
-    void voidPortal.offsetWidth; // restart the animations
-    voidPortal.classList.add('is-active');
     if (page) page.classList.add('is-leaving');
-
     if (mainAmbient) fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.74));
 
-    // Hand over once the event horizon has swallowed the frame.
+    // Canvas black hole for every forward passage inside the archive.
+    if (window.SymvoliaVoid) {
+      window.SymvoliaVoid.start({
+        duration: VOID_MS,
+        interactive: true,
+        onMid: go,
+      });
+      return;
+    }
+
+    voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
+    void voidPortal.offsetWidth;
+    voidPortal.classList.add('is-active');
     window.setTimeout(go, Math.round(VOID_MS * 0.74));
   }
 
@@ -95,11 +103,12 @@
 
     leaving = false;
     if (page) page.classList.remove('is-leaving');
+    if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
 
     if (voidPortal) {
-      voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving');
+      voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
       if (!reduced()) {
-        void voidPortal.offsetWidth; // restart the animations
+        void voidPortal.offsetWidth;
         voidPortal.classList.add('is-arriving');
         window.setTimeout(() => voidPortal.classList.remove('is-arriving'), VOID_MS);
       }
