@@ -1,0 +1,671 @@
+/* ─── Symvolia — dedicated Sound Archive page ───
+   Lives beyond the void: its own page, same murky grammar as the library. */
+
+.archive-body {
+  min-height: 100%;
+}
+
+.archive-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header: back arrow on the left, discreet wordmark on the right.
+   .main__header already reserves room for the floating sound toggle. */
+.archive-page__header {
+  justify-content: space-between;
+}
+
+.archive-page__wordmark {
+  font-family: var(--font-elegant);
+  font-size: 0.7rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(126, 117, 107, 0.66);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.archive-page__body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 9vh, 6rem) 1.5rem 4rem;
+}
+
+/* ── Hero ── */
+
+.archive-page__hero {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.archive-page__title {
+  font-family: var(--font-elegant);
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(224, 216, 205, 0.94);
+  margin: 0.75rem 0 1rem;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 46px rgba(124, 58, 237, 0.16);
+}
+
+.archive-page__title:focus {
+  outline: none;
+}
+
+.archive-page__lead {
+  max-width: 34rem;
+  margin: 1.75rem auto 0;
+  font-family: var(--font-elegant);
+  font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.75;
+  color: rgba(176, 167, 155, 0.78);
+}
+
+/* A single violet thread — the seam the void left behind */
+.archive-page__rule {
+  display: block;
+  width: min(18rem, 60%);
+  height: 1px;
+  margin: clamp(1.75rem, 5vh, 2.75rem) auto 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(124, 58, 237, 0.32) 30%,
+    rgba(198, 189, 177, 0.3) 50%,
+    rgba(124, 58, 237, 0.32) 70%,
+    transparent
+  );
+}
+
+/* ── Cards ── */
+
+.archive-page__grid {
+  max-width: 58rem;
+}
+
+.archive-page__grid .archive-card {
+  padding: 2rem 1.75rem;
+}
+
+/* Each card is a threshold to its own page */
+.archive-gate {
+  display: block;
+  text-decoration: none;
+}
+
+.archive-gate__index {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-family: var(--font-elegant);
+  font-size: 0.66rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.34em;
+  color: rgba(124, 110, 138, 0.62);
+}
+
+/* A glimpse of the covers waiting behind the threshold */
+.archive-gate__covers {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.archive-gate__covers img {
+  display: block;
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  filter: grayscale(0.45) brightness(0.72) contrast(1.06);
+  transition: filter 0.8s var(--ease-open);
+}
+
+.archive-gate:hover .archive-gate__covers img,
+.archive-gate:focus-visible .archive-gate__covers img {
+  filter: grayscale(0) brightness(0.95) contrast(1);
+}
+
+.archive-gate__cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-elegant);
+  font-size: 0.7rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(160, 150, 138, 0.7);
+  transition: color 0.5s var(--ease-open), gap 0.5s var(--ease-flow);
+}
+
+.archive-gate__cue::after {
+  content: '→';
+  font-style: normal;
+  opacity: 0.7;
+}
+
+.archive-gate:hover .archive-gate__cue,
+.archive-gate:focus-visible .archive-gate__cue {
+  color: rgba(216, 208, 196, 0.94);
+  gap: 1rem;
+}
+
+.archive-gate:focus-visible {
+  outline: 1px solid rgba(198, 189, 177, 0.45);
+  outline-offset: 3px;
+}
+
+/* ── Footer ── */
+
+.archive-page__foot {
+  margin-top: clamp(3rem, 9vh, 5rem);
+  padding-top: clamp(2rem, 6vh, 3rem);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.archive-page__foot .main__social {
+  margin-top: 1.5rem;
+}
+
+.archive-page__return {
+  display: inline-block;
+  margin-bottom: 1.75rem;
+  font-family: var(--font-elegant);
+  font-size: 0.72rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(168, 158, 146, 0.62);
+  text-decoration: none;
+  transition: color 0.4s var(--ease-open), letter-spacing 0.4s var(--ease-open);
+}
+
+.archive-page__return:hover,
+.archive-page__return:focus-visible {
+  color: rgba(216, 208, 196, 0.92);
+  letter-spacing: 0.28em;
+  outline: none;
+}
+
+/* ─── A single passage: its own page ─── */
+
+.archive-entry__body {
+  max-width: 52rem;
+}
+
+.archive-entry__kind {
+  font-family: var(--font-elegant);
+  font-size: 0.68rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(124, 110, 138, 0.7);
+}
+
+.archive-entry__title {
+  font-size: clamp(1.8rem, 6vw, 2.75rem);
+}
+
+.archive-entry__section {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+}
+
+.archive-entry__section-label {
+  display: block;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-elegant);
+  font-size: 0.68rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(140, 130, 118, 0.6);
+  text-align: center;
+}
+
+/* Foreign players are guests here: framed, dimmed, never glaring */
+.archive-entry__player {
+  position: relative;
+  border: 1px solid var(--line);
+  background: rgba(5, 4, 3, 0.92);
+  overflow: hidden;
+  filter: saturate(0.82) brightness(0.86) contrast(1.02);
+  transition: filter 0.6s var(--ease-open);
+}
+
+.archive-entry__player:hover,
+.archive-entry__player:focus-within {
+  filter: saturate(0.95) brightness(0.98) contrast(1);
+}
+
+.archive-entry__player iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.archive-entry__player--video {
+  aspect-ratio: 16 / 9;
+}
+
+.archive-entry__player--video iframe {
+  height: 100%;
+}
+
+.archive-entry__note {
+  margin-top: 0.9rem;
+  font-family: var(--font-elegant);
+  font-size: 0.72rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  color: rgba(120, 112, 103, 0.62);
+  text-align: center;
+}
+
+/* Listening links, as thresholds rather than buttons */
+.archive-entry__links {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.archive-entry__player + .archive-entry__links,
+.archive-entry__body-text + .archive-entry__links {
+  margin-top: 1.25rem;
+}
+
+.archive-entry__body-text + .archive-entry__player {
+  margin-top: 1.5rem;
+}
+
+.archive-entry__link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.35rem 1.5rem;
+  background: rgba(5, 4, 3, 0.92);
+  text-decoration: none;
+  transition: background 0.6s var(--ease-soft), padding-left 0.6s var(--ease-flow);
+}
+
+.archive-entry__link:hover,
+.archive-entry__link:focus-visible {
+  background: rgba(16, 12, 20, 0.96);
+  padding-left: 1.9rem;
+  outline: none;
+}
+
+.archive-entry__link-name {
+  font-family: var(--font-elegant);
+  font-size: 1rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: rgba(216, 208, 196, 0.94);
+}
+
+.archive-entry__link-where {
+  flex: none;
+  font-family: var(--font-elegant);
+  font-size: 0.68rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(150, 140, 128, 0.72);
+}
+
+.archive-entry__link:hover .archive-entry__link-where,
+.archive-entry__link:focus-visible .archive-entry__link-where {
+  color: rgba(198, 189, 177, 0.92);
+}
+
+.archive-entry__body-text p {
+  font-family: var(--font-elegant);
+  font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.8;
+  color: rgba(186, 177, 165, 0.82);
+}
+
+.archive-entry__body-text p + p {
+  margin-top: 1.25rem;
+}
+
+/* ── Linktree grammar: one row per piece, its artwork alongside ── */
+
+.archive-list {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.archive-list__link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.85rem 1.15rem;
+  background: rgba(5, 4, 3, 0.92);
+  text-decoration: none;
+  transition: background 0.6s var(--ease-soft), padding-left 0.6s var(--ease-flow);
+}
+
+.archive-list__link:hover,
+.archive-list__link:focus-visible {
+  background: rgba(16, 12, 20, 0.96);
+  padding-left: 1.45rem;
+  outline: none;
+}
+
+.archive-list__art {
+  width: 3.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #050403;
+}
+
+.archive-list__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Kept in the site's murk until the row is touched */
+  filter: grayscale(0.4) brightness(0.78) contrast(1.06);
+  transition: filter 0.7s var(--ease-open), transform 1.4s var(--ease-flow);
+}
+
+.archive-list__link:hover .archive-list__art img,
+.archive-list__link:focus-visible .archive-list__art img {
+  filter: grayscale(0) brightness(1) contrast(1);
+  transform: scale(1.05);
+}
+
+.archive-list__title {
+  display: block;
+  font-family: var(--font-elegant);
+  font-size: 0.98rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  color: rgba(214, 206, 194, 0.94);
+}
+
+.archive-list__meta {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-elegant);
+  font-size: 0.66rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(138, 129, 118, 0.66);
+}
+
+.archive-list__cue {
+  flex: none;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: rgba(140, 130, 118, 0.55);
+  transition: color 0.5s var(--ease-open), transform 0.5s var(--ease-flow);
+}
+
+.archive-list__link:hover .archive-list__cue,
+.archive-list__link:focus-visible .archive-list__cue {
+  color: rgba(206, 198, 186, 0.9);
+  transform: translateX(3px);
+}
+
+/* ── An album and its cover ── */
+
+.album + .album {
+  margin-top: clamp(3rem, 8vh, 4.5rem);
+  padding-top: clamp(2.5rem, 7vh, 3.5rem);
+  border-top: 1px solid var(--line);
+}
+
+.album__head {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+.album__cover {
+  border: 1px solid var(--line);
+  background: #050403;
+  overflow: hidden;
+}
+
+.album__cover img {
+  display: block;
+  width: 100%;
+  /* The width/height attributes would otherwise pin the height and defeat the ratio */
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  filter: brightness(0.88) contrast(1.04);
+  transition: filter 0.9s var(--ease-open);
+}
+
+.album__cover:hover img {
+  filter: brightness(1) contrast(1);
+}
+
+.album__title {
+  font-family: var(--font-elegant);
+  font-size: clamp(1.4rem, 4.4vw, 1.9rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(220, 212, 200, 0.94);
+  margin: 0;
+}
+
+.album__label {
+  margin-top: 0.5rem;
+  font-family: var(--font-elegant);
+  font-size: 0.68rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(124, 110, 138, 0.72);
+}
+
+.album__desc {
+  margin-top: 1.1rem;
+  font-family: var(--font-elegant);
+  font-size: 0.98rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.75;
+  color: rgba(186, 177, 165, 0.82);
+}
+
+.album__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.6rem;
+  margin-top: 1.5rem;
+}
+
+.album__links a {
+  font-family: var(--font-elegant);
+  font-size: 0.7rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(170, 159, 147, 0.78);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(120, 112, 103, 0.35);
+  padding-bottom: 0.2rem;
+  transition: color 0.5s var(--ease-open), border-color 0.5s var(--ease-open);
+}
+
+.album__links a:hover,
+.album__links a:focus-visible {
+  color: rgba(220, 212, 200, 0.95);
+  border-color: rgba(198, 189, 177, 0.6);
+  outline: none;
+}
+
+.album__sub-label {
+  display: block;
+  margin: 1.75rem 0 0.9rem;
+  font-family: var(--font-elegant);
+  font-size: 0.64rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(130, 121, 111, 0.6);
+}
+
+/* Previous / next passage */
+.archive-entry__nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 1px;
+  margin-top: clamp(3rem, 8vh, 4.5rem);
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.archive-entry__nav-link {
+  flex: 1;
+  padding: 1.5rem;
+  background: rgba(5, 4, 3, 0.92);
+  text-decoration: none;
+  transition: background 0.6s var(--ease-soft);
+}
+
+.archive-entry__nav-link:hover,
+.archive-entry__nav-link:focus-visible {
+  background: rgba(16, 12, 20, 0.96);
+  outline: none;
+}
+
+.archive-entry__nav-link--next {
+  text-align: right;
+}
+
+.archive-entry__nav-dir {
+  display: block;
+  font-family: var(--font-elegant);
+  font-size: 0.62rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(120, 112, 103, 0.6);
+  margin-bottom: 0.4rem;
+}
+
+.archive-entry__nav-name {
+  display: block;
+  font-family: var(--font-elegant);
+  font-size: 0.98rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: rgba(206, 198, 186, 0.9);
+}
+
+/* ── Leaving: everything sinks back into the void ── */
+
+.archive-page.is-leaving {
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity 0.9s var(--ease-open), transform 1.4s var(--ease-flow);
+}
+
+@media (max-width: 560px) {
+  .archive-page__wordmark {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+  }
+
+  .archive-page__body {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+
+  .archive-entry__link {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.15rem 1.15rem;
+  }
+
+  .archive-entry__nav {
+    flex-direction: column;
+  }
+
+  .archive-entry__nav-link--next {
+    text-align: left;
+  }
+
+  .archive-list__link {
+    gap: 0.85rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .archive-list__art {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .archive-list__title {
+    font-size: 0.9rem;
+  }
+
+  .album__head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .album__cover {
+    max-width: 16rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-page.is-leaving {
+    transition: none;
+  }
+}

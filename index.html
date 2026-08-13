@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="css/style.css?v=38">
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=41">
-  <link rel="stylesheet" href="css/void.css?v=40">
+  <link rel="stylesheet" href="css/void.css?v=41">
   <link rel="stylesheet" href="css/cinematic-intro.css?v=32">
   <link rel="stylesheet" href="css/home-reveal.css?v=20">
   <link rel="stylesheet" href="css/ouroboros.css?v=38">
@@ -21,7 +21,19 @@
   <link rel="stylesheet" href="css/environment.css?v=38">
   <link rel="stylesheet" href="css/responsive.css?v=39">
   <style>html,body{background:#010101!important}</style>
-  <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('loading');
+      // Coming back from the dedicated Sound Archive page: no intro, no homepage —
+      // we surface straight into the library, still veiled by the void.
+      if (/[?&]from=archive/.test(window.location.search)) {
+        root.classList.add('is-direct', 'is-void-arrival');
+      } else {
+        root.classList.add('is-intro', 'is-cine');
+      }
+    })();
+  </script>
 </head>
 <body class="esoteric-surface">
 
@@ -566,66 +578,12 @@
 
     <section class="main__archive" id="archive">
       <div class="archive-portal reveal" data-reveal>
-        <button type="button" class="archive-portal__btn" id="archivePortalBtn" aria-expanded="false" aria-controls="archivePanel">
+        <a class="archive-portal__btn" id="archivePortalBtn" href="archive.html">
           <span class="archive-portal__aura" aria-hidden="true"></span>
           <span class="archive-portal__ring" aria-hidden="true"></span>
           <span class="archive-portal__label">Sound Archive</span>
           <span class="archive-portal__sub">Enter the void · Works · Collaborations · Passages</span>
-        </button>
-      </div>
-
-      <div class="archive-panel" id="archivePanel" hidden>
-        <div class="archive-panel__head">
-          <h2 class="main__section-title">Sound Archive</h2>
-          <p class="main__section-sub">Works · Collaborations · Passages</p>
-          <button type="button" class="archive-panel__close" id="archivePanelClose" aria-label="Chiudi archivio" title="Chiudi archivio">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
-            </svg>
-          </button>
-        </div>
-
-      <div class="archive-grid">
-        <article class="archive-card reveal" data-reveal id="podcast">
-          <h3 class="archive-card__title">Podcast</h3>
-          <p class="archive-card__desc">Long-form journeys through sound — mixes, rituals, and inner landscapes.</p>
-          <a href="https://soundcloud.com/symvolia/sets/podcast" class="archive-card__link" target="_blank" rel="noopener noreferrer">Listen on SoundCloud</a>
-        </article>
-
-        <article class="archive-card reveal" data-reveal>
-          <h3 class="archive-card__title">Single Tracks</h3>
-          <p class="archive-card__desc">Standalone pieces — fragments, studies, and solitary echoes.</p>
-          <a href="https://soundcloud.com/symvolia/sets/track" class="archive-card__link" target="_blank" rel="noopener noreferrer">Listen on SoundCloud</a>
-        </article>
-
-        <article class="archive-card reveal" data-reveal>
-          <h3 class="archive-card__title">Album</h3>
-          <p class="archive-card__desc"><strong>Nibiru</strong> · EP · Capital Corpse Records 2024. A descent into orbital darkness.</p>
-          <div class="archive-card__links">
-            <a href="https://soundcloud.com/symvolia/sets/nibiru-ep-symvolia" target="_blank" rel="noopener noreferrer">SoundCloud</a>
-            <a href="https://symvolia.bandcamp.com/album/nibiru-capital-corpse-2024" target="_blank" rel="noopener noreferrer">Bandcamp</a>
-          </div>
-          <p class="archive-card__desc"><strong>Catharsis</strong> · VūMantra Records. Confronting the Shadow — integration as the only path forward.</p>
-          <div class="archive-card__links">
-            <a href="https://vumantra.bandcamp.com/album/catharsis" target="_blank" rel="noopener noreferrer">Bandcamp</a>
-          </div>
-        </article>
-
-        <article class="archive-card reveal" data-reveal>
-          <h3 class="archive-card__title">Poetic Beingness</h3>
-          <p class="archive-card__desc">Collaborations with Poetic Beingness — Huldra and Stone by Stone.</p>
-          <div class="archive-card__links">
-            <a href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener noreferrer">Huldra · Bandcamp</a>
-            <a href="https://vimeo.com/1081943249" target="_blank" rel="noopener noreferrer">Stone by Stone · Vimeo</a>
-          </div>
-        </article>
-
-        <article class="archive-card reveal" data-reveal>
-          <h3 class="archive-card__title">Soundtrack</h3>
-          <p class="archive-card__desc">Oppenheimer Soundtrack — Symvolia Rework. Cinematic reimagining.</p>
-          <a href="https://vimeo.com/1133774775" class="archive-card__link" target="_blank" rel="noopener noreferrer">Watch on Vimeo</a>
-        </article>
-      </div>
+        </a>
       </div>
     </section>
 
@@ -670,9 +628,9 @@
   </div>
 
   <script src="js/ouroboros.js?v=4" defer></script>
-  <script src="js/main.js?v=21" defer></script>
-  <script src="js/environment.js?v=6" defer></script>
+  <script src="js/main.js?v=22" defer></script>
+  <script src="js/environment.js?v=7" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
-  <script src="js/cinematic-intro.js?v=22" defer></script>
+  <script src="js/cinematic-intro.js?v=23" defer></script>
 </body>
 </html>
