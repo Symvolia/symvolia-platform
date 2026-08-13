@@ -1,0 +1,17 @@
+{
+  "name": "Symvolia Platform",
+  "install": "python3 --version",
+  "terminals": [
+    {
+      "name": "static-site",
+      "command": "python3 -m http.server 8777",
+      "description": "Serves the static site at http://localhost:8777 (index.html, archive pages, /demo/portal-demo.html)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "static site",
+      "port": 8777
+    }
+  ]
+}
