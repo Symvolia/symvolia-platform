@@ -1,7 +1,7 @@
 /**
  * Symvolia — Monochrome alchemical void (canvas).
- * A living engraving: pure black, thin white ink, sacred geometry,
- * planetary seals dissolving into the prima materia.
+ * A living engraving on deep cosmic parchment: thin white ink,
+ * sacred geometry, planetary seals dissolving into the prima materia.
  *
  * Exposed as window.SymvoliaVoid:
  *   start({ duration, onMid, interactive })
@@ -35,7 +35,9 @@
   let ghosts = [];
   let blooms = [];
   let mandalas = [];
+  let haze = [];
   let grain = null;
+  let scanlines = null;
 
   let mouseX = 0;
   let mouseY = 0;
@@ -93,13 +95,14 @@
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     buildGrain();
+    buildScanlines();
   }
 
   function beginFrame() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  /* Film grain — a quiet manuscript tooth over the blackness. */
+  /* Static film grain — parchment tooth, never animated. */
   function buildGrain() {
     const g = document.createElement('canvas');
     g.width = 128;
@@ -111,10 +114,50 @@
       img.data[i] = n;
       img.data[i + 1] = n;
       img.data[i + 2] = n;
-      img.data[i + 3] = 18 + ((Math.random() * 20) | 0);
+      img.data[i + 3] = 22 + ((Math.random() * 28) | 0);
     }
     gctx.putImageData(img, 0, 0);
     grain = g;
+  }
+
+  /* Faint horizontal scan lines — analog / lo-fi lens. */
+  function buildScanlines() {
+    const s = document.createElement('canvas');
+    s.width = 4;
+    s.height = 4;
+    const sctx = s.getContext('2d');
+    sctx.fillStyle = 'rgba(0,0,0,0)';
+    sctx.fillRect(0, 0, 4, 4);
+    sctx.fillStyle = 'rgba(255,255,255,0.55)';
+    sctx.fillRect(0, 0, 4, 1);
+    scanlines = s;
+  }
+
+  /* Soft value-noise helper (cheap Perlin-like breath for the dark). */
+  function softNoise(x, y, t) {
+    const n =
+      Math.sin(x * 1.7 + t * 0.31) * Math.cos(y * 1.3 - t * 0.27) +
+      Math.sin((x + y) * 0.9 + t * 0.19) * 0.55 +
+      Math.cos(x * 0.45 - y * 0.6 + t * 0.11) * 0.35;
+    return (n + 1.9) / 3.8;
+  }
+
+  function makeHaze() {
+    return {
+      x: Math.random(),
+      y: Math.random(),
+      r: rand(0.18, 0.42),
+      drift: rand(0.000015, 0.00004) * (Math.random() < 0.5 ? 1 : -1),
+      phase: Math.random() * Math.PI * 2,
+      tint: Math.random() < 0.5 ? 0.04 : 0.055,
+    };
+  }
+
+  /* Ambient light falloff from the event horizon (only light source). */
+  function ambientAt(r, hr) {
+    const reach = hr * 4.2;
+    const t = 1 - Math.min(1, Math.max(0, (r - hr) / reach));
+    return 0.55 + t * t * 0.85;
   }
 
   /* ── Pools ── */
@@ -178,6 +221,9 @@
 
     planets = PLANETS.map((_, i) => makePlanet(i));
 
+    haze = [];
+    for (let i = 0; i < 7; i += 1) haze.push(makeHaze());
+
     ripples = [];
     ghosts = [];
     blooms = [];
@@ -195,7 +241,8 @@
   }
 
   function horizonRadius(t) {
-    const base = Math.min(width, height) * 0.1;
+    // Smaller, more contained singularity — threatening in its smallness.
+    const base = Math.min(width, height) * 0.12;
     const swallow = Math.hypot(width, height) * 0.76;
     const linear = Math.min(1, t / Math.max(1, duration));
     // Hold as a readable seal, then swallow the frame for the handoff.
@@ -284,11 +331,11 @@
     }
   }
 
-  function drawFlowerOfLife(radius, rot) {
+  function drawFlowerOfLife(radius, rot, glow) {
     const r = radius / 3;
     ctx.save();
     ctx.rotate(rot);
-    ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+    ctx.strokeStyle = `rgba(255,255,255,${0.12 * glow})`;
     ctx.lineWidth = 0.8;
     const centers = [[0, 0]];
     for (let i = 0; i < 6; i += 1) {
@@ -330,10 +377,10 @@
     ctx.restore();
   }
 
-  function drawFibonacci(hr, rot) {
+  function drawFibonacci(hr, rot, glow) {
     ctx.save();
     ctx.rotate(rot);
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.strokeStyle = `rgba(255,255,255,${0.16 * glow})`;
     ctx.lineWidth = 0.8;
     ctx.beginPath();
     let first = true;
@@ -373,10 +420,10 @@
     ctx.restore();
   }
 
-  function drawVesica(radius, deform, rot) {
+  function drawVesica(radius, deform, rot, glow) {
     ctx.save();
     ctx.rotate(rot);
-    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.strokeStyle = `rgba(255,255,255,${0.18 * glow})`;
     ctx.lineWidth = 0.9;
     const d = radius * (0.55 + deform * 0.12);
     ctx.beginPath();
@@ -456,6 +503,13 @@
     flowerRot += dt * 0.02;
     dashOffset -= dt * 18;
     metaLife = (Math.sin(elapsed * 0.0007) + 1) * 0.5;
+
+    // Atmospheric haze drifts like ink in dark water.
+    for (let i = 0; i < haze.length; i += 1) {
+      const h = haze[i];
+      h.x = (h.x + h.drift * 60 * dt + 1) % 1;
+      h.y = (h.y + Math.sin(elapsed * 0.00008 + h.phase) * 0.00002 + 1) % 1;
+    }
 
     const hr = horizonRadius(elapsed);
     const absorbR = Math.max(4, hr * 0.92);
@@ -587,15 +641,75 @@
 
   /* ── Draw ── */
 
+  function drawCosmicPlate(elapsed, hr) {
+    // Deep cosmic plate — not pure black, aged dark parchment / space.
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, width, height);
+
+    const mid = ctx.createRadialGradient(cx, cy, hr * 0.5, cx, cy, Math.hypot(width, height) * 0.72);
+    mid.addColorStop(0, '#111118');
+    mid.addColorStop(0.35, '#0d0d14');
+    mid.addColorStop(0.75, '#0a0a0f');
+    mid.addColorStop(1, '#000000');
+    ctx.fillStyle = mid;
+    ctx.fillRect(0, 0, width, height);
+
+    // Breathing darkness — soft value-noise nebula washes.
+    const t = elapsed * 0.001;
+    const cells = 5;
+    for (let iy = 0; iy < cells; iy += 1) {
+      for (let ix = 0; ix < cells; ix += 1) {
+        const nx = (ix + 0.5) / cells;
+        const ny = (iy + 0.5) / cells;
+        const n = softNoise(nx * 4, ny * 3, t);
+        const px = nx * width;
+        const py = ny * height;
+        const rad = Math.min(width, height) * (0.22 + n * 0.18);
+        const g = ctx.createRadialGradient(px, py, 0, px, py, rad);
+        const a = 0.02 + n * 0.035;
+        g.addColorStop(0, `rgba(28,28,38,${a})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(px, py, rad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Grey-blue wisps — ink dispersed in dark water.
+    for (let i = 0; i < haze.length; i += 1) {
+      const h = haze[i];
+      const hx = h.x * width;
+      const hy = h.y * height;
+      const hr2 = Math.min(width, height) * h.r;
+      const pulse = 0.85 + 0.15 * Math.sin(elapsed * 0.0004 + h.phase);
+      const g = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr2);
+      g.addColorStop(0, `rgba(40,44,58,${h.tint * pulse})`);
+      g.addColorStop(0.55, `rgba(20,22,32,${h.tint * 0.45 * pulse})`);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(hx, hy, hr2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Ambient glow — the void is the only light source.
+    const amb = ctx.createRadialGradient(cx, cy, hr * 0.6, cx, cy, hr * 5.5);
+    amb.addColorStop(0, 'rgba(210,210,220,0.07)');
+    amb.addColorStop(0.25, 'rgba(160,160,175,0.035)');
+    amb.addColorStop(0.55, 'rgba(80,80,95,0.015)');
+    amb.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = amb;
+    ctx.fillRect(0, 0, width, height);
+  }
+
   function draw(elapsed) {
     const hr = horizonRadius(elapsed);
     beginFrame();
     cx = width * 0.5;
     cy = height * 0.5;
 
-    // Pure black plate.
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, width, height);
+    drawCosmicPlate(elapsed, hr);
 
     // Star field with gravitational lensing.
     for (let i = 0; i < stars.length; i += 1) {
@@ -634,16 +748,20 @@
     ctx.translate(cx, cy);
     ctx.rotate(sceneRot);
 
-    // Sacred geometry layer — thin ink, never solid.
-    drawFlowerOfLife(hr * 2.8, flowerRot);
-    drawFibonacci(hr, -flowerRot * 0.6);
-    drawVesica(hr * 1.9, Math.sin(elapsed * 0.0008), flowerRot * 0.4);
-    drawMetatron(hr * 2.2, 0.08 + metaLife * 0.12);
-    drawSriYantra(hr * 1.6, flowerRot * 0.25, 0.14);
+    const nearGlow = ambientAt(hr * 1.6, hr);
+    const midGlow = ambientAt(hr * 2.4, hr);
+    const farGlow = ambientAt(hr * 3.2, hr);
+
+    // Sacred geometry layer — thin ink, brighter near the void's light.
+    drawFlowerOfLife(hr * 2.8, flowerRot, midGlow);
+    drawFibonacci(hr, -flowerRot * 0.6, nearGlow);
+    drawVesica(hr * 1.9, Math.sin(elapsed * 0.0008), flowerRot * 0.4, nearGlow);
+    drawMetatron(hr * 2.2, (0.08 + metaLife * 0.12) * midGlow);
+    drawSriYantra(hr * 1.6, flowerRot * 0.25, 0.12 * nearGlow);
 
     // Ouroboros — outermost dashed white ring.
     ctx.save();
-    ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+    ctx.strokeStyle = `rgba(255,255,255,${0.22 * farGlow})`;
     ctx.lineWidth = 1.1;
     ctx.setLineDash([6, 10]);
     ctx.lineDashOffset = dashOffset;
@@ -658,9 +776,9 @@
     ctx.restore();
 
     // Latin inscriptions as curved text arcs.
-    drawTextArc(PHRASES[0], hr * 2.55, elapsed * 0.00008, 0.22);
-    drawTextArc(PHRASES[1], hr * 2.95, -elapsed * 0.00006, 0.18);
-    drawTextArc(PHRASES[2], hr * 3.35, elapsed * 0.00005, 0.16);
+    drawTextArc(PHRASES[0], hr * 2.55, elapsed * 0.00008, 0.18 * midGlow);
+    drawTextArc(PHRASES[1], hr * 2.95, -elapsed * 0.00006, 0.15 * farGlow);
+    drawTextArc(PHRASES[2], hr * 3.35, elapsed * 0.00005, 0.13 * farGlow);
 
     // Planetary seals.
     for (let i = 0; i < planets.length; i += 1) {
@@ -670,10 +788,22 @@
       const y = Math.sin(s.angle) * s.orbit * 0.92;
       // Lines near the void bend toward the singularity.
       const warp = Math.max(0, 1 - s.orbit / (hr * 3)) * 8;
+      let mx = 0;
+      let my = 0;
+      if (interactive && mouseLive) {
+        const wx = mouseX - cx;
+        const wy = mouseY - cy;
+        const md = Math.hypot(wx - x, wy - y) + 1;
+        if (md < 160) {
+          const f = (1 - md / 160) * 6;
+          mx = ((wx - x) / md) * f;
+          my = ((wy - y) / md) * f;
+        }
+      }
       ctx.save();
-      ctx.translate(x * (1 - warp * 0.01), y * (1 - warp * 0.01));
+      ctx.translate(x * (1 - warp * 0.01) + mx, y * (1 - warp * 0.01) + my);
       ctx.rotate(s.rot);
-      ctx.globalAlpha = 0.35 + fade * 0.45;
+      ctx.globalAlpha = (0.28 + fade * 0.4) * ambientAt(s.orbit, hr);
       strokeGlyph(s.kind, s.size);
       ctx.restore();
     }
@@ -735,7 +865,7 @@
       ctx.restore();
     }
 
-    // Event horizon — thin glowing white rim.
+    // Event horizon — pure black void + thin glowing white rim.
     ctx.beginPath();
     ctx.arc(cx, cy, hr, 0, Math.PI * 2);
     ctx.fillStyle = '#000000';
@@ -768,26 +898,37 @@
       ctx.stroke();
     }
 
-    // Vignette — edges fall to black.
+    // Vignette — corners push to pure #000000.
     const vig = ctx.createRadialGradient(
       cx,
       cy,
-      Math.min(width, height) * 0.25,
+      Math.min(width, height) * 0.22,
       cx,
       cy,
-      Math.hypot(width, height) * 0.7
+      Math.hypot(width, height) * 0.72
     );
     vig.addColorStop(0, 'rgba(0,0,0,0)');
-    vig.addColorStop(0.7, 'rgba(0,0,0,0.2)');
-    vig.addColorStop(1, 'rgba(0,0,0,0.88)');
+    vig.addColorStop(0.55, 'rgba(0,0,0,0.18)');
+    vig.addColorStop(0.85, 'rgba(0,0,0,0.55)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.94)');
     ctx.fillStyle = vig;
     ctx.fillRect(0, 0, width, height);
 
-    // Film grain / parchment tooth.
+    // Static film grain / parchment tooth (opacity ~0.04).
     if (grain) {
       ctx.save();
-      ctx.globalAlpha = 0.07;
+      ctx.globalAlpha = 0.04;
       const pattern = ctx.createPattern(grain, 'repeat');
+      ctx.fillStyle = pattern;
+      ctx.fillRect(0, 0, width, height);
+      ctx.restore();
+    }
+
+    // Faint scan lines — analog lo-fi overlay.
+    if (scanlines) {
+      ctx.save();
+      ctx.globalAlpha = 0.02;
+      const pattern = ctx.createPattern(scanlines, 'repeat');
       ctx.fillStyle = pattern;
       ctx.fillRect(0, 0, width, height);
       ctx.restore();

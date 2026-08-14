@@ -295,7 +295,7 @@ body.is-entered .sound-toggle {
 .void.void--canvas.is-active {
   opacity: 1 !important;
   visibility: visible !important;
-  background: #000000;
+  background: #0a0a0f;
   animation: none !important;
   pointer-events: auto;
 }
