@@ -235,7 +235,7 @@ html.is-cine .sound-toggle {
   mix-blend-mode: soft-light;
 }
 
-/* Seal inside pupil SVG coords (r78 @ 400,300) — scales with .eye__sun on mobile */
+/* Seal fills inner corona (r80 @ 400,300) — PNG padded, image oversized to meet the ring */
 .eye__art .eye__seal {
   opacity: 0;
   transform: scale(0.2);
