@@ -532,8 +532,13 @@ html.is-cine .sound-toggle {
     --intro-core-scale: min(1.55, calc(100vw / 265));
   }
 
-  .eye__art .eye__iris-glow {
+  .eye__art .eye__iris-glow,
+  .eye__art .eye__limbal {
     opacity: 0;
+  }
+
+  .eye__art .eye__socket {
+    clip-path: url(#eyeAlmondOpen);
   }
 
   .eye__stage {
