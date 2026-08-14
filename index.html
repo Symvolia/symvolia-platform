@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=41">
   <link rel="stylesheet" href="css/void.css?v=45">
-  <link rel="stylesheet" href="css/cinematic-intro.css?v=33">
+  <link rel="stylesheet" href="css/cinematic-intro.css?v=35">
   <link rel="stylesheet" href="css/home-reveal.css?v=22">
   <link rel="stylesheet" href="css/ouroboros.css?v=38">
   <link rel="stylesheet" href="css/design-system.css?v=38">
@@ -153,9 +153,10 @@
                 </g>
 
                 <circle cx="400" cy="300" r="168" fill="#000000"/>
-                <circle cx="400" cy="300" r="168" fill="url(#boltGlow)" opacity="0.55"/>
-                <circle cx="400" cy="300" r="168" fill="url(#irisHot)" opacity="0.75"/>
+                <circle class="eye__iris-glow" cx="400" cy="300" r="168" fill="url(#boltGlow)" opacity="0.55"/>
+                <circle class="eye__iris-glow" cx="400" cy="300" r="168" fill="url(#irisHot)" opacity="0.75"/>
 
+                <g class="eye__sun">
                 <g class="eye__lightning" clip-path="url(#irisClip)" filter="url(#softGlow)">
             <path d="M 480.0 300.9 L 487.8 299.6 L 498.1 294.7 L 507.7 290.5 L 513.4 285.2 L 520.1 276.2 L 527.6 267.0 L 534.9 260.3 L 541.9 253.3" stroke="#ffffff" stroke-width="0.70" opacity="1.00" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M 513.4 285.2 L 526.1 281.9 L 531.2 273.5 L 541.3 266.5 L 552.6 261.4" stroke="#e8e8e8" stroke-width="0.74" opacity="0.73" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -267,14 +268,18 @@
             <path d="M 479.6 292.4 L 484.3 293.1 L 488.2 293.0 L 492.7 293.2 L 496.4 293.8 L 500.6 294.1 L 504.5 295.2 L 508.6 295.2 L 511.4 294.9 L 514.3 293.9 L 518.8 292.9 L 524.2 291.9" stroke="#e8e8e8" stroke-width="0.45" opacity="0.64" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </g>
 
-                <!-- dense corona at pupil rim -->
-                <circle cx="400" cy="300" r="80" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-                <circle cx="400" cy="300" r="84" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="5"/>
-                <circle cx="400" cy="300" r="92" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="10"/>
+                <!-- sun corona + pupil (scaled with lightning as one unit on mobile) -->
+                <g class="eye__core">
+                  <circle cx="400" cy="300" r="100" fill="url(#boltGlow)" opacity="0.55"/>
+                  <circle cx="400" cy="300" r="100" fill="url(#irisHot)" opacity="0.75"/>
+                  <circle cx="400" cy="300" r="80" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+                  <circle cx="400" cy="300" r="84" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="5"/>
+                  <circle cx="400" cy="300" r="92" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="10"/>
+                  <circle class="eye__pupil" cx="400" cy="300" r="78" fill="#000000"/>
+                  <circle cx="400" cy="300" r="78" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2.5"/>
+                </g>
+                </g>
                 <circle cx="400" cy="300" r="168" fill="url(#limbalShade)"/>
-
-                <circle class="eye__pupil" cx="400" cy="300" r="78" fill="#000000"/>
-                <circle cx="400" cy="300" r="78" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2.5"/>
               </g>
 
               <!-- outer vignette -->
