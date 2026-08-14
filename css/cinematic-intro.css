@@ -5,7 +5,6 @@
 
 :root {
   --void: #010101;
-  --intro-seal-base: 19.5%;
   --intro-core-scale: 1;
   --iris-gold: #c4922a;
   --color-text: rgba(255, 252, 245, 0.92);
@@ -236,16 +235,12 @@ html.is-cine .sound-toggle {
   mix-blend-mode: soft-light;
 }
 
-/* Seal inside the pupil — base width matches r78/800; scaled with .eye__core on mobile */
-.eye__seal {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
+/* Seal inside pupil SVG coords (r78 @ 400,300) — scales with .eye__sun on mobile */
+.eye__art .eye__seal {
   opacity: 0;
   transform: scale(0.2);
+  transform-origin: 400px 300px;
+  transform-box: view-box;
   filter: blur(10px);
   transition:
     opacity 1600ms var(--ease-cine),
@@ -253,34 +248,26 @@ html.is-cine .sound-toggle {
     filter 1600ms var(--ease-cine);
 }
 
-.eye__seal img {
-  display: block;
-  width: calc(var(--intro-seal-base) * var(--intro-core-scale));
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-  -webkit-clip-path: circle(50% at 50% 50%);
+.eye__art .eye__seal image {
   mix-blend-mode: screen;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.35));
-  transition: width 1600ms var(--ease-cine), filter 1600ms var(--ease-cine);
+  transition: filter 1600ms var(--ease-cine);
 }
 
 .eye__art .eye__sun {
   transform: scale(var(--intro-core-scale));
   transform-origin: 400px 300px;
-  transform-box: fill-box;
+  transform-box: view-box;
   transition: transform 1600ms var(--ease-cine);
 }
 
-.eye-container.is-seal .eye__seal {
+.eye-container.is-seal .eye__art .eye__seal {
   opacity: 1;
   transform: scale(1);
   filter: blur(0);
 }
 
-.eye-container.is-closing .eye__seal {
+.eye-container.is-closing .eye__art .eye__seal {
   opacity: 0;
   transform: scale(0.35);
   filter: blur(8px);
@@ -561,7 +548,7 @@ html.is-cine .sound-toggle {
     transform: translate(-50%, calc(-50% - 2.5cm)) scale(1.08);
   }
 
-  .eye__seal img {
+  .eye__art .eye__seal image {
     filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.45));
   }
 
@@ -588,15 +575,15 @@ html.is-cine .sound-toggle {
     transform: translate(-50%, calc(-50% - 2.5cm)) scale(1.12);
   }
 
-  .eye__seal img {
+  .eye__art .eye__seal image {
     filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.55));
   }
 
-  .eye-container.is-seal .eye__seal {
+  .eye-container.is-seal .eye__art .eye__seal {
     transform: scale(1);
   }
 
-  .eye-container.is-closing .eye__seal {
+  .eye-container.is-closing .eye__art .eye__seal {
     transform: scale(0.38);
   }
 
