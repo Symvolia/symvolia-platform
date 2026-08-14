@@ -547,7 +547,16 @@ html.is-cine .sound-toggle {
   }
 
   .eye__seal img {
-    width: 19.5%;
+    width: 36%;
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.45));
+  }
+
+  .eye-container.is-seal .eye__seal {
+    transform: scale(1.06);
+  }
+
+  .eye-container.is-closing .eye__seal {
+    transform: scale(0.42);
   }
 
   .cine__brand {
