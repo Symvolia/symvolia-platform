@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=41">
   <link rel="stylesheet" href="css/void.css?v=45">
-  <link rel="stylesheet" href="css/cinematic-intro.css?v=38">
+  <link rel="stylesheet" href="css/cinematic-intro.css?v=39">
   <link rel="stylesheet" href="css/home-reveal.css?v=22">
   <link rel="stylesheet" href="css/ouroboros.css?v=38">
   <link rel="stylesheet" href="css/design-system.css?v=38">
@@ -109,6 +109,9 @@
                 <clipPath id="eyeAlmond">
                   <path d="M 70 300 Q 220 140 400 130 Q 580 140 730 300 Q 580 460 400 470 Q 220 460 70 300 Z"/>
                 </clipPath>
+                <clipPath id="eyeAlmondOpen">
+                  <ellipse cx="400" cy="300" rx="390" ry="270"/>
+                </clipPath>
                 <clipPath id="irisClip">
                   <circle cx="400" cy="300" r="168"/>
                 </clipPath>
@@ -133,7 +136,7 @@
               <rect width="800" height="600" fill="#010101"/>
               <ellipse cx="400" cy="300" rx="360" ry="220" fill="url(#voidGlow)" opacity="0.9"/>
 
-              <g clip-path="url(#eyeAlmond)">
+              <g class="eye__socket" clip-path="url(#eyeAlmond)">
                 <ellipse cx="400" cy="300" rx="360" ry="200" fill="url(#scleraWash)"/>
                 <g class="eye__brush" fill="none">
             <path d="M 194.0 222.3 Q 126.6 206.6 101.7 224.2" stroke="rgba(255,255,255,0.44)" stroke-width="3.9" fill="none" stroke-linecap="round"/>
@@ -299,7 +302,7 @@
                   </g>
                 </g>
                 </g>
-                <circle cx="400" cy="300" r="168" fill="url(#limbalShade)"/>
+                <circle class="eye__limbal" cx="400" cy="300" r="168" fill="url(#limbalShade)"/>
               </g>
 
               <!-- outer vignette -->
