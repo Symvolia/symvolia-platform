@@ -1,6 +1,6 @@
 # Symvolia Platform
 
-Permanent site: **https://symvolia.github.io/symvolia-platform/**
+Permanent site: **https://symvolia.xyz/**
 
 Static HTML/CSS/JS — no build step.
 
@@ -17,8 +17,9 @@ No black cuts · no yellow aura ring. See `docs/PORTAL-PERFORMANCE.md`.
 
 Pushes to GitHub; Actions deploys Pages in 1–2 minutes.
 
-> Note: `symvoliaplatform.com` is not configured in DNS (NXDOMAIN).
-> Live URL is the GitHub Pages link above until a real domain is pointed at the repo.
+> Custom domain: **symvolia.xyz** (`CNAME` in repo root).
+> At your registrar, set apex DNS to GitHub Pages (A/AAAA below), then confirm
+> the domain + HTTPS in GitHub → Settings → Pages.
 
 ## Local preview
 
