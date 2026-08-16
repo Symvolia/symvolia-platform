@@ -542,16 +542,22 @@ html.is-cine .sound-toggle {
     clip-path: url(#eyeAlmondOpen);
   }
 
+  /* Seal in the upper band — leaves a clear mid zone for the wordmark */
   .eye__stage {
     width: 100vw;
     aspect-ratio: 800 / 600;
     height: auto;
-    transform: translate(-50%, calc(-50% - 1.5rem)) scale(1);
+    top: 38%;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .eye-container.is-settled .eye__stage,
   .eye-container.is-closing .eye__stage {
-    transform: translate(-50%, calc(-50% - 1.5rem)) scale(1);
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .cine__wipe {
+    top: 38%;
   }
 
   .eye__lid {
@@ -570,12 +576,14 @@ html.is-cine .sound-toggle {
     filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.45));
   }
 
+  /* SYMVOLIA: optical midpoint between seal and Enter */
   .cine__brand {
-    transform: translate(-50%, calc(min(36vmin, 240px) + 0.5cm - 1.5rem + 10px));
+    top: 68%;
+    transform: translate(-50%, calc(-50% + 10px));
   }
 
   .cine.is-brand .cine__brand {
-    transform: translate(-50%, calc(min(36vmin, 240px) + 0.5cm - 1.5rem));
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -585,12 +593,17 @@ html.is-cine .sound-toggle {
   }
 
   .eye__stage {
-    transform: translate(-50%, calc(-50% - 1.75rem)) scale(1);
+    top: 36%;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .eye-container.is-settled .eye__stage,
   .eye-container.is-closing .eye__stage {
-    transform: translate(-50%, calc(-50% - 1.75rem)) scale(1);
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .cine__wipe {
+    top: 36%;
   }
 
   .eye__lid {
@@ -610,14 +623,15 @@ html.is-cine .sound-toggle {
   }
 
   .cine__brand {
+    top: 70%;
     width: min(94vw, 26rem);
     padding: 0 0.5rem;
     gap: 0.4rem;
-    transform: translate(-50%, calc(min(46vmin, 290px) + 0.5cm - 1rem + 10px));
+    transform: translate(-50%, calc(-50% + 10px));
   }
 
   .cine.is-brand .cine__brand {
-    transform: translate(-50%, calc(min(46vmin, 290px) + 0.5cm - 1rem));
+    transform: translate(-50%, -50%);
   }
 
   .cine__wordmark {
@@ -626,9 +640,13 @@ html.is-cine .sound-toggle {
   }
 
   .cine__enter {
-    bottom: max(4.5vh, 1.4rem);
+    bottom: max(5.5vh, calc(1.5rem + env(safe-area-inset-bottom, 0px)));
     left: 50%;
     transform: translate3d(-50%, 14px, 0) scale(0.96);
+  }
+
+  .cine__enter.is-visible {
+    transform: translate3d(-50%, 0, 0) scale(1);
   }
 }
 
