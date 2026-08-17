@@ -8,16 +8,26 @@
   const copyBtn = document.getElementById('copyBtn');
   const copyPermanentBtn = document.getElementById('copyPermanentBtn');
   const copyHint = document.getElementById('copyHint');
+  const tunnelCard = linkEl && linkEl.closest('.share__card');
 
   if (!linkEl || !openBtn || !copyBtn) return;
 
-  function applyUrl(url) {
+  function applyTunnelUrl(url) {
     const trimmed = url.trim();
-    if (!trimmed) return;
+    if (!trimmed || trimmed === PERMANENT_URL.trim()) return false;
 
     linkEl.textContent = trimmed;
     linkEl.href = trimmed;
     copyBtn.disabled = false;
+    if (tunnelCard) tunnelCard.hidden = false;
+    return true;
+  }
+
+  function hideTunnelCard() {
+    if (tunnelCard) tunnelCard.hidden = true;
+    linkEl.textContent = 'Not active';
+    linkEl.removeAttribute('href');
+    copyBtn.disabled = true;
   }
 
   function showCopyHint() {
@@ -39,28 +49,28 @@
     }
   }
 
-  function loadLink() {
-    fetch('assets/site-link.txt', { cache: 'no-store' })
+  function loadTunnelLink() {
+    fetch('assets/site-link-tunnel.txt', { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) throw new Error('missing');
         return res.text();
       })
-      .then(applyUrl)
+      .then((text) => {
+        if (!applyTunnelUrl(text)) hideTunnelCard();
+      })
       .catch(() => {
         if (window.location.protocol.startsWith('http') &&
             window.location.hostname.endsWith('.trycloudflare.com')) {
-          applyUrl(window.location.origin);
+          applyTunnelUrl(window.location.origin);
           return;
         }
-
-        linkEl.textContent = 'Tunnel not ready — refresh in a moment.';
-        linkEl.removeAttribute('href');
+        hideTunnelCard();
       });
   }
 
   if (permanentLink) {
     permanentLink.href = PERMANENT_URL;
-    permanentLink.textContent = PERMANENT_URL;
+    permanentLink.textContent = 'symvolia.xyz';
   }
 
   if (openBtn) {
@@ -73,5 +83,5 @@
     copyPermanentBtn.addEventListener('click', () => copyUrl(PERMANENT_URL));
   }
 
-  loadLink();
+  loadTunnelLink();
 })();

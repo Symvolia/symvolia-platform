@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 APP_SUPPORT="$HOME/Library/Application Support/Symvolia"
 LOG="$APP_SUPPORT/.run/tunnel.log"
-LINK_FILE="$(cd "$(dirname "$0")/.." && pwd)/assets/site-link.txt"
+LINK_FILE="$(cd "$(dirname "$0")/.." && pwd)/assets/site-link-tunnel.txt"
+PERMANENT_URL="https://symvolia.xyz/"
 
 echo "Locale: http://localhost:8765"
+echo "Permanente: symvolia.xyz"
 echo ""
 
 url=""

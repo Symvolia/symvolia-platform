@@ -5,7 +5,7 @@ PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 APP_SUPPORT="$HOME/Library/Application Support/Symvolia"
 SITE_DIR="$APP_SUPPORT/site"
 LOG="$APP_SUPPORT/.run/tunnel.log"
-LINK_FILE="$PROJECT_DIR/assets/site-link.txt"
+LINK_FILE="$PROJECT_DIR/assets/site-link-tunnel.txt"
 LABEL="com.symvolia.site"
 
 sync_files() {
@@ -26,7 +26,7 @@ save_public_url() {
   if [[ -n "$url" ]]; then
     printf '%s\n' "$url" > "$LINK_FILE"
     mkdir -p "$SITE_DIR/assets"
-    printf '%s\n' "$url" > "$SITE_DIR/assets/site-link.txt"
+    printf '%s\n' "$url" > "$SITE_DIR/assets/site-link-tunnel.txt"
     return 0
   fi
   return 1

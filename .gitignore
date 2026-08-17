@@ -4,4 +4,5 @@
 .env.*
 .run/
 bin/
+assets/site-link-tunnel.txt
 
