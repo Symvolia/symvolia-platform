@@ -15,6 +15,13 @@
 /* Fullscreen shell — mandala lifted above the footer band */
 html.is-home .stage.stage--alive {
   --home-lift: max(2.2cm, 5.5vh);
+  --home-rim: 1cm;
+  --home-corona-iw: 2560;
+  --home-corona-ih: 1440;
+  /* Painted black disc in the corona masters (px from image center) */
+  --home-disc-dx: -126;
+  --home-disc-dy: -184;
+  --home-disc-r: 494;
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
@@ -158,6 +165,7 @@ html.is-home .stage.stage--alive .stage__sigil {
   opacity: 1;
   visibility: visible;
   z-index: 6;
+  transition: none;
 }
 
 /* Eye decorations belong to the intro only. They are merely faded out when the
@@ -543,27 +551,39 @@ html.is-home .sound-toggle.is-muted {
   display: none;
 }
 
+/* Corona layer scaled so the painted black disc is 1cm beyond the seal,
+   and shifted so that disc shares the sigil's center. */
+html.is-home .stage.stage--alive .stage__corona-bg {
+  position: fixed;
+  left: 50%;
+  top: calc(50% - var(--home-lift));
+  width: calc(var(--home-corona-iw) * var(--home-bg-scale));
+  height: calc(var(--home-corona-ih) * var(--home-bg-scale));
+  transform: translate(
+    calc(-50% - var(--home-disc-dx) * var(--home-bg-scale)),
+    calc(-50% - var(--home-disc-dy) * var(--home-bg-scale))
+  );
+  z-index: 0;
+  pointer-events: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
 /* Desktop — corona locked to seal: disc center = image center = viewport center */
 @media (min-width: 821px) {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 2560;
     --home-corona-ih: 1440;
-    --home-corona-disc-r: 341;
-    --home-seal-inset: 1;
+    --home-sigil: calc(682 * max(100vw / 2560, 100vh / 1440));
+    --home-bg-scale: calc((var(--home-sigil) / 2 + var(--home-rim)) / var(--home-disc-r));
   }
 
   html.is-home .stage.stage--alive .stage__corona-bg {
     display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
     opacity: 1;
-    background-color: #010101;
     background-image: url('../assets/home-corona-bg-desktop.png?v=5');
-    background-repeat: no-repeat;
-    background-position: 50% calc(50% - var(--home-lift));
-    background-size: cover;
   }
 
   html.is-home .stage.stage--alive.stage--home-visible .stage__corona-bg {
@@ -597,8 +617,8 @@ html.is-home .sound-toggle.is-muted {
     left: 50%;
     top: 50%;
     z-index: 1;
-    width: 100%;
-    height: 100%;
+    width: calc(100% + 2 * var(--home-rim));
+    height: calc(100% + 2 * var(--home-rim));
     transform: translate(-50%, -50%);
     border-radius: 50%;
     background: #010101;
@@ -655,8 +675,8 @@ html.is-home .sound-toggle.is-muted {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 1440;
     --home-corona-ih: 2560;
-    --home-corona-disc-r: 341;
-    --home-seal-inset: 1;
+    --home-sigil: calc(682 * max(100vw / 1440, 100vh / 2560));
+    --home-bg-scale: calc((var(--home-sigil) / 2 + var(--home-rim)) / var(--home-disc-r));
     --home-lift: max(2.6cm, 7vh);
     padding:
       max(0.65rem, env(safe-area-inset-top))
@@ -669,16 +689,8 @@ html.is-home .sound-toggle.is-muted {
 
   html.is-home .stage.stage--alive .stage__corona-bg {
     display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
     opacity: 1;
-    background-color: #010101;
     background-image: url('../assets/home-corona-bg-mobile.png?v=5');
-    background-repeat: no-repeat;
-    background-position: 50% calc(50% - var(--home-lift));
-    background-size: cover;
   }
 
   html.is-home .stage.stage--alive.stage--home-visible .stage__corona-bg {
@@ -727,8 +739,8 @@ html.is-home .sound-toggle.is-muted {
     left: 50%;
     top: 50%;
     z-index: 1;
-    width: 100%;
-    height: 100%;
+    width: calc(100% + 2 * var(--home-rim));
+    height: calc(100% + 2 * var(--home-rim));
     transform: translate(-50%, -50%);
     border-radius: 50%;
     background: #010101;
