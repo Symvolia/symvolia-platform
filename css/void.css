@@ -693,7 +693,7 @@ html.is-void-arrival .void,
 /* Arrivo: si parte immersi nel nero, che si dirada rivelando la pagina */
 @keyframes voidArrive {
   0% { opacity: 1; visibility: visible; background: #000; }
-  45% { opacity: 0.85; background: #000; }
+  38% { opacity: 1; background: #000; }
   100% { opacity: 0; visibility: hidden; background: #000; }
 }
 
