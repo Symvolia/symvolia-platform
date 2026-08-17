@@ -651,6 +651,17 @@
     transform 1.1s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/* Hidden YouTube bed — Sound Archive hub only */
+.archive-hub-ambient {
+  position: fixed;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .archive-page.is-leaving {
     transition: none;

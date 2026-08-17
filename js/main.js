@@ -281,8 +281,8 @@
       window.SymvoliaArchiveFlow.hold(video);
     }
 
-    ensureSheet('css/archive-page.css?v=7');
-    ensureSheet('css/archive-sun.css?v=14');
+    ensureSheet('css/archive-page.css?v=8');
+    ensureSheet('css/archive-sun.css?v=15');
 
     fetch('archive.html')
       .then((res) => {
@@ -338,6 +338,12 @@
         } catch (err) { /* ignore */ }
 
         window.scrollTo(0, 0);
+        fadeAudio(mainAmbient, 0, FADE_MS);
+        let hubMuted = false;
+        try { hubMuted = localStorage.getItem('symvolia-muted') === '1'; } catch (err) { /* ignore */ }
+        if (window.SymvoliaArchiveAmbient && !hubMuted) {
+          window.SymvoliaArchiveAmbient.play(0.5, FADE_MS);
+        }
       })
       .catch(() => {
         window.location.href = 'archive.html?landed=1';

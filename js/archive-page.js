@@ -12,6 +12,7 @@
   const mainAmbient = document.getElementById('mainAmbient');
   const page = document.querySelector('.archive-page');
   const isSunHub = !!document.getElementById('darkSun');
+  const hubAmbient = isSunHub && window.SymvoliaArchiveAmbient;
 
   const VOID_MS = 3200;
   const HUB_LEAVE_MS = 720;
@@ -69,7 +70,8 @@
 
     if (isSunHub) {
       if (page) page.classList.add('is-leaving');
-      if (mainAmbient) fadeAudio(mainAmbient, 0, HUB_LEAVE_MS);
+      if (hubAmbient) hubAmbient.fadeOut(HUB_LEAVE_MS);
+      else if (mainAmbient) fadeAudio(mainAmbient, 0, HUB_LEAVE_MS);
       window.setTimeout(go, reduced() ? 0 : HUB_LEAVE_MS);
       return;
     }
@@ -227,7 +229,11 @@
   function applyMuted(next, persist) {
     muted = next;
 
-    if (mainAmbient) mainAmbient.muted = muted;
+    if (hubAmbient) {
+      if (muted) hubAmbient.pause();
+    } else if (mainAmbient) {
+      mainAmbient.muted = muted;
+    }
 
     if (soundToggle) {
       soundToggle.classList.toggle('is-muted', muted);
@@ -241,11 +247,27 @@
       } catch (err) { /* storage unavailable */ }
     }
 
+    if (!muted && (!hubAmbient || hubIsOpen())) startAmbient();
+  }
+
+  window.addEventListener('symvolia:archive-open', () => {
     if (!muted) startAmbient();
+  });
+
+  function hubIsOpen() {
+    return document.documentElement.classList.contains('is-archive-open');
   }
 
   function startAmbient() {
-    if (!mainAmbient || muted || leaving) return;
+    if (muted || leaving) return;
+
+    if (hubAmbient) {
+      if (!hubIsOpen()) return;
+      hubAmbient.play(MAIN_VOLUME, FADE_MS);
+      return;
+    }
+
+    if (!mainAmbient) return;
     if (!mainAmbient.paused && mainAmbient.volume > 0) return;
 
     mainAmbient.volume = 0;
@@ -271,13 +293,15 @@
   function bindAmbientLifecycle() {
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        if (mainAmbient && !mainAmbient.paused) mainAmbient.pause();
+        if (hubAmbient) hubAmbient.pause();
+        else if (mainAmbient && !mainAmbient.paused) mainAmbient.pause();
       } else {
         startAmbient();
       }
     });
     window.addEventListener('pagehide', () => {
-      if (mainAmbient && !mainAmbient.paused) mainAmbient.pause();
+      if (hubAmbient) hubAmbient.pause();
+      else if (mainAmbient && !mainAmbient.paused) mainAmbient.pause();
     });
   }
 
@@ -433,4 +457,6 @@
   bindReveals();
   bindMailMenu();
   bindPlayerDucking();
+
+  if (hubAmbient && hubIsOpen()) startAmbient();
 })();

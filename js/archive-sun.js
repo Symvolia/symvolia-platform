@@ -46,11 +46,24 @@
     return Math.max(0.85, Math.min(2.4, target / Math.max(discPx, 1)));
   }
 
+  let unitCmPx = 0;
+
+  function cmPx(cm) {
+    if (!unitCmPx) {
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:fixed;visibility:hidden;height:1cm;pointer-events:none';
+      document.documentElement.appendChild(probe);
+      unitCmPx = probe.offsetHeight || 37.8;
+      probe.remove();
+    }
+    return unitCmPx * cm;
+  }
+
   function cameraTo(nx, ny, zoom, yFrac) {
     const { w, h } = worldSize();
     const { w: vw, h: vh } = view();
     const tx = vw / 2 - nx * w * zoom;
-    const ty = vh * yFrac - ny * h * zoom;
+    const ty = vh * yFrac - ny * h * zoom - cmPx(3);
     world.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${zoom})`;
   }
 
@@ -67,6 +80,7 @@
       flowLabel.hidden = true;
     }
     window.scrollTo(0, 0);
+    window.dispatchEvent(new CustomEvent('symvolia:archive-open'));
   }
 
   function openArchive() {
