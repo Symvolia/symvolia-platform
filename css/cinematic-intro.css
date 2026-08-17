@@ -840,6 +840,11 @@ html.is-cine .sound-toggle {
   .cine:has(.eye-container.is-seal) .cine__brand {
     width: min(94vw, 26rem);
     padding: 0.25rem 0.5rem 0;
+    transform: translateY(calc(10px - 1cm));
+  }
+
+  .cine:has(.eye-container.is-seal).is-brand .cine__brand {
+    transform: translateY(-1cm);
   }
 
   .cine:has(.eye-container.is-seal) .cine__enter {
