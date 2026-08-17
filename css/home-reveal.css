@@ -250,7 +250,7 @@ html.is-home .stage.stage--alive a.stage__menu-item {
   font-style: italic;
   letter-spacing: 0.14em;
   line-height: 1.3;
-  text-transform: uppercase;
+  text-transform: uppercase !important;
   text-decoration: none;
   color: rgba(226, 216, 200, 0.92) !important;
   background: none;
@@ -846,6 +846,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     font-weight: 400;
     letter-spacing: 0.07em;
     line-height: 1.28;
+    text-transform: uppercase !important;
     text-wrap: balance;
     color: rgba(226, 216, 200, 0.92) !important;
     opacity: 1;
