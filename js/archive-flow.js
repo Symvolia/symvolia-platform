@@ -19,6 +19,7 @@
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('muted', '');
+    video.setAttribute('autoplay', '');
   }
 
   function tryPlay(video) {
