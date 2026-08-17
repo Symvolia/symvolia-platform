@@ -21,7 +21,7 @@
   if (!stage || !main) return;
 
   const REVEAL_START_MS = 1000;
-  const CROSSFADE_MS = 1300;
+  const SITE_ENTER_CROSSFADE_MS = 1300;
 
   const STAGE_VOLUME = 0.55;
   const MAIN_VOLUME = 0.5;
@@ -506,11 +506,7 @@
   function handleEnter() {
     // Archive dive is locked until the homepage sigil has settled.
     if (!libraryUnlocked) return;
-    if (!livingAwake) {
-      awaken({ silent: false });
-      showEnterCta();
-      return;
-    }
+    if (!livingAwake) awaken({ silent: false });
     enterSite('bio');
   }
 
@@ -977,7 +973,7 @@
     }
 
     const revealDelay = reducedMotion ? 0 : REVEAL_START_MS;
-    const hideDelay = reducedMotion ? 200 : REVEAL_START_MS + CROSSFADE_MS + 200;
+    const hideDelay = reducedMotion ? 200 : REVEAL_START_MS + SITE_ENTER_CROSSFADE_MS + 200;
 
     window.setTimeout(() => {
       document.body.classList.add('is-entered');
