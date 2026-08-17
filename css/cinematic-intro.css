@@ -28,6 +28,10 @@ body {
 html.loading,
 html.is-cine {
   overflow: hidden;
+  --dur-lid: 820ms;
+  --dur-reveal: 620ms;
+  --dur-settle: 480ms;
+  --dur-pupil: 380ms;
 }
 
 html.loading body,
