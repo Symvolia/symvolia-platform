@@ -20,8 +20,8 @@
 
   if (!stage || !main) return;
 
-  const DIVE_MS = 2600;
-  const REVEAL_START_MS = 1450;
+  const REVEAL_START_MS = 1000;
+  const CROSSFADE_MS = 1300;
 
   const STAGE_VOLUME = 0.55;
   const MAIN_VOLUME = 0.5;
@@ -281,8 +281,8 @@
       window.SymvoliaArchiveFlow.hold(video);
     }
 
-    ensureSheet('css/archive-page.css?v=8');
-    ensureSheet('css/archive-sun.css?v=15');
+    ensureSheet('css/archive-page.css?v=9');
+    ensureSheet('css/archive-sun.css?v=16');
 
     fetch('archive.html')
       .then((res) => {
@@ -965,7 +965,10 @@
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    main.hidden = false;
+
     if (!reducedMotion) {
+      document.documentElement.classList.add('is-site-entering');
       stage.classList.add('is-diving');
       if (tunnel) tunnel.classList.add('is-active');
     } else {
@@ -973,11 +976,8 @@
       document.documentElement.classList.remove('is-home');
     }
 
-    main.hidden = false;
-
     const revealDelay = reducedMotion ? 0 : REVEAL_START_MS;
-    const leaveDelay = reducedMotion ? 100 : DIVE_MS - 400;
-    const hideDelay = reducedMotion ? 200 : DIVE_MS;
+    const hideDelay = reducedMotion ? 200 : REVEAL_START_MS + CROSSFADE_MS + 200;
 
     window.setTimeout(() => {
       document.body.classList.add('is-entered');
@@ -987,6 +987,7 @@
       else window.scrollTo(0, 0);
 
       main.classList.add('is-visible');
+      if (!reducedMotion) stage.classList.add('is-fading');
       revealMainContent();
 
       if (history.replaceState) {
@@ -998,15 +999,13 @@
     }, revealDelay);
 
     window.setTimeout(() => {
-      stage.classList.add('is-leaving');
-      document.documentElement.classList.remove('is-home');
-    }, leaveDelay);
-
-    window.setTimeout(() => {
       setHomeChromeVisible(false);
+      stage.classList.remove('is-diving', 'is-fading');
+      stage.classList.add('is-leaving');
       stage.hidden = true;
       stage.setAttribute('aria-hidden', 'true');
-      document.documentElement.classList.remove('is-home');
+      if (tunnel) tunnel.classList.remove('is-active');
+      document.documentElement.classList.remove('is-home', 'is-site-entering');
       main.removeAttribute('hidden');
     }, hideDelay);
   }

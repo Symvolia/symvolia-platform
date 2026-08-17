@@ -140,9 +140,8 @@ section#stage.stage {
 
 .stage.is-leaving {
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.85s var(--ease-open), visibility 0.85s linear;
+  transition: opacity 0.85s var(--ease-open);
 }
 
 .stage[hidden] {
@@ -219,7 +218,7 @@ body.is-entered .stage__orbit,
 
 .stage.is-diving .stage__composition {
   z-index: 6;
-  animation: diveIntoEye 2.6s var(--ease-open) forwards;
+  animation: diveIntoEye 2.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   will-change: transform, opacity;
 }
 
@@ -232,15 +231,15 @@ body.is-entered .stage__orbit,
 }
 
 .stage.is-diving .stage__sigil-img {
-  animation: sigilImgDive 2.6s var(--ease-open) forwards;
+  animation: sigilImgDive 2.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 .stage.is-diving .stage__sigil-glow {
-  animation: sigilGlowDive 2.6s var(--ease-open) forwards;
+  animation: sigilGlowDive 2.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 .stage.is-diving .stage__vignette {
-  animation: vignetteTunnel 2.5s var(--ease-open) forwards;
+  animation: vignetteTunnel 2.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 .stage__tunnel {
@@ -253,7 +252,26 @@ body.is-entered .stage__orbit,
 }
 
 .stage__tunnel.is-active {
-  animation: tunnelRush 2.5s var(--ease-open) forwards;
+  animation: tunnelRush 2.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* Homepage → library: crossfade the sigil dive with the library surfacing */
+html.is-site-entering .stage.is-diving {
+  transition: opacity 1.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+html.is-site-entering .stage.is-diving.is-fading {
+  opacity: 0;
+}
+
+html.is-site-entering .main {
+  z-index: 11;
+  opacity: 0;
+  transition: opacity 1.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+html.is-site-entering .main.is-visible {
+  opacity: 1;
 }
 
 @keyframes diveIntoEye {
@@ -261,12 +279,16 @@ body.is-entered .stage__orbit,
     transform: scale(1);
     opacity: 1;
   }
-  38% {
-    transform: scale(2.05);
+  34% {
+    transform: scale(2.15);
     opacity: 1;
   }
+  68% {
+    transform: scale(5.8);
+    opacity: 0.92;
+  }
   100% {
-    transform: scale(8.5);
+    transform: scale(9);
     opacity: 0;
   }
 }
@@ -1061,7 +1083,7 @@ body.is-entered .stage__orbit,
   min-height: 100%;
   background: var(--void);
   opacity: 0;
-  transition: opacity 1.05s var(--ease-open);
+  transition: opacity 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 body.is-entered .main {

@@ -14,8 +14,8 @@
   const isSunHub = !!document.getElementById('darkSun');
   const hubAmbient = isSunHub && window.SymvoliaArchiveAmbient;
 
-  const VOID_MS = 3200;
-  const HUB_LEAVE_MS = 720;
+  const VOID_MS = 2600;
+  const HUB_LEAVE_MS = 880;
   const FADE_MS = 1400;
   const MUTE_KEY = 'symvolia-muted';
 
@@ -72,7 +72,7 @@
       if (page) page.classList.add('is-leaving');
       if (hubAmbient) hubAmbient.fadeOut(HUB_LEAVE_MS);
       else if (mainAmbient) fadeAudio(mainAmbient, 0, HUB_LEAVE_MS);
-      window.setTimeout(go, reduced() ? 0 : HUB_LEAVE_MS);
+      window.setTimeout(go, reduced() ? 0 : Math.round(HUB_LEAVE_MS * 0.82));
       return;
     }
 
