@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="is-archive-page">
+<html lang="en" class="is-archive-page is-dark-sun">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -13,27 +13,18 @@
   <title>Sound Archive — Symvolia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=38">
   <link rel="stylesheet" href="css/textures.css?v=38">
-  <link rel="stylesheet" href="css/void.css?v=45">
+  <link rel="stylesheet" href="css/void.css?v=50">
   <link rel="stylesheet" href="css/design-system.css?v=38">
   <link rel="stylesheet" href="css/environment.css?v=38">
   <link rel="stylesheet" href="css/responsive.css?v=39">
-  <link rel="stylesheet" href="css/archive-page.css?v=5">
+  <link rel="stylesheet" href="css/archive-page.css?v=6">
+  <link rel="stylesheet" href="css/archive-sun.css?v=8">
   <style>html,body{background:#010101!important}</style>
 </head>
-<body class="esoteric-surface is-entered archive-body">
-
-  <!-- The void is already at full opacity on first paint: the page emerges from it. -->
-  <div class="void is-arriving" id="voidPortal" aria-hidden="true">
-    <canvas class="void__canvas" id="voidCanvas" aria-hidden="true"></canvas>
-    <div class="void__gradient" aria-hidden="true"></div>
-    <div class="void__vortex" aria-hidden="true"></div>
-    <div class="void__glow" aria-hidden="true"></div>
-    <div class="void__particles" id="voidParticles" aria-hidden="true"></div>
-    <div class="void__core" aria-hidden="true"></div>
-  </div>
+<body class="esoteric-surface is-entered archive-body dark-sun-body">
 
   <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
     <svg class="sound-toggle__glyph sound-toggle__glyph--on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -46,40 +37,57 @@
     </svg>
   </button>
 
-  <div class="main is-visible archive-page">
-    <div class="main__grain" aria-hidden="true"></div>
-    <div class="main__sub" aria-hidden="true"></div>
-    <div class="main__depth" aria-hidden="true"></div>
-    <div class="main__waveform" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-
+  <div class="main is-visible archive-page archive-page--sun">
     <header class="main__header archive-page__header">
       <a class="main__back" id="archiveBack" href="index.html?from=archive#archive" aria-label="Torna al sito" title="Torna al sito">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/>
         </svg>
       </a>
-      <p class="archive-page__wordmark">Symvolia · Sound Archive</p>
+      <p class="archive-page__wordmark">Symvolia</p>
     </header>
 
+    <div class="dark-sun" id="darkSun">
+      <div class="dark-sun__world" id="darkSunWorld">
+        <img
+          class="dark-sun__img"
+          src="assets/archive-seal.png?v=1"
+          width="576"
+          height="1024"
+          alt=""
+          decoding="async"
+        >
+        <button
+          type="button"
+          class="dark-sun__gate"
+          id="darkSunGate"
+          aria-expanded="false"
+          aria-controls="archiveEarth"
+        >
+          <span class="dark-sun__gate-label">Sound<br>Archive</span>
+        </button>
+      </div>
+
+      <video
+        class="archive-flow dark-sun__flow"
+        id="archiveFlow"
+        muted
+        playsinline
+        loop
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source src="assets/archive-flow.mp4?v=1" type="video/mp4">
+      </video>
+      <p class="archive-flow__label" id="archiveFlowLabel" hidden>Sound<br>Archive</p>
+
+      <div class="dark-sun__earth" id="archiveEarth">
+        <div class="dark-sun__earth-inner">
     <main class="archive-page__body" id="archivePage">
-      <section class="archive-page__hero reveal" data-reveal>
-        <p class="main__eyebrow">The Echo of your Own Soul</p>
-        <h1 class="archive-page__title" tabindex="-1">Sound Archive</h1>
-        <p class="main__section-sub">Works · Collaborations · Passages</p>
-        <p class="archive-page__lead">
-          Every passage recorded here is a descent — sound used as a threshold
-          toward what the ego keeps in the dark.
-        </p>
-        <span class="archive-page__rule" aria-hidden="true"></span>
-      </section>
+      <h1 class="visually-hidden">Sound Archive</h1>
 
       <div class="archive-grid archive-page__grid">
-        <a class="archive-card archive-gate reveal" data-reveal id="albums" href="archive-albums.html">
+        <a class="archive-card archive-gate" id="albums" href="archive-albums.html">
           <span class="archive-gate__index" aria-hidden="true">I</span>
           <h2 class="archive-card__title">Album</h2>
           <p class="archive-card__desc">Catharsis [2026] · VūMantra Records, and Nibiru [2024] · Capital Corpse Records.</p>
@@ -90,28 +98,28 @@
           <span class="archive-gate__cue">Enter the passage</span>
         </a>
 
-        <a class="archive-card archive-gate reveal" data-reveal id="tracks" href="archive-tracks.html">
+        <a class="archive-card archive-gate" id="tracks" href="archive-tracks.html">
           <span class="archive-gate__index" aria-hidden="true">II</span>
           <h2 class="archive-card__title">Releases</h2>
           <p class="archive-card__desc">Single tracks, premieres and compilation appearances — one link each.</p>
           <span class="archive-gate__cue">Enter the passage</span>
         </a>
 
-        <a class="archive-card archive-gate reveal" data-reveal id="podcast" href="archive-podcast.html">
+        <a class="archive-card archive-gate" id="podcast" href="archive-podcast.html">
           <span class="archive-gate__index" aria-hidden="true">III</span>
           <h2 class="archive-card__title">Podcast</h2>
           <p class="archive-card__desc">Eight hours of mixes and guest sessions — each one with its own link.</p>
           <span class="archive-gate__cue">Enter the passage</span>
         </a>
 
-        <a class="archive-card archive-gate reveal" data-reveal id="poetic-beingness" href="archive-poetic.html">
+        <a class="archive-card archive-gate" id="poetic-beingness" href="archive-poetic.html">
           <span class="archive-gate__index" aria-hidden="true">IV</span>
           <h2 class="archive-card__title">Collaborations</h2>
           <p class="archive-card__desc">Collaborations with Poetic Beingness — Huldra and Stone by Stone.</p>
           <span class="archive-gate__cue">Enter the passage</span>
         </a>
 
-        <a class="archive-card archive-gate reveal" data-reveal id="soundtrack" href="archive-soundtrack.html">
+        <a class="archive-card archive-gate" id="soundtrack" href="archive-soundtrack.html">
           <span class="archive-gate__index" aria-hidden="true">V</span>
           <h2 class="archive-card__title">Soundtrack</h2>
           <p class="archive-card__desc">Oppenheimer Soundtrack — Symvolia Rework. Cinematic reimagining.</p>
@@ -119,7 +127,7 @@
         </a>
       </div>
 
-      <footer class="archive-page__foot reveal" data-reveal>
+      <footer class="archive-page__foot">
         <p class="main__section-sub">Listen elsewhere</p>
         <nav class="main__social" aria-label="Social links">
           <a class="main__social-link" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener noreferrer" aria-label="SoundCloud">
@@ -144,15 +152,19 @@
             </svg>
           </button>
         </nav>
-        <a class="archive-page__return" id="archiveReturn" href="index.html?from=archive#archive">Return through the void</a>
+        <a class="archive-page__return" id="archiveReturn" href="index.html?from=archive#archive">Return to Symvolia</a>
         <p class="main__footer-note">Symvolia · Verona, Italy</p>
       </footer>
     </main>
+        </div>
+      </div>
+    </div>
   </div>
 
   <audio id="mainAmbient" preload="auto" loop src="assets/audio/ancient-chants-live.m4a?v=1" aria-hidden="true"></audio>
 
-  <script src="js/void-blackhole.js?v=7" defer></script>
-  <script src="js/archive-page.js?v=6" defer></script>
+  <script src="js/archive-flow.js?v=2" defer></script>
+  <script src="js/archive-page.js?v=7" defer></script>
+  <script src="js/archive-sun.js?v=6" defer></script>
 </body>
 </html>

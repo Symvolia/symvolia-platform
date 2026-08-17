@@ -1,0 +1,347 @@
+/* ─── Sound Archive — fibrous seal (assets/archive-seal.png, 576×1024)
+   Inner void center 50% 50%, diameter ~11.1% of image width.
+   Outer ring diameter ~75% of image width. */
+
+.dark-sun-body,
+html.is-dark-sun {
+  overflow: hidden;
+  height: 100%;
+  background: #000;
+}
+
+html.is-dark-sun.is-archive-open,
+html.is-dark-sun.is-archive-open body,
+html.is-dark-sun.is-archive-open body.dark-sun-body {
+  overflow: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100%;
+}
+
+.archive-page--sun {
+  position: relative;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.archive-page--sun .archive-page__body {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.archive-page--sun .main__grain,
+.archive-page--sun .main__sub,
+.archive-page--sun .main__depth,
+.archive-page--sun .main__waveform {
+  display: none;
+}
+
+.archive-page--sun .main__header.archive-page__header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 30;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+}
+
+.archive-page--sun .archive-page__header::before {
+  display: none;
+}
+
+.archive-page--sun .archive-page__header .main__back,
+.archive-page--sun .archive-page__wordmark {
+  pointer-events: auto;
+}
+
+.archive-page--sun .archive-page__wordmark {
+  color: rgba(232, 226, 216, 0.42);
+}
+
+.dark-sun {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  z-index: 1;
+}
+
+.dark-sun__world {
+  --disc-x: 50%;
+  --disc-y: 50%;
+  --disc-d: 13.5%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max(100vw, 100dvh);
+  height: max(100vw, 100dvh);
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: transform 0.8s cubic-bezier(0.22, 0.72, 0.18, 1);
+}
+
+.dark-sun__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dark-sun__gate {
+  position: absolute;
+  left: var(--disc-x);
+  top: var(--disc-y);
+  width: var(--disc-d);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 8%;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #f4efe6;
+  cursor: pointer;
+  container-type: size;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dark-sun__gate:focus {
+  outline: none;
+}
+
+.dark-sun__gate:focus-visible {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.dark-sun__gate-label {
+  font-family: var(--font-elegant);
+  font-size: clamp(0.85rem, 34cqw, 1.7rem);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-align: center;
+  color: #ffffff;
+  -webkit-text-stroke: 0.4px rgba(255, 255, 255, 0.35);
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.55),
+    0 0 22px rgba(255, 255, 255, 0.28),
+    0 1px 3px rgba(0, 0, 0, 0.95);
+  transition: color 0.45s ease, text-shadow 0.45s ease, letter-spacing 0.45s ease;
+}
+
+.dark-sun__gate:hover .dark-sun__gate-label,
+.dark-sun__gate:focus-visible .dark-sun__gate-label {
+  color: #fff;
+  letter-spacing: 0.2em;
+  text-shadow:
+    0 0 22px rgba(255, 255, 255, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.dark-sun.is-descended .dark-sun__gate {
+  pointer-events: none;
+}
+
+.dark-sun.is-flowing .dark-sun__world,
+.dark-sun.is-flowing .dark-sun__gate {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.55s ease;
+}
+
+.dark-sun .archive-flow {
+  position: absolute;
+  z-index: 8;
+}
+
+.dark-sun .archive-flow.is-behind {
+  z-index: 2;
+}
+
+.dark-sun .archive-flow__label {
+  position: absolute;
+  z-index: 9;
+}
+
+.dark-sun.is-descended .archive-flow__label {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.dark-sun__earth {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding:
+    calc(5.5rem + env(safe-area-inset-top, 0px))
+    1.25rem
+    calc(2.25rem + env(safe-area-inset-bottom, 0px));
+  opacity: 0;
+  pointer-events: none;
+  transform: none;
+  transition: opacity 0.45s ease;
+}
+
+.dark-sun.is-descended .dark-sun__earth {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+html.is-archive-open .archive-page--sun {
+  height: auto !important;
+  min-height: 100dvh;
+  overflow: visible !important;
+}
+
+html.is-archive-open .main.archive-page--sun {
+  height: auto !important;
+  min-height: 100dvh;
+  overflow: visible !important;
+}
+
+html.is-archive-open .dark-sun {
+  position: relative;
+  height: auto !important;
+  min-height: 0;
+  overflow: visible !important;
+}
+
+html.is-archive-open .dark-sun.is-flowing .dark-sun__world {
+  display: none;
+}
+
+html.is-archive-open .dark-sun .archive-flow,
+html.is-archive-open .dark-sun .archive-flow.is-behind {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+html.is-archive-open .archive-page--sun .main__header.archive-page__header {
+  position: sticky;
+  z-index: 40;
+}
+
+html.is-archive-open .dark-sun__earth {
+  position: relative;
+  inset: auto;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  display: block;
+  overflow: visible !important;
+  justify-content: flex-start;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  pointer-events: auto;
+}
+
+.dark-sun__earth-inner {
+  width: min(58rem, 100%);
+  margin: 0 auto;
+  padding: 0.85rem 1.15rem 0.5rem;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.42) 22%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
+}
+
+.dark-sun__earth .archive-page__grid {
+  max-width: none;
+}
+
+.dark-sun__earth .archive-grid {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-sun__earth .archive-card {
+  background: rgba(4, 4, 4, 0.78);
+  padding: 1.2rem 1.25rem;
+}
+
+.dark-sun__earth .archive-page__foot {
+  margin-top: 1.35rem;
+  padding-top: 1.1rem;
+  text-align: center;
+}
+
+.archive-page--sun.is-leaving {
+  opacity: 0;
+  transform: none;
+  filter: none;
+  transition: opacity 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dark-sun__world,
+  .dark-sun__earth,
+  .dark-sun__gate-label {
+    transition: none !important;
+  }
+
+  .dark-sun__earth {
+    transform: none;
+  }
+
+  .dark-sun.is-descended .dark-sun__earth {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .dark-sun__earth {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .dark-sun__earth-inner {
+    padding: 1.1rem 0.7rem 0.9rem;
+  }
+
+  .dark-sun__gate-label {
+    letter-spacing: 0.1em;
+  }
+}

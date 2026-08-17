@@ -263,25 +263,23 @@
     }, VOID_MS);
   }
 
-  /* The archive lives on its own page: dive into the void here, surface there. */
+  /* Sound Archive: go straight to the hub; the 5s film plays there. */
   function diveToArchivePage(href) {
     if (voidBusy) return;
     voidBusy = true;
 
-    const target = href || ARCHIVE_PAGE;
-
-    if (!voidPortal || prefersReducedMotion()) {
-      window.location.href = target;
-      return;
+    let target = href || ARCHIVE_PAGE;
+    try {
+      const url = new URL(target, window.location.href);
+      url.searchParams.set('play', '1');
+      url.searchParams.delete('enter');
+      url.searchParams.delete('landed');
+      target = url.pathname + url.search + url.hash;
+    } catch (err) {
+      target = 'archive.html?play=1';
     }
 
-    main.classList.add('is-void-sucked');
-    fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.74));
-
-    runVoid(false, () => {
-      // Handed over once the horizon has swallowed the frame.
-      window.location.href = target;
-    });
+    window.location.href = target;
   }
 
   function resetArchive() {

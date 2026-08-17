@@ -1,7 +1,7 @@
 /**
  * Symvolia — Sound Archive pages (the hub and every single passage).
- * Each page emerges from the void on arrival, sinks back into it on the way out,
- * and keeps the site-wide mute preference in sync.
+ * Passage pages still emerge from / return through the void.
+ * The Dark Sun hub uses its own descent instead of the alchemical veil.
  */
 (function () {
   'use strict';
@@ -11,8 +11,10 @@
   const soundToggle = document.getElementById('soundToggle');
   const mainAmbient = document.getElementById('mainAmbient');
   const page = document.querySelector('.archive-page');
+  const isSunHub = !!document.getElementById('darkSun');
 
   const VOID_MS = 3200;
+  const HUB_LEAVE_MS = 420;
   const FADE_MS = 1400;
   const MUTE_KEY = 'symvolia-muted';
 
@@ -49,10 +51,10 @@
     particlesBuilt = true;
   }
 
-  buildVoidParticles();
+  if (voidParticles) buildVoidParticles();
 
   /* ── Arrival: drop the veil once it has dissolved ── */
-  if (voidPortal) {
+  if (voidPortal && !isSunHub) {
     window.setTimeout(() => {
       voidPortal.classList.remove('is-arriving');
     }, reduced() ? 0 : VOID_MS);
@@ -64,6 +66,13 @@
   function leaveThrough(go) {
     if (leaving) return;
     leaving = true;
+
+    if (isSunHub) {
+      if (page) page.classList.add('is-leaving');
+      if (mainAmbient) fadeAudio(mainAmbient, 0, HUB_LEAVE_MS);
+      window.setTimeout(go, reduced() ? 0 : HUB_LEAVE_MS);
+      return;
+    }
 
     if (!voidPortal || reduced()) {
       go();
@@ -105,7 +114,7 @@
     if (page) page.classList.remove('is-leaving');
     if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
 
-    if (voidPortal) {
+    if (voidPortal && !isSunHub) {
       voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
       if (!reduced()) {
         void voidPortal.offsetWidth;

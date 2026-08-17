@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="css/style.css?v=38">
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=41">
-  <link rel="stylesheet" href="css/void.css?v=45">
+  <link rel="stylesheet" href="css/void.css?v=50">
   <link rel="stylesheet" href="css/cinematic-intro.css?v=85">
   <link rel="preload" as="image" href="assets/symvolia-emblem-corona-hd.png?v=3">
   <link rel="preload" as="image" href="assets/logo-seal.png?v=3">
@@ -454,12 +454,17 @@
     </section>
 
     <section class="main__archive" id="archive">
-      <div class="archive-portal reveal" data-reveal>
+      <div class="archive-portal archive-portal--sun reveal" data-reveal>
         <a class="archive-portal__btn" id="archivePortalBtn" href="archive.html">
-          <span class="archive-portal__aura" aria-hidden="true"></span>
-          <span class="archive-portal__ring" aria-hidden="true"></span>
-          <span class="archive-portal__label">Sound Archive</span>
-          <span class="archive-portal__sub">Enter the void · Works · Collaborations · Passages</span>
+          <img
+            class="archive-portal__sun"
+            src="assets/archive-seal.png?v=1"
+            width="576"
+            height="1024"
+            alt=""
+            decoding="async"
+          >
+          <span class="archive-portal__label">Sound<br>Archive</span>
         </a>
       </div>
     </section>
@@ -505,9 +510,23 @@
     <div class="void__core" aria-hidden="true"></div>
   </div>
 
+  <video
+    class="archive-flow"
+    id="archiveFlow"
+    muted
+    playsinline
+    loop
+    preload="none"
+    aria-hidden="true"
+  >
+    <source src="assets/archive-flow.mp4?v=1" type="video/mp4">
+  </video>
+  <p class="archive-flow__label" id="archiveFlowLabel" hidden>Sound<br>Archive</p>
+
   <script src="js/ouroboros.js?v=4" defer></script>
   <script src="js/void-blackhole.js?v=7" defer></script>
-  <script src="js/main.js?v=25" defer></script>
+  <script src="js/archive-flow.js?v=2" defer></script>
+  <script src="js/main.js?v=28" defer></script>
   <script src="js/environment.js?v=7" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
   <script src="js/cinematic-intro.js?v=23" defer></script>
