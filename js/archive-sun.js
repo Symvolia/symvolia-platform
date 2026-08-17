@@ -72,15 +72,18 @@
   function openArchive() {
     if (opened) return;
     opened = true;
-    root.classList.add('is-flowing');
     gate.setAttribute('aria-expanded', 'true');
     gate.setAttribute('tabindex', '-1');
 
     if (window.SymvoliaArchiveFlow) {
-      window.SymvoliaArchiveFlow.play(video, { onReveal: revealArchive });
+      window.SymvoliaArchiveFlow.play(video, {
+        onStart: () => root.classList.add('is-flowing'),
+        onReveal: revealArchive,
+      });
       return;
     }
 
+    root.classList.add('is-flowing');
     revealArchive();
   }
 
@@ -133,13 +136,9 @@
           gate.setAttribute('aria-expanded', 'true');
           gate.setAttribute('tabindex', '-1');
           if (window.SymvoliaArchiveFlow && video && !reduced()) {
-            window.SymvoliaArchiveFlow.play(video, {
-              revealAt: 0,
-              onReveal: revealArchive,
-            });
-          } else {
-            revealArchive();
+            window.SymvoliaArchiveFlow.hold(video);
           }
+          revealArchive();
         } else if (mode === 'play') {
           openArchive();
         }

@@ -176,7 +176,7 @@ html.is-dark-sun.is-archive-open body.dark-sun-body {
 .dark-sun.is-flowing .dark-sun__gate {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.55s ease;
+  transition: opacity 1.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .dark-sun .archive-flow {
@@ -214,7 +214,7 @@ html.is-dark-sun.is-archive-open body.dark-sun-body {
   opacity: 0;
   pointer-events: none;
   transform: none;
-  transition: opacity 0.45s ease;
+  transition: opacity 1.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .dark-sun.is-descended .dark-sun__earth {
@@ -235,6 +235,11 @@ html.is-archive-open .main.archive-page--sun {
   overflow: visible !important;
 }
 
+html.is-archive-open .archive-page--sun,
+html.is-archive-open .dark-sun {
+  background: transparent;
+}
+
 html.is-archive-open .dark-sun {
   position: relative;
   height: auto !important;
@@ -250,8 +255,10 @@ html.is-archive-open .dark-sun .archive-flow,
 html.is-archive-open .dark-sun .archive-flow.is-behind {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
+  display: block;
+  visibility: visible;
 }
 
 html.is-archive-open .archive-page--sun .main__header.archive-page__header {
@@ -356,11 +363,28 @@ html.is-archive-open .dark-sun__earth {
     -webkit-text-stroke: 0.35px rgba(255, 255, 255, 0.4);
   }
 
-  .dark-sun .archive-flow,
-  html.is-archive-open .dark-sun .archive-flow,
   html.is-archive-open .dark-sun .archive-flow.is-behind {
     object-fit: cover;
     object-position: center center;
+    z-index: 1;
+    opacity: 0.5;
+    visibility: visible;
+    display: block;
+  }
+
+  html.is-archive-open .archive-page--sun,
+  html.is-archive-open .dark-sun {
+    background: transparent;
+  }
+
+  html.is-archive-open .dark-sun__earth-inner {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.12) 0%,
+        rgba(0, 0, 0, 0.48) 28%,
+        rgba(0, 0, 0, 0.82) 100%
+      );
   }
 
   .dark-sun__earth {
