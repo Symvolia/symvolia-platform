@@ -275,6 +275,46 @@
     document.head.appendChild(link);
   }
 
+  function teardownArchiveInPlace() {
+    const shell = document.getElementById('archiveInPlace');
+    if (!shell) return false;
+
+    shell.remove();
+    document.documentElement.classList.remove('is-archive-open', 'is-archive-page', 'is-dark-sun');
+    document.body.classList.remove('is-archive-open', 'archive-body', 'dark-sun-body');
+
+    if (entered) {
+      if (main) {
+        main.hidden = false;
+        main.removeAttribute('aria-hidden');
+      }
+      if (stage) {
+        stage.hidden = true;
+        stage.setAttribute('aria-hidden', 'true');
+      }
+      fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
+    } else {
+      if (main) main.hidden = true;
+      if (stage) {
+        stage.hidden = false;
+        stage.removeAttribute('aria-hidden');
+      }
+      if (livingAwake) startStageAmbient();
+    }
+
+    if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.stop();
+
+    try {
+      if (history.replaceState) {
+        const hash = entered ? '#archive' : '#home';
+        history.replaceState(null, '', `${window.location.pathname}${hash}`);
+      }
+    } catch (err) { /* ignore */ }
+
+    voidBusy = false;
+    return true;
+  }
+
   function enterArchiveInPlace() {
     const video = document.getElementById('archiveFlow');
     if (video && window.SymvoliaArchiveFlow) {
@@ -344,8 +384,10 @@
         if (window.SymvoliaArchiveAmbient && !hubMuted) {
           window.SymvoliaArchiveAmbient.play(0.5, FADE_MS);
         }
+        voidBusy = false;
       })
       .catch(() => {
+        voidBusy = false;
         window.location.href = 'archive.html?landed=1';
       });
   }
@@ -1028,6 +1070,9 @@
   bindAmbientLifecycle();
   bindSectionNavigation();
   bindArchivePortal();
+  window.addEventListener('popstate', () => {
+    teardownArchiveInPlace();
+  });
   bindStageMenu();
   // Enter CTA is revealed by environment.js after the opening journey.
 

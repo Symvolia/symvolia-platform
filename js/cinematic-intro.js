@@ -37,8 +37,8 @@
   let unlockSkip = false;
   let introT0 = 0;
 
-  const BRAND_AT_MS = 1000;
-  const ENTER_AT_MS = 2000;
+  const BRAND_AT_MS = 2000;
+  const ENTER_AT_MS = 3500;
 
   async function waitUntil(targetMs) {
     const wait = targetMs - (performance.now() - introT0);
@@ -54,7 +54,7 @@
     _noiseRaf: 0,
 
     play() {
-      if (this.playing || this.destroyed) return this._run();
+      if (this.playing || this.destroyed) return;
       this.playing = true;
       return this._run();
     },
@@ -68,9 +68,9 @@
     },
 
     async _run() {
-      introT0 = performance.now();
       try {
         await phase0();
+        introT0 = performance.now();
         if (this.destroyed) return;
         if (reduced) {
           await reducedPath();
@@ -202,7 +202,7 @@
     await delay(120);
   }
 
-  /** Eye opens in parallel — brand and enter follow fixed clocks at 1s / 2s. */
+  /** Eye opens in parallel — brand at 2s, enter at 3.5s from first frame shown. */
   async function phaseEyeFlow() {
     timeline.currentPhase = 1;
     unlockSkip = true;
