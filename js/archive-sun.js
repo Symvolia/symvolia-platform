@@ -99,6 +99,21 @@
   }
 
   function bind() {
+    const unlock = () => {
+      if (video && window.SymvoliaArchiveFlow) {
+        window.SymvoliaArchiveFlow.arm(video);
+        window.SymvoliaArchiveFlow.tryPlay(video);
+      }
+    };
+
+    gate.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      unlock();
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+        openArchive();
+      }
+    });
+
     gate.addEventListener('click', (e) => {
       e.preventDefault();
       openArchive();
@@ -120,30 +135,34 @@
 
   bind();
 
+  if (video && window.SymvoliaArchiveFlow) {
+    window.SymvoliaArchiveFlow.prime(video);
+  }
+
   function start() {
     world.style.transition = 'none';
     frameSun();
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         if (!reduced()) world.style.transition = '';
-
-        const mode = shouldOpenNow();
-        if (mode === 'landed') {
-          opened = true;
-          root.classList.add('is-flowing', 'is-descended');
-          document.documentElement.classList.add('is-archive-open');
-          document.body.classList.add('is-archive-open');
-          gate.setAttribute('aria-expanded', 'true');
-          gate.setAttribute('tabindex', '-1');
-          if (window.SymvoliaArchiveFlow && video && !reduced()) {
-            window.SymvoliaArchiveFlow.hold(video);
-          }
-          revealArchive();
-        } else if (mode === 'play') {
-          openArchive();
-        }
       });
     });
+  }
+
+  const mode = shouldOpenNow();
+  if (mode === 'landed') {
+    opened = true;
+    root.classList.add('is-flowing', 'is-descended');
+    document.documentElement.classList.add('is-archive-open');
+    document.body.classList.add('is-archive-open');
+    gate.setAttribute('aria-expanded', 'true');
+    gate.setAttribute('tabindex', '-1');
+    if (window.SymvoliaArchiveFlow && video && !reduced()) {
+      window.SymvoliaArchiveFlow.hold(video);
+    }
+    revealArchive();
+  } else if (mode === 'play') {
+    openArchive();
   }
 
   const img = world.querySelector('.dark-sun__img');

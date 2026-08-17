@@ -206,21 +206,20 @@ body.is-entered .sound-toggle {
   background: #000;
   opacity: 0;
   pointer-events: none;
-  visibility: hidden;
-  transition:
-    opacity 1.45s cubic-bezier(0.22, 0.61, 0.36, 1),
-    visibility 1.45s linear;
+  /* iOS will not start playback if the element is visibility:hidden. */
+  visibility: visible;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transition: opacity 1.45s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .archive-flow.is-playing {
   opacity: 1;
-  visibility: visible;
 }
 
 .archive-flow.is-behind {
   z-index: 1;
   opacity: 0.46;
-  visibility: visible;
   transition: opacity 1.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -228,6 +227,8 @@ body.is-entered .sound-toggle {
 @media (min-width: 821px) {
   .archive-flow,
   .dark-sun .archive-flow,
+  html.is-archive-open .archive-flow,
+  html.is-archive-open .archive-flow.is-behind,
   html.is-archive-open .dark-sun .archive-flow,
   html.is-archive-open .dark-sun .archive-flow.is-behind {
     position: fixed;

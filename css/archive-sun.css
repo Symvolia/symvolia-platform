@@ -180,12 +180,15 @@ html.is-dark-sun.is-archive-open body.dark-sun-body {
 }
 
 .dark-sun .archive-flow {
-  position: absolute;
+  position: fixed;
+  inset: 0;
   z-index: 8;
+  width: 100%;
+  height: 100%;
 }
 
 .dark-sun .archive-flow.is-behind {
-  z-index: 2;
+  z-index: 1;
 }
 
 .dark-sun .archive-flow__label {
@@ -251,6 +254,8 @@ html.is-archive-open .dark-sun.is-flowing .dark-sun__world {
   display: none;
 }
 
+html.is-archive-open .archive-flow,
+html.is-archive-open .archive-flow.is-behind,
 html.is-archive-open .dark-sun .archive-flow,
 html.is-archive-open .dark-sun .archive-flow.is-behind {
   position: fixed;
@@ -263,6 +268,8 @@ html.is-archive-open .dark-sun .archive-flow.is-behind {
 
 @media (min-width: 821px) {
   .dark-sun .archive-flow,
+  html.is-archive-open .archive-flow,
+  html.is-archive-open .archive-flow.is-behind,
   html.is-archive-open .dark-sun .archive-flow,
   html.is-archive-open .dark-sun .archive-flow.is-behind {
     position: fixed;
@@ -379,13 +386,36 @@ html.is-archive-open .dark-sun__earth {
     -webkit-text-stroke: 0.35px rgba(255, 255, 255, 0.4);
   }
 
+  /* Phones: 9:16 film fills the portrait frame — never rotate, never clip. */
+  .archive-flow,
+  .archive-flow.is-playing,
+  .archive-flow.is-behind,
+  .dark-sun .archive-flow,
+  html.is-archive-open .archive-flow,
+  html.is-archive-open .archive-flow.is-behind,
+  html.is-archive-open .dark-sun .archive-flow,
   html.is-archive-open .dark-sun .archive-flow.is-behind {
+    position: fixed !important;
+    inset: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
     object-fit: cover;
     object-position: center center;
-    z-index: 1;
+  }
+
+  html.is-archive-open .archive-flow.is-behind,
+  html.is-archive-open .dark-sun .archive-flow.is-behind {
+    z-index: 1 !important;
     opacity: 0.5;
-    visibility: visible;
-    display: block;
+  }
+
+  .archive-flow.is-playing:not(.is-behind) {
+    z-index: 240 !important;
+    opacity: 1;
   }
 
   html.is-archive-open .archive-page--sun,

@@ -263,24 +263,40 @@
     }, VOID_MS);
   }
 
-  /* Sound Archive: same on desktop and phone — the 5s film plays on the hub
-     and then stays looping behind the archive. */
+  /* Sound Archive: play the film on this tap (iOS needs the gesture),
+     then open the hub over the looping background. */
   function diveToArchivePage(href) {
     if (voidBusy) return;
     voidBusy = true;
 
-    let target = href || ARCHIVE_PAGE;
+    let landed = 'archive.html?landed=1';
+    let play = 'archive.html?play=1';
     try {
-      const url = new URL(target, window.location.href);
-      url.searchParams.set('play', '1');
+      const url = new URL(href || ARCHIVE_PAGE, window.location.href);
       url.searchParams.delete('enter');
+      url.searchParams.delete('play');
+      url.searchParams.set('landed', '1');
+      landed = url.pathname + url.search + url.hash;
       url.searchParams.delete('landed');
-      target = url.pathname + url.search + url.hash;
-    } catch (err) {
-      target = 'archive.html?play=1';
+      url.searchParams.set('play', '1');
+      play = url.pathname + url.search + url.hash;
+    } catch (err) { /* ignore */ }
+
+    const flow = document.getElementById('archiveFlow');
+    const canFilm = flow && window.SymvoliaArchiveFlow && !prefersReducedMotion();
+    const needsGesture = window.matchMedia('(pointer: coarse)').matches
+      || window.matchMedia('(max-width: 820px)').matches;
+
+    if (canFilm && needsGesture) {
+      window.SymvoliaArchiveFlow.play(flow, {
+        onReveal: () => {
+          window.location.href = landed;
+        },
+      });
+      return;
     }
 
-    window.location.href = target;
+    window.location.href = play;
   }
 
   function resetArchive() {
@@ -320,11 +336,34 @@
 
   function bindArchivePortal() {
     if (!archivePortalBtn) return;
-    archivePortalBtn.addEventListener('click', (e) => {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+    const go = (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.type === 'click' && e.button !== 0) return;
       e.preventDefault();
       diveToArchivePage(archivePortalBtn.getAttribute('href'));
+    };
+
+    archivePortalBtn.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') return;
+      e.preventDefault();
+      go(e);
     });
+    archivePortalBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      go(e);
+    }, { passive: false });
+    archivePortalBtn.addEventListener('click', go);
+
+    const flow = document.getElementById('archiveFlow');
+    if (flow && window.SymvoliaArchiveFlow && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        window.SymvoliaArchiveFlow.prime(flow);
+        io.disconnect();
+      }, { rootMargin: '200px' });
+      io.observe(archivePortalBtn);
+    }
   }
 
   /* Returning from the archive page: surface directly into the library,
