@@ -181,7 +181,6 @@ html.is-home .stage.stage--alive .stage__sigil-img {
   opacity: 1 !important;
   visibility: visible !important;
   filter: none !important;
-  transform: none !important;
   animation: none !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
@@ -247,6 +246,9 @@ html.is-home .stage.stage--alive a.stage__menu-item {
   text-transform: uppercase;
   text-decoration: none;
   color: #000 !important;
+  background: #fff;
+  padding: 0.16em 0.42em 0.12em;
+  -webkit-text-stroke: 0;
   text-shadow: none;
   opacity: 1;
   transition:
@@ -309,16 +311,25 @@ html.is-home .stage.stage--alive .stage__social-link {
 }
 
 html.is-home .stage.stage--alive .stage__tagline span {
+  display: block;
+  max-width: min(16rem, 88vw);
+  margin: 0 auto;
   color: #000;
   font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  text-wrap: balance;
   opacity: 1 !important;
+  background: #fff;
+  padding: 0.18em 0.55em 0.12em;
+  -webkit-text-stroke: 0;
 }
 
 html.is-home .stage.stage--alive .stage__enter-btn {
   color: #000;
   font-weight: 700;
   border: 1px solid #000;
-  background: transparent;
+  background: #fff;
   box-shadow: none;
 }
 
@@ -326,7 +337,7 @@ html.is-home .stage.stage--alive .stage__enter-btn:hover,
 html.is-home .stage.stage--alive .stage__enter-btn:focus-visible {
   color: #000;
   border-color: #000;
-  background: rgba(255, 255, 255, 0.35);
+  background: #fff;
   box-shadow: none;
 }
 
@@ -494,8 +505,8 @@ html.is-home .sound-toggle.is-muted {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 1024;
     --home-corona-ih: 576;
-    --home-corona-disc-r: 134;
-    --home-seal-inset: 0.94;
+    --home-corona-disc-r: 136;
+    --home-seal-inset: 1;
   }
 
   html.is-home .stage.stage--alive .stage__corona-bg {
@@ -525,7 +536,7 @@ html.is-home .sound-toggle.is-muted {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    --home-sigil: calc(268 * max(100vw / 1024, 100vh / 576));
+    --home-sigil: calc(272 * max(100vw / 1024, 100vh / 576));
     --home-gutter: clamp(1.85rem, 3.8vmin, 2.85rem);
     --home-phrase: min(11rem, calc(50vw - var(--home-orbit) - 2rem));
     position: fixed;
@@ -582,11 +593,13 @@ html.is-home .sound-toggle.is-muted {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-img {
-    width: calc(100% * var(--home-seal-inset));
-    height: calc(100% * var(--home-seal-inset));
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     object-position: center center;
-    clip-path: circle(49.6% at 50% 50%);
+    clip-path: circle(50% at 50% 50%);
   }
 
   html.is-home .stage.stage--alive .stage__footer {
@@ -599,8 +612,8 @@ html.is-home .sound-toggle.is-muted {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 576;
     --home-corona-ih: 1024;
-    --home-corona-disc-r: 134;
-    --home-seal-inset: 0.94;
+    --home-corona-disc-r: 136;
+    --home-seal-inset: 1;
     padding:
       max(0.65rem, env(safe-area-inset-top))
       max(0.65rem, env(safe-area-inset-right))
@@ -652,9 +665,9 @@ html.is-home .sound-toggle.is-muted {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    --home-sigil: calc(268 * max(100vw / 576, 100vh / 1024));
-    --home-gutter: clamp(0.9rem, 4.2vw, 1.3rem);
-    --home-phrase: max(4.2rem, calc(50vw - var(--home-orbit) - 0.75rem));
+    --home-sigil: calc(272 * max(100vw / 576, 100vh / 1024));
+    --home-gutter: clamp(0.55rem, 2.6vw, 0.9rem);
+    --home-phrase: max(4.4rem, calc(50vw - var(--home-orbit) - 0.55rem));
     position: fixed;
     left: 50%;
     top: 50%;
@@ -690,15 +703,38 @@ html.is-home .sound-toggle.is-muted {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-img {
-    width: calc(100% * var(--home-seal-inset));
-    height: calc(100% * var(--home-seal-inset));
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     object-position: center center;
-    clip-path: circle(49.6% at 50% 50%);
+    clip-path: circle(50% at 50% 50%);
   }
 
   html.is-home .stage.stage--alive .stage__footer {
     z-index: 8;
+    gap: 0.45rem;
+    padding: 0.2rem 0.75rem 0.55rem;
+  }
+
+  html.is-home .stage.stage--alive .stage__enter-hint {
+    display: none;
+  }
+
+  html.is-home .stage.stage--alive .stage__enter-btn {
+    padding: 0.5rem 1.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+  }
+
+  html.is-home .stage.stage--alive .stage__social {
+    gap: 0.55rem;
+  }
+
+  html.is-home .stage.stage--alive .stage__social-link {
+    width: 2.15rem;
+    height: 2.15rem;
   }
 
   html.is-home .stage.stage--alive .orbit-br {
@@ -727,7 +763,8 @@ html.is-home .sound-toggle.is-muted {
 
   html.is-home .stage.stage--alive .stage__orbit-item:nth-child(3),
   html.is-home .stage.stage--alive .stage__orbit-item:nth-child(6) {
-    --orbit-row-min: 2.55em;
+    --orbit-row-min: 2.2em;
+    top: calc(50% + var(--home-orbit) * 0.52) !important;
   }
 
   html.is-home .stage.stage--alive .stage__menu-item {
@@ -754,24 +791,25 @@ html.is-home .sound-toggle.is-muted {
     letter-spacing: 0.09em;
     color: #000 !important;
   }
-
-  html.is-home .stage.stage--alive .stage__footer {
-    gap: 0.7rem;
-    padding-top: 0.25rem;
-  }
 }
 
 /* Narrow phones — tighter orbit copy */
 @media (max-width: 480px) {
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    --home-gutter: clamp(0.85rem, 3.8vw, 1.15rem);
-    --home-phrase: max(3.95rem, calc(50vw - var(--home-orbit) - 0.65rem));
+    --home-gutter: clamp(0.5rem, 2.4vw, 0.8rem);
+    --home-phrase: max(4rem, calc(50vw - var(--home-orbit) - 0.5rem));
   }
 
   html.is-home .stage.stage--alive .stage__menu-item {
     font-size: clamp(0.52rem, 2.75vw, 0.68rem);
     letter-spacing: 0.06em;
-    min-height: 2.45em;
+    min-height: 2.2em;
+  }
+
+  html.is-home .stage.stage--alive .stage__tagline span {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    max-width: 12.5rem;
   }
 }
 
