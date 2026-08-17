@@ -18,10 +18,7 @@ html.is-home .stage.stage--alive {
   --home-rim: 1cm;
   --home-corona-iw: 2560;
   --home-corona-ih: 1440;
-  /* Painted black disc in the corona masters (px from image center) */
-  --home-disc-dx: -126;
-  --home-disc-dy: -184;
-  --home-disc-r: 494;
+  --home-disc-r: 333;
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
@@ -551,21 +548,17 @@ html.is-home .sound-toggle.is-muted {
   display: none;
 }
 
-/* Corona layer scaled so the painted black disc is 1cm beyond the seal,
-   and shifted so that disc shares the sigil's center. */
+/* Cover-sized corona, disc centered on the same origin as the sigil. */
 html.is-home .stage.stage--alive .stage__corona-bg {
   position: fixed;
   left: 50%;
   top: calc(50% - var(--home-lift));
-  width: calc(var(--home-corona-iw) * var(--home-bg-scale));
-  height: calc(var(--home-corona-ih) * var(--home-bg-scale));
-  transform: translate(
-    calc(-50% - var(--home-disc-dx) * var(--home-bg-scale)),
-    calc(-50% - var(--home-disc-dy) * var(--home-bg-scale))
-  );
+  width: calc(var(--home-corona-iw) * max(100vw / var(--home-corona-iw), 100vh / var(--home-corona-ih)));
+  height: calc(var(--home-corona-ih) * max(100vw / var(--home-corona-iw), 100vh / var(--home-corona-ih)));
+  transform: translate(-50%, -50%);
   z-index: 0;
   pointer-events: none;
-  background-color: transparent;
+  background-color: #010101;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: 100% 100%;
@@ -576,14 +569,14 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 2560;
     --home-corona-ih: 1440;
-    --home-sigil: calc(682 * max(100vw / 2560, 100vh / 1440));
-    --home-bg-scale: calc((var(--home-sigil) / 2 + var(--home-rim)) / var(--home-disc-r));
+    --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 2560, 100vh / 1440));
+    --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
   }
 
   html.is-home .stage.stage--alive .stage__corona-bg {
     display: block;
     opacity: 1;
-    background-image: url('../assets/home-corona-bg-desktop.png?v=5');
+    background-image: url('../assets/home-corona-bg-desktop.png?v=6');
   }
 
   html.is-home .stage.stage--alive.stage--home-visible .stage__corona-bg {
@@ -599,7 +592,8 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    --home-sigil: calc(682 * max(100vw / 2560, 100vh / 1440));
+    --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
+    --home-radius: calc(var(--home-disc) * 0.58);
     --home-gutter: clamp(1.85rem, 3.8vmin, 2.85rem);
     --home-phrase: min(11rem, calc(50vw - var(--home-orbit) - 2rem));
     position: fixed;
@@ -675,8 +669,8 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 1440;
     --home-corona-ih: 2560;
-    --home-sigil: calc(682 * max(100vw / 1440, 100vh / 2560));
-    --home-bg-scale: calc((var(--home-sigil) / 2 + var(--home-rim)) / var(--home-disc-r));
+    --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 1440, 100vh / 2560));
+    --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
     --home-lift: max(2.6cm, 7vh);
     padding:
       max(0.65rem, env(safe-area-inset-top))
@@ -690,7 +684,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive .stage__corona-bg {
     display: block;
     opacity: 1;
-    background-image: url('../assets/home-corona-bg-mobile.png?v=5');
+    background-image: url('../assets/home-corona-bg-mobile.png?v=6');
   }
 
   html.is-home .stage.stage--alive.stage--home-visible .stage__corona-bg {
@@ -721,7 +715,8 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   }
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
-    --home-sigil: calc(682 * max(100vw / 1440, 100vh / 2560));
+    --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
+    --home-radius: calc(var(--home-disc) * 0.58);
     --home-gutter: clamp(0.55rem, 2.6vw, 0.9rem);
     --home-phrase: max(4.4rem, calc(50vw - var(--home-orbit) - 0.55rem));
     position: fixed;
