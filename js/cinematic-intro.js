@@ -35,6 +35,15 @@
 
   let entered = false;
   let unlockSkip = false;
+  let introT0 = 0;
+
+  const BRAND_AT_MS = 1000;
+  const ENTER_AT_MS = 2000;
+
+  async function waitUntil(targetMs) {
+    const wait = targetMs - (performance.now() - introT0);
+    if (wait > 0) await delay(wait);
+  }
 
   const timeline = {
     currentPhase: 0,
@@ -59,6 +68,7 @@
     },
 
     async _run() {
+      introT0 = performance.now();
       try {
         await phase0();
         if (this.destroyed) return;
@@ -66,7 +76,12 @@
           await reducedPath();
           return;
         }
-        await phaseFlow();
+        phaseEyeFlow();
+        await waitUntil(BRAND_AT_MS);
+        if (this.skipped || this.destroyed) return;
+        await revealBrand();
+        if (this.skipped || this.destroyed) return;
+        await waitUntil(ENTER_AT_MS);
         if (this.skipped || this.destroyed) return;
         await phaseEnterReady();
       } catch (err) {
@@ -184,50 +199,40 @@
     show(cine);
     cine.classList.add('is-shown');
     initNoise();
-    await delay(520);
+    await delay(120);
   }
 
-  /**
-   * Continuous eye birth — one fluid arc, no hard cuts.
-   * Lids + iris + pupil + grain + vignette + settle overlap.
-   */
-  async function phaseFlow() {
+  /** Eye opens in parallel — brand and enter follow fixed clocks at 1s / 2s. */
+  async function phaseEyeFlow() {
     timeline.currentPhase = 1;
     unlockSkip = true;
 
     show(eye);
-    await delay(180);
+    await delay(60);
     if (timeline.skipped) return;
 
-    // Lids part — reveal the painted eye
     eye.classList.add('is-open');
     cine.classList.add('is-grain');
 
-    // After lids open: seal fades from pupil center
-    await delay(2000);
+    await delay(320);
     if (timeline.skipped) return;
     eye.classList.add('is-seal');
 
-    // Soft vignette as world settles into view
-    await delay(900);
-    if (timeline.skipped) return;
     if (vignette) {
       show(vignette);
       vignette.classList.add('is-shown');
     }
 
-    // Hold on the open eye + seal
-    await delay(800);
+    await delay(180);
     if (timeline.skipped) return;
 
-    // Pull back — make space for the word
     eye.classList.add('is-settled', 'is-breathing');
     timeline.currentPhase = 2;
+  }
 
-    await delay(900);
-    if (timeline.skipped) return;
+  async function revealBrand() {
+    if (timeline.skipped || timeline.destroyed) return;
 
-    // Brand rises into the cleared space (wordmark under centered pupil)
     timeline.currentPhase = 3;
     cine.classList.add('is-brand');
 
@@ -236,21 +241,12 @@
         animateTo(letter, {
           opacity: 1,
           transform: 'translate3d(0, 0, 0)',
-          duration: 680,
+          duration: 480,
           easing: 'var(--ease-soft)',
-          delayMs: 80 + i * 55,
+          delayMs: i * 32,
         })
       )
     );
-    if (timeline.skipped) return;
-
-    await animateTo(tagline, {
-      opacity: 1,
-      transform: 'translate3d(0, 0, 0)',
-      duration: 780,
-      easing: 'var(--ease-soft)',
-      delayMs: 60,
-    });
   }
 
   async function phaseEnterReady() {
@@ -307,12 +303,9 @@
       show(vignette);
       vignette.classList.add('is-shown');
     }
-    [...letters, tagline].forEach((el) => {
-      if (!el) return;
-      show(el);
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-    });
+    await waitUntil(BRAND_AT_MS);
+    await revealBrand();
+    await waitUntil(ENTER_AT_MS);
     await phaseEnterReady();
   }
 
