@@ -281,6 +281,28 @@ input:focus-visible {
 /* Only relevant once the reader has entered the scrollable content. */
 body:not(.is-entered) .scroll-progress { opacity: 0; }
 
+/* Archive view: no gold progress bar, no gold scrollbars. */
+body.is-entered .scroll-progress {
+  display: none !important;
+}
+
+html:has(body.is-entered),
+html:has(body.is-entered) *,
+body.is-entered,
+body.is-entered * {
+  scrollbar-width: none;
+}
+
+html:has(body.is-entered)::-webkit-scrollbar,
+html:has(body.is-entered) *::-webkit-scrollbar,
+body.is-entered::-webkit-scrollbar,
+body.is-entered *::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent;
+}
+
 /* ─────────────────────────  5. ACCESSIBILITY  ───────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ds-fade-in,

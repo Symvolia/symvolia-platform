@@ -343,30 +343,34 @@ html.is-home .stage.stage--alive .stage__tagline span {
   position: relative;
   isolation: isolate;
   display: block;
-  max-width: min(18rem, 88vw);
+  max-width: min(22rem, 92vw);
   margin: 0 auto;
-  color: var(--silver);
-  font-weight: 300;
-  letter-spacing: 0.22em;
-  line-height: 1.35;
+  color: #f2ebe0;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
   text-wrap: balance;
   background: none;
-  padding: 0.25em 0.7em;
+  padding: 0.3em 0.85em;
   -webkit-text-stroke: 0;
-  text-shadow: 0 0 18px rgba(1, 1, 1, 0.7);
+  opacity: 1 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.95),
+    0 0 14px rgba(0, 0, 0, 0.9),
+    0 0 28px rgba(0, 0, 0, 0.75);
 }
 
 html.is-home .stage.stage--alive .stage__tagline span::before {
   content: '';
   position: absolute;
-  inset: -0.35em -1.1em;
+  inset: -0.45em -1.35em;
   z-index: -1;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 80% 70% at 50% 50%,
-    rgba(6, 4, 3, 0.62) 0%,
-    rgba(8, 6, 4, 0.28) 55%,
-    transparent 82%
+    ellipse 82% 72% at 50% 50%,
+    rgba(1, 1, 1, 0.88) 0%,
+    rgba(1, 1, 1, 0.52) 48%,
+    transparent 78%
   );
 }
 
@@ -593,7 +597,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
     --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
-    --home-radius: calc(var(--home-disc) * 0.58);
+    --home-radius: calc(var(--home-disc) * 0.64);
     --home-gutter: clamp(1.85rem, 3.8vmin, 2.85rem);
     --home-phrase: min(11rem, calc(50vw - var(--home-orbit) - 2rem));
     position: fixed;
@@ -670,6 +674,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     --home-corona-iw: 1440;
     --home-corona-ih: 2560;
     --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 1440, 100vh / 2560));
+    --home-rim: 0.4cm;
     --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
     --home-lift: max(2.6cm, 7vh);
     padding:
@@ -716,7 +721,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
 
   html.is-home .stage.stage--alive .stage__sigil-wrap {
     --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
-    --home-radius: calc(var(--home-disc) * 0.58);
+    --home-radius: calc(var(--home-disc) * 0.64);
     --home-gutter: clamp(0.55rem, 2.6vw, 0.9rem);
     --home-phrase: max(4.4rem, calc(50vw - var(--home-orbit) - 0.55rem));
     position: fixed;
@@ -815,7 +820,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive .stage__orbit-item:nth-child(3),
   html.is-home .stage.stage--alive .stage__orbit-item:nth-child(6) {
     --orbit-row-min: 2.2em;
-    top: calc(50% + var(--home-orbit) * 0.52) !important;
+    top: calc(50% + var(--home-orbit) * 0.70) !important;
   }
 
   html.is-home .stage.stage--alive .stage__menu-item {
@@ -858,9 +863,9 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   }
 
   html.is-home .stage.stage--alive .stage__tagline span {
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    max-width: 12.5rem;
+    font-size: 0.92rem;
+    letter-spacing: 0.14em;
+    max-width: 16rem;
   }
 }
 
