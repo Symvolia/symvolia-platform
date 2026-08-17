@@ -375,24 +375,32 @@ html.is-home .stage.stage--alive .stage__tagline span::before {
 }
 
 html.is-home .stage.stage--alive .stage__enter-btn {
-  color: var(--silver);
-  font-weight: 300;
-  border: 1px solid rgba(90, 78, 68, 0.42);
+  color: #f2ebe0;
+  font-weight: 400;
+  border: 1px solid rgba(242, 235, 224, 0.55);
   background: radial-gradient(
     ellipse 80% 120% at 50% 50%,
-    rgba(12, 10, 8, 0.45) 0%,
-    rgba(6, 5, 4, 0.18) 70%,
-    transparent 100%
+    rgba(1, 1, 1, 0.82) 0%,
+    rgba(1, 1, 1, 0.45) 70%,
+    rgba(1, 1, 1, 0.12) 100%
   );
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 18px rgba(0, 0, 0, 0.7),
+    0 0 36px rgba(0, 0, 0, 0.4);
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.95),
+    0 0 14px rgba(0, 0, 0, 0.9),
+    0 0 28px rgba(0, 0, 0, 0.75);
 }
 
 html.is-home .stage.stage--alive .stage__enter-btn:hover,
 html.is-home .stage.stage--alive .stage__enter-btn:focus-visible {
-  color: #c8beb2;
-  border-color: rgba(110, 95, 82, 0.58);
-  background: rgba(18, 14, 11, 0.5);
-  box-shadow: 0 0 28px rgba(50, 40, 32, 0.28);
+  color: #fff8ee;
+  border-color: rgba(255, 246, 232, 0.78);
+  background: rgba(1, 1, 1, 0.72);
+  box-shadow:
+    0 0 22px rgba(0, 0, 0, 0.75),
+    0 0 32px rgba(50, 40, 32, 0.28);
 }
 
 html.is-home .stage.stage--alive .stage__enter-hint {
@@ -523,6 +531,10 @@ html.is-home .stage--alive .living__script--runes {
   display: block;
 }
 
+html.is-home .stage.stage--alive .orbit-phrase--duo {
+  white-space: nowrap;
+}
+
 @media (max-width: 767px), (pointer: coarse) {
   .stage__enter-label--desk {
     display: none;
@@ -599,7 +611,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
     --home-radius: calc(var(--home-disc) * 0.64);
     --home-gutter: clamp(1.85rem, 3.8vmin, 2.85rem);
-    --home-phrase: min(11rem, calc(50vw - var(--home-orbit) - 2rem));
+    --home-phrase: min(14rem, calc(50vw - var(--home-orbit) - 1.25rem));
     position: fixed;
     left: 50%;
     top: calc(50% - var(--home-lift));
@@ -665,6 +677,10 @@ html.is-home .stage.stage--alive .stage__corona-bg {
 
   html.is-home .stage.stage--alive .stage__footer {
     z-index: 8;
+  }
+
+  html.is-home .stage.stage--alive .stage__menu-item:not(.orbit-phrase--duo) {
+    white-space: nowrap;
   }
 }
 
@@ -772,6 +788,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     z-index: 8;
     gap: 0.45rem;
     padding: 0.2rem 0.75rem 0.55rem;
+    bottom: calc(1cm + max(0.5rem, env(safe-area-inset-bottom)));
   }
 
   html.is-home .stage.stage--alive .stage__enter-hint {
@@ -780,8 +797,8 @@ html.is-home .stage.stage--alive .stage__corona-bg {
 
   html.is-home .stage.stage--alive .stage__enter-btn {
     padding: 0.5rem 1.35rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
+    font-size: 0.88rem;
+    letter-spacing: 0.16em;
   }
 
   html.is-home .stage.stage--alive .stage__social {
@@ -800,6 +817,8 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive .orbit-phrase--duo {
     letter-spacing: 0.055em;
     line-height: 1.22;
+    text-wrap: unset;
+    white-space: nowrap;
   }
 
   html.is-home .stage.stage--alive .stage__orbit-item {
