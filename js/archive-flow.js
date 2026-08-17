@@ -26,13 +26,17 @@
     video.classList.add('is-playing');
     video.loop = true;
     video.muted = true;
+    video.defaultMuted = true;
     video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
     try { video.currentTime = 0; } catch (err) { /* ignore */ }
 
     let revealed = false;
     const reveal = () => {
       if (revealed) return;
       revealed = true;
+      window.clearTimeout(failSafe);
       video.classList.add('is-behind');
       video.removeEventListener('timeupdate', onTime);
       if (typeof onReveal === 'function') onReveal();
@@ -45,10 +49,16 @@
     video.addEventListener('timeupdate', onTime);
     video.addEventListener('ended', reveal, { once: true });
     video.addEventListener('error', reveal, { once: true });
+    const failSafe = window.setTimeout(reveal, Math.round((revealAt + 0.85) * 1000));
 
     const p = video.play();
     if (p && typeof p.catch === 'function') {
-      p.catch(() => reveal());
+      p.catch(() => {
+        const again = video.play();
+        if (again && typeof again.catch === 'function') {
+          again.catch(() => { /* failSafe still running */ });
+        }
+      });
     }
   }
 

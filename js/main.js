@@ -263,29 +263,57 @@
     }, VOID_MS);
   }
 
-  /* Sound Archive: go straight to the hub; the 5s film plays there. */
+  /* Sound Archive: desktop plays the 5s film on the hub.
+     On phones the click gesture starts the film here, then the hub opens. */
   function diveToArchivePage(href) {
     if (voidBusy) return;
     voidBusy = true;
 
-    let target = href || ARCHIVE_PAGE;
-    try {
-      const url = new URL(target, window.location.href);
-      url.searchParams.set('play', '1');
-      url.searchParams.delete('enter');
-      url.searchParams.delete('landed');
-      target = url.pathname + url.search + url.hash;
-    } catch (err) {
-      target = 'archive.html?play=1';
+    const go = (mode) => {
+      let target = href || ARCHIVE_PAGE;
+      try {
+        const url = new URL(target, window.location.href);
+        url.searchParams.delete('enter');
+        if (mode === 'landed') {
+          url.searchParams.set('landed', '1');
+          url.searchParams.delete('play');
+        } else {
+          url.searchParams.set('play', '1');
+          url.searchParams.delete('landed');
+        }
+        target = url.pathname + url.search + url.hash;
+      } catch (err) {
+        target = mode === 'landed' ? 'archive.html?landed=1' : 'archive.html?play=1';
+      }
+      window.location.href = target;
+    };
+
+    const video = document.getElementById('archiveFlow');
+    const phone = window.matchMedia('(max-width: 820px)').matches;
+    if (
+      phone &&
+      video &&
+      window.SymvoliaArchiveFlow &&
+      !prefersReducedMotion()
+    ) {
+      window.SymvoliaArchiveFlow.play(video, {
+        onReveal: () => go('landed'),
+      });
+      return;
     }
 
-    window.location.href = target;
+    go('play');
   }
 
   function resetArchive() {
     if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
     if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
     if (main) main.classList.remove('is-void-sucked');
+    const flow = document.getElementById('archiveFlow');
+    if (flow) {
+      flow.classList.remove('is-playing', 'is-behind');
+      try { flow.pause(); } catch (err) { /* ignore */ }
+    }
     voidBusy = false;
   }
 

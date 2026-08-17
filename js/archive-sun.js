@@ -30,10 +30,18 @@
     return { w: world.offsetWidth, h: world.offsetHeight };
   }
 
+  function isPhone() {
+    return window.matchMedia('(max-width: 820px)').matches;
+  }
+
   function sunZoom() {
     const { w } = worldSize();
     const { w: vw, h: vh } = view();
     const discPx = DISC_D * w;
+    if (isPhone()) {
+      // Portrait seal already fills the phone; do not punch into the void.
+      return 1;
+    }
     const target = Math.max(120, Math.min(vw * 0.28, vh * 0.22, 210));
     return Math.max(0.85, Math.min(2.4, target / Math.max(discPx, 1)));
   }
