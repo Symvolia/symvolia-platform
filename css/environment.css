@@ -31,9 +31,12 @@ html.is-journey-locked body {
 }
 
 body.is-stage-alive .cosmic-dust,
-html.is-journey-alive .cosmic-dust,
-body.is-entered .cosmic-dust {
+html.is-journey-alive .cosmic-dust {
   opacity: 1;
+}
+
+body.is-entered .cosmic-dust {
+  opacity: 0;
 }
 
 .cosmic-dust canvas {
@@ -137,11 +140,11 @@ html.is-journey-cta .stage__enter-hint {
   pointer-events: none;
   background: #010101;
   opacity: 0;
-  transition: opacity 0.45s ease-out;
+  transition: opacity 0.72s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .section-veil.is-on {
-  opacity: 0.35;
+  opacity: 0.14;
 }
 
 /* Main content sits above the cosmic wash */

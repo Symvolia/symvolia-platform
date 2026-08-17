@@ -34,17 +34,17 @@
     wrap.appendChild(canvas);
     document.body.appendChild(wrap);
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let W = 0;
     let H = 0;
     let raf = 0;
     const particles = [];
-    const COUNT = Math.min(48, Math.floor((window.innerWidth * window.innerHeight) / 28000));
+    const COUNT = Math.min(28, Math.floor((window.innerWidth * window.innerHeight) / 42000));
 
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       W = window.innerWidth;
       H = window.innerHeight;
       canvas.width = Math.round(W * dpr);
@@ -67,7 +67,26 @@
       }
     }
 
+    function isDustLive() {
+      const stageEl = document.getElementById('stage');
+      return !document.hidden
+        && document.documentElement.classList.contains('is-home')
+        && !document.body.classList.contains('is-entered')
+        && !(stageEl && stageEl.classList.contains('is-diving'));
+    }
+
+    function stop() {
+      if (raf) window.cancelAnimationFrame(raf);
+      raf = 0;
+      ctx.clearRect(0, 0, W, H);
+    }
+
     function tick() {
+      raf = 0;
+      if (!isDustLive()) {
+        ctx.clearRect(0, 0, W, H);
+        return;
+      }
       ctx.clearRect(0, 0, W, H);
       for (let i = 0; i < particles.length; i += 1) {
         const p = particles[i];
@@ -84,7 +103,17 @@
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
-      raf = requestAnimationFrame(tick);
+      raf = window.requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (raf || !isDustLive()) return;
+      raf = window.requestAnimationFrame(tick);
+    }
+
+    function sync() {
+      if (isDustLive()) start();
+      else stop();
     }
 
     resize();
@@ -93,15 +122,16 @@
       resize();
       seed();
     }, { passive: true });
-    raf = requestAnimationFrame(tick);
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        cancelAnimationFrame(raf);
-      } else {
-        raf = requestAnimationFrame(tick);
-      }
-    });
+    document.addEventListener('visibilitychange', sync);
+
+    const mo = new MutationObserver(sync);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    const stageEl = document.getElementById('stage');
+    if (stageEl) mo.observe(stageEl, { attributes: true, attributeFilter: ['class'] });
+
+    sync();
   }
 
   /* ── Soft section veil ───────────────────────────────────────────── */
@@ -118,7 +148,7 @@
   function pulseSectionVeil() {
     if (reduced) return;
     sectionVeil.classList.add('is-on');
-    window.setTimeout(() => sectionVeil.classList.remove('is-on'), 480);
+    window.setTimeout(() => sectionVeil.classList.remove('is-on'), 700);
   }
 
   /* ── Opening orchestration ───────────────────────────────────────── */
@@ -195,23 +225,9 @@
     sections.forEach((el) => io.observe(el));
   }
 
-  /* ── Wire nav clicks to soft veil ────────────────────────────────── */
-  function bindNavVeil() {
-    document.addEventListener(
-      'click',
-      (e) => {
-        const a = e.target.closest && e.target.closest('.main__nav a[href^="#"]');
-        if (!a) return;
-        pulseSectionVeil();
-      },
-      true
-    );
-  }
-
   /* ── Boot ────────────────────────────────────────────────────────── */
   mountCosmicDust();
   bindSectionMood();
-  bindNavVeil();
 
   window.addEventListener('symvolia:intro-complete', (e) => {
     // Cinematic intro owns Enter → homepage. Do NOT unlock library CTA yet.

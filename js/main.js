@@ -21,7 +21,7 @@
   if (!stage || !main) return;
 
   const DIVE_MS = 2600;
-  const REVEAL_START_MS = 1600;
+  const REVEAL_START_MS = 1450;
 
   const STAGE_VOLUME = 0.55;
   const MAIN_VOLUME = 0.5;
@@ -659,7 +659,7 @@
 
     if (scrollAnim) window.cancelAnimationFrame(scrollAnim);
 
-    const span = duration || 900;
+    const span = duration || 1080;
     const t0 = performance.now();
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
@@ -773,16 +773,30 @@
 
     if (enterBtn) enterBtn.disabled = false;
 
-    main.classList.remove('is-visible');
-    main.hidden = true;
+    const reducedMotion = prefersReducedMotion();
+    const fadeMs = reducedMotion ? 0 : 900;
 
     stage.hidden = false;
     stage.removeAttribute('aria-hidden');
     stage.classList.remove('is-diving', 'is-leaving');
     stage.classList.add('stage--alive', 'stage--home-enter', 'stage--home-visible');
     stage.style.visibility = 'visible';
-    stage.style.opacity = '1';
+    stage.style.opacity = '0';
     setHomeChromeVisible(true);
+
+    void stage.offsetWidth;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        main.classList.remove('is-visible');
+        stage.style.opacity = '1';
+      });
+    });
+
+    window.setTimeout(() => {
+      main.hidden = true;
+      stage.style.removeProperty('opacity');
+      stage.style.removeProperty('visibility');
+    }, fadeMs);
 
     window.scrollTo(0, 0);
     try {
@@ -825,9 +839,6 @@
     if (enterBtn) enterBtn.disabled = true;
     if (enterCta) enterCta.classList.remove('is-active');
 
-    // Hard-remove alchemical menu / homepage chrome immediately
-    setHomeChromeVisible(false);
-
     playEnterSound();
 
     fadeAudio(stageAmbient, 0, FADE_MS);
@@ -856,16 +867,17 @@
 
     window.setTimeout(() => {
       document.body.classList.add('is-entered');
+
+      const section = document.getElementById(targetId);
+      if (section) jumpTo(sectionOffset(section));
+      else window.scrollTo(0, 0);
+
       main.classList.add('is-visible');
       revealMainContent();
-
-      window.scrollTo(0, 0);
 
       if (history.replaceState) {
         history.replaceState(null, '', `#${targetId}`);
       }
-
-      scrollToSection(targetId, reducedMotion ? 'auto' : 'smooth');
 
       const focusTarget = document.getElementById(targetId) || main.querySelector('.main__title');
       if (focusTarget) focusTarget.focus({ preventScroll: true });
@@ -877,6 +889,7 @@
     }, leaveDelay);
 
     window.setTimeout(() => {
+      setHomeChromeVisible(false);
       stage.hidden = true;
       stage.setAttribute('aria-hidden', 'true');
       document.documentElement.classList.remove('is-home');

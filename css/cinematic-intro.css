@@ -431,11 +431,9 @@ html.is-cine .sound-toggle {
   transform: scale(0.2);
   transform-origin: 400px 300px;
   transform-box: view-box;
-  filter: blur(10px);
   transition:
     opacity 1600ms var(--ease-cine),
-    transform 1600ms var(--ease-cine),
-    filter 1600ms var(--ease-cine);
+    transform 1600ms var(--ease-cine);
 }
 
 .eye__art .eye__seal image {
@@ -461,14 +459,12 @@ html.is-cine .sound-toggle {
         (160 * var(--intro-core-scale) * var(--intro-stage-scale) * min(100vw, 1540px))
     )
   );
-  filter: blur(0);
 }
 
 .eye-container.is-closing .eye__art .eye__seal {
   opacity: 0;
   transform: scale(0.35);
-  filter: blur(8px);
-  transition-duration: 450ms;
+  transition-duration: 620ms;
 }
 
 /* ── Eyelids ── */

@@ -14,7 +14,7 @@
   const isSunHub = !!document.getElementById('darkSun');
 
   const VOID_MS = 3200;
-  const HUB_LEAVE_MS = 420;
+  const HUB_LEAVE_MS = 720;
   const FADE_MS = 1400;
   const MUTE_KEY = 'symvolia-muted';
 
