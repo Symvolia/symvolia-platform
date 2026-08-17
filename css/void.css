@@ -224,6 +224,24 @@ body.is-entered .sound-toggle {
   transition: opacity 1.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/* Desktop: the film is 9:16 — lay it on its side so it covers the landscape frame. */
+@media (min-width: 821px) {
+  .archive-flow,
+  .dark-sun .archive-flow,
+  html.is-archive-open .dark-sun .archive-flow,
+  html.is-archive-open .dark-sun .archive-flow.is-behind {
+    position: fixed;
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: 100dvh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
 .archive-flow__label {
   position: fixed;
   left: 50%;

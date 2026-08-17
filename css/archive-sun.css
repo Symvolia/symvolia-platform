@@ -261,6 +261,22 @@ html.is-archive-open .dark-sun .archive-flow.is-behind {
   visibility: visible;
 }
 
+@media (min-width: 821px) {
+  .dark-sun .archive-flow,
+  html.is-archive-open .dark-sun .archive-flow,
+  html.is-archive-open .dark-sun .archive-flow.is-behind {
+    position: fixed;
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: 100dvh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
 html.is-archive-open .archive-page--sun .main__header.archive-page__header {
   position: sticky;
   z-index: 40;
