@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/environment.css?v=38">
   <link rel="stylesheet" href="css/responsive.css?v=39">
   <link rel="stylesheet" href="css/archive-page.css?v=7">
-  <link rel="stylesheet" href="css/archive-sun.css?v=13">
+  <link rel="stylesheet" href="css/archive-sun.css?v=14">
   <style>html,body{background:#010101!important}</style>
 </head>
 <body class="esoteric-surface is-entered archive-body dark-sun-body">
@@ -167,10 +167,13 @@
       var video = document.getElementById('archiveFlow');
       var playNow = false;
       var landed = false;
+      var coarse = false;
       try {
         var p = new URLSearchParams(window.location.search);
         playNow = p.get('play') === '1' || p.get('enter') === '1';
         landed = p.get('landed') === '1' || (!!window.location.hash && window.location.hash !== '#');
+        coarse = window.matchMedia('(pointer: coarse)').matches
+          || window.matchMedia('(max-width: 820px)').matches;
       } catch (err) { /* ignore */ }
       if (landed) {
         root.classList.add('is-archive-open');
@@ -179,15 +182,16 @@
       if (!video) return;
       video.muted = true;
       video.defaultMuted = true;
+      video.controls = false;
       video.playsInline = true;
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
       if (landed) {
         video.classList.add('is-playing', 'is-behind');
-      } else if (playNow) {
+        var hold = video.play();
+        if (hold && typeof hold.catch === 'function') hold.catch(function () {});
+      } else if (playNow && !coarse) {
         video.classList.add('is-playing');
-      }
-      if (landed || playNow) {
         var go = video.play();
         if (go && typeof go.catch === 'function') go.catch(function () {});
       }
@@ -196,8 +200,8 @@
 
   <audio id="mainAmbient" preload="auto" loop src="assets/audio/ancient-chants-live.m4a?v=1" aria-hidden="true"></audio>
 
-  <script src="js/archive-flow.js?v=6" defer></script>
+  <script src="js/archive-flow.js?v=7" defer></script>
   <script src="js/archive-page.js?v=8" defer></script>
-  <script src="js/archive-sun.js?v=9" defer></script>
+  <script src="js/archive-sun.js?v=10" defer></script>
 </body>
 </html>

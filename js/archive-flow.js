@@ -2,9 +2,8 @@
  * Sound Archive — the FindArt particle-sun film plays after the click,
  * then the archive is allowed to surface over a looping background.
  *
- * iOS will not start a muted video that is visibility:hidden, display:none,
- * or played after a navigation (the tap is spent). Fade immediately, retry
- * play(), and unlock on the same gesture that opened Sound Archive.
+ * iOS will not start a muted video that is visibility:hidden, or restart it
+ * after a navigation. play() must run in the tap handler; never seek first.
  */
 (function (w) {
   'use strict';
@@ -21,11 +20,13 @@
     video.muted = true;
     video.defaultMuted = true;
     video.volume = 0;
+    video.controls = false;
     video.playsInline = true;
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('muted', '');
     video.setAttribute('autoplay', '');
+    video.removeAttribute('controls');
     video.autoplay = true;
     try { video.preload = 'auto'; } catch (err) { /* ignore */ }
   }
@@ -41,23 +42,6 @@
   function prime(video) {
     if (!video) return;
     arm(video);
-    if (video.readyState < 2) {
-      try { video.load(); } catch (err) { /* ignore */ }
-    }
-  }
-
-  function kickWhile(video, alive) {
-    tryPlay(video);
-    ['loadeddata', 'canplay', 'canplaythrough'].forEach((ev) => {
-      video.addEventListener(ev, () => {
-        if (alive()) tryPlay(video);
-      }, { once: true });
-    });
-    [40, 160, 400, 900, 1800, 3200].forEach((ms) => {
-      w.setTimeout(() => {
-        if (alive()) tryPlay(video);
-      }, ms);
-    });
   }
 
   function bindResume(video) {
@@ -68,9 +52,6 @@
     };
     document.addEventListener('visibilitychange', resume);
     w.addEventListener('pageshow', resume);
-    document.addEventListener('touchstart', () => {
-      if (video.paused) tryPlay(video);
-    }, { passive: true });
   }
 
   function hold(video) {
@@ -78,7 +59,7 @@
     arm(video);
     video.classList.add('is-playing', 'is-behind');
     bindResume(video);
-    kickWhile(video, () => true);
+    tryPlay(video);
   }
 
   function play(video, opts) {
@@ -93,12 +74,12 @@
     }
 
     arm(video);
-
-    // Fade now — iOS will not decode a hidden <video>, and 'playing' may never fire.
     video.classList.add('is-playing');
     if (typeof onStart === 'function') onStart();
 
-    try { video.currentTime = 0; } catch (err) { /* ignore */ }
+    // Must stay inside the tap call stack. Seeking first pauses iOS playback
+    // and the next play() is no longer a user gesture.
+    tryPlay(video);
 
     let revealed = false;
     const reveal = () => {
@@ -120,7 +101,6 @@
     const failSafe = w.setTimeout(reveal, Math.round((revealAt + 0.85) * 1000));
 
     bindResume(video);
-    kickWhile(video, () => !revealed);
   }
 
   w.SymvoliaArchiveFlow = { play, hold, prime, arm, tryPlay, REVEAL_AT };

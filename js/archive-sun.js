@@ -99,19 +99,9 @@
   }
 
   function bind() {
-    const unlock = () => {
-      if (video && window.SymvoliaArchiveFlow) {
-        window.SymvoliaArchiveFlow.arm(video);
-        window.SymvoliaArchiveFlow.tryPlay(video);
-      }
-    };
-
     gate.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      unlock();
-      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-        openArchive();
-      }
+      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') return;
+      openArchive();
     });
 
     gate.addEventListener('click', (e) => {
@@ -162,7 +152,9 @@
     }
     revealArchive();
   } else if (mode === 'play') {
-    openArchive();
+    const needsGesture = window.matchMedia('(pointer: coarse)').matches
+      || window.matchMedia('(max-width: 820px)').matches;
+    if (!needsGesture) openArchive();
   }
 
   const img = world.querySelector('.dark-sun__img');

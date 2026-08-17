@@ -263,20 +263,95 @@
     }, VOID_MS);
   }
 
-  /* Sound Archive: play the film on this tap (iOS needs the gesture),
-     then open the hub over the looping background. */
+  /* Sound Archive: the tap that opens it must also start the film.
+     iOS will not restart a <video> after a navigation, so phones keep this
+     document and bring the archive in over the looping film. */
+  function ensureSheet(href) {
+    const path = href.split('?')[0];
+    if (document.querySelector(`link[href*="${path}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function enterArchiveInPlace() {
+    const video = document.getElementById('archiveFlow');
+    if (video && window.SymvoliaArchiveFlow) {
+      window.SymvoliaArchiveFlow.hold(video);
+    }
+
+    ensureSheet('css/archive-page.css?v=7');
+    ensureSheet('css/archive-sun.css?v=14');
+
+    fetch('archive.html')
+      .then((res) => {
+        if (!res.ok) throw new Error('archive');
+        return res.text();
+      })
+      .then((html) => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const inner = doc.querySelector('.dark-sun__earth-inner');
+        const header = doc.querySelector('.archive-page__header');
+        if (!inner) throw new Error('archive-markup');
+
+        document.title = doc.title || document.title;
+        document.documentElement.classList.add('is-archive-open', 'is-archive-page', 'is-dark-sun');
+        document.documentElement.classList.remove('is-home');
+        document.body.classList.add('is-archive-open', 'is-entered', 'archive-body', 'dark-sun-body');
+
+        if (main) {
+          main.hidden = true;
+          main.setAttribute('aria-hidden', 'true');
+        }
+        if (stage) {
+          stage.hidden = true;
+          stage.setAttribute('aria-hidden', 'true');
+        }
+
+        const existing = document.getElementById('archiveInPlace');
+        if (existing) existing.remove();
+
+        const shell = document.createElement('div');
+        shell.id = 'archiveInPlace';
+        shell.className = 'main is-visible archive-page archive-page--sun';
+        if (header) shell.appendChild(document.importNode(header, true));
+
+        const sun = document.createElement('div');
+        sun.className = 'dark-sun is-flowing is-descended';
+        sun.id = 'darkSun';
+        const earth = document.createElement('div');
+        earth.className = 'dark-sun__earth';
+        earth.id = 'archiveEarth';
+        earth.appendChild(document.importNode(inner, true));
+        sun.appendChild(earth);
+        shell.appendChild(sun);
+
+        if (video && video.parentNode) {
+          video.parentNode.insertBefore(shell, video);
+        } else {
+          document.body.appendChild(shell);
+        }
+
+        try {
+          history.pushState({ archiveInPlace: true }, '', 'archive.html?landed=1');
+        } catch (err) { /* ignore */ }
+
+        window.scrollTo(0, 0);
+      })
+      .catch(() => {
+        window.location.href = 'archive.html?landed=1';
+      });
+  }
+
   function diveToArchivePage(href) {
     if (voidBusy) return;
     voidBusy = true;
 
-    let landed = 'archive.html?landed=1';
     let play = 'archive.html?play=1';
     try {
       const url = new URL(href || ARCHIVE_PAGE, window.location.href);
       url.searchParams.delete('enter');
-      url.searchParams.delete('play');
-      url.searchParams.set('landed', '1');
-      landed = url.pathname + url.search + url.hash;
       url.searchParams.delete('landed');
       url.searchParams.set('play', '1');
       play = url.pathname + url.search + url.hash;
@@ -289,9 +364,7 @@
 
     if (canFilm && needsGesture) {
       window.SymvoliaArchiveFlow.play(flow, {
-        onReveal: () => {
-          window.location.href = landed;
-        },
+        onReveal: enterArchiveInPlace,
       });
       return;
     }
@@ -349,10 +422,6 @@
       e.preventDefault();
       go(e);
     });
-    archivePortalBtn.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      go(e);
-    }, { passive: false });
     archivePortalBtn.addEventListener('click', go);
 
     const flow = document.getElementById('archiveFlow');
