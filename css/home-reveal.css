@@ -679,8 +679,9 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     z-index: 8;
   }
 
-  html.is-home .stage.stage--alive .stage__menu-item:not(.orbit-phrase--duo) {
+  html.is-home .stage.stage--alive a.stage__menu-item:not(.orbit-phrase--duo) {
     white-space: nowrap;
+    text-transform: none;
   }
 }
 
