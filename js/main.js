@@ -805,7 +805,7 @@
     // Archive dive is locked until the homepage sigil has settled.
     if (!libraryUnlocked) return;
     if (!livingAwake) awaken({ silent: false });
-    enterSite('archive');
+    enterSite('bio');
   }
 
   /* One-shot reveal animations are done once the home has settled: drop their
@@ -1255,7 +1255,7 @@
   }
 
   /* Land after the library is laid out — a single jump while main was just
-     un-hidden often measures #archive at y≈0 and leaves the user on Bio. */
+     un-hidden can measure the wrong offset before layout settles. */
   function landOnSection(targetId) {
     const go = () => {
       const section = document.getElementById(targetId);
@@ -1275,7 +1275,7 @@
     window.setTimeout(go, 700);
   }
 
-  function enterSite(targetId = 'archive', opts) {
+  function enterSite(targetId = 'bio', opts) {
     const fromHistory = !!(opts && opts.fromHistory);
     // Critical: never dive to library until homepage has been revealed.
     if (!entered && !libraryUnlocked) return;
@@ -1416,7 +1416,7 @@
   bindStageMenu();
   // Enter CTA is revealed by environment.js after the opening journey.
 
-  if (directEntry) enterLibraryDirect('archive');
+  if (directEntry) enterLibraryDirect('bio');
 
   if (enterBtn) {
     enterBtn.addEventListener('click', handleEnter);
