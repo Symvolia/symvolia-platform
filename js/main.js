@@ -19,7 +19,7 @@
   const ARCHIVE_PAGE = 'archive.html';
   /* Single source of truth for the archive stylesheets used by the in-place
      path. Keep these identical to the <link> versions in archive.html. */
-  const ARCHIVE_CSS = ['css/archive-page.css?v=9', 'css/archive-sun.css?v=16'];
+  const ARCHIVE_CSS = ['css/archive-page.css?v=9', 'css/archive-sun.css?v=17'];
   const ARCHIVE_PREFETCH_TIMEOUT_MS = 8000;
   const HUB_LEAVE_MS = 880;
 
@@ -591,11 +591,6 @@
       diveToArchivePage(archivePortalBtn.getAttribute('href'));
     };
 
-    archivePortalBtn.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') return;
-      e.preventDefault();
-      go(e);
-    });
     archivePortalBtn.addEventListener('click', go);
 
     const flow = document.getElementById('archiveFlow');

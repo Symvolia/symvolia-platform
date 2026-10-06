@@ -113,11 +113,6 @@
   }
 
   function bind() {
-    gate.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') return;
-      openArchive();
-    });
-
     gate.addEventListener('click', (e) => {
       e.preventDefault();
       openArchive();

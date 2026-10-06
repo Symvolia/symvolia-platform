@@ -129,6 +129,7 @@ html.is-dark-sun.is-archive-open body.dark-sun-body {
   background: transparent;
   color: #f4efe6;
   cursor: pointer;
+  touch-action: manipulation;
   container-type: size;
   -webkit-tap-highlight-color: transparent;
 }

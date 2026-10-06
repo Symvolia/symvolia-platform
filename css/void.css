@@ -298,6 +298,7 @@ body.is-entered .sound-toggle {
   background: transparent;
   color: rgba(198, 189, 177, 0.82);
   cursor: pointer;
+  touch-action: manipulation;
   overflow: visible;
   isolation: isolate;
   box-shadow: none;
