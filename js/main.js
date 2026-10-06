@@ -1254,7 +1254,28 @@
     if (tunnel) tunnel.classList.remove('is-active');
   }
 
-  function enterSite(targetId = 'bio', opts) {
+  /* Land after the library is laid out — a single jump while main was just
+     un-hidden often measures #archive at y≈0 and leaves the user on Bio. */
+  function landOnSection(targetId) {
+    const go = () => {
+      const section = document.getElementById(targetId);
+      if (!section) {
+        window.scrollTo(0, 0);
+        return;
+      }
+      jumpTo(sectionOffset(section));
+    };
+    go();
+    requestAnimationFrame(() => {
+      go();
+      requestAnimationFrame(go);
+    });
+    window.setTimeout(go, 60);
+    window.setTimeout(go, 280);
+    window.setTimeout(go, 700);
+  }
+
+  function enterSite(targetId = 'archive', opts) {
     const fromHistory = !!(opts && opts.fromHistory);
     // Critical: never dive to library until homepage has been revealed.
     if (!entered && !libraryUnlocked) return;
@@ -1286,6 +1307,8 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     main.hidden = false;
+    main.removeAttribute('hidden');
+    void main.offsetHeight;
 
     if (!reducedMotion) {
       document.documentElement.classList.add('is-site-entering');
@@ -1302,13 +1325,10 @@
     window.setTimeout(() => {
       document.body.classList.add('is-entered');
 
-      const section = document.getElementById(targetId);
-      if (section) jumpTo(sectionOffset(section));
-      else window.scrollTo(0, 0);
-
       main.classList.add('is-visible');
       if (!reducedMotion) stage.classList.add('is-fading');
       revealMainContent();
+      landOnSection(targetId);
 
       // home → site is a new history entry, so Back returns to the home.
       if (fromHistory) {
@@ -1318,10 +1338,7 @@
       }
       sectionPushed = true;
 
-      if (!focusSection(targetId)) {
-        const title = main.querySelector('.main__title');
-        if (title) title.focus({ preventScroll: true });
-      }
+      focusSection(targetId);
     }, revealDelay);
 
     window.setTimeout(() => {
@@ -1334,6 +1351,8 @@
       if (tunnel) tunnel.classList.remove('is-active');
       document.documentElement.classList.remove('is-home', 'is-site-entering');
       main.removeAttribute('hidden');
+      landOnSection(targetId);
+      focusSection(targetId);
     }, hideDelay);
   }
 
