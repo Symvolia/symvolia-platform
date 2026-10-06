@@ -474,6 +474,13 @@
 
     if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.pause();
 
+    // The film has done its job — stop decoding it behind the site.
+    const film = document.getElementById('archiveFlow');
+    if (film) {
+      film.classList.remove('is-playing', 'is-behind');
+      try { film.pause(); } catch (err) { /* ignore */ }
+    }
+
     if (entered) writeHistory('replaceState', { symv: 'section', id: 'archive' }, `${HOME_PATH}#archive`);
     else writeHistory('replaceState', { symv: 'home' }, `${HOME_PATH}#home`);
 

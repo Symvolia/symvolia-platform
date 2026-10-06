@@ -7,7 +7,19 @@
 
   const delay = (ms) => new Promise((r) => window.setTimeout(r, ms));
   const SEAL_URL = 'assets/logo-seal.png?v=3';
-  const EMBLEM_URL = 'assets/symvolia-emblem-corona-hd.png?v=3';
+  const supportsWebP = (() => {
+    try {
+      const c = document.createElement('canvas');
+      c.width = c.height = 1;
+      return c.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    } catch (_) {
+      return false;
+    }
+  })();
+  // Same URL as the <picture> source / <link rel=preload> → one download.
+  const EMBLEM_URL = supportsWebP
+    ? 'assets/symvolia-emblem-corona-hd.webp?v=1'
+    : 'assets/symvolia-emblem-corona-hd.png?v=3';
   const PRELOAD_MS = 2500;
   const FAILSAFE_MS = 4000;
   const INTRO_SEEN_KEY = 'symvolia-intro-seen';
@@ -23,7 +35,7 @@
   // Direct entry (returning from the archive page): the film has no business here.
   if (root.classList.contains('is-direct')) {
     if (cine.parentNode) cine.parentNode.removeChild(cine);
-    root.classList.remove('loading');
+    deferredSheetsReady().then(() => root.classList.remove('loading'));
     return;
   }
 
@@ -55,6 +67,20 @@
   async function waitUntil(targetMs) {
     const wait = targetMs - (performance.now() - introT0);
     if (wait > 0) await delay(wait);
+  }
+
+  /* Non-blocking sheets (link[data-defer-css]) — wait for them before the first
+     frame so nothing shows unstyled. Never rejects; bounded by PRELOAD_MS. */
+  function deferredSheetsReady() {
+    const links = Array.from(document.querySelectorAll('link[data-defer-css]'));
+    const all = Promise.all(links.map((link) => {
+      if (link.media === 'all') return Promise.resolve();
+      return new Promise((resolve) => {
+        link.addEventListener('load', () => resolve(), { once: true });
+        link.addEventListener('error', () => resolve(), { once: true });
+      });
+    }));
+    return Promise.race([all, delay(PRELOAD_MS)]);
   }
 
   function loadImage(src, timeoutMs) {
@@ -209,6 +235,7 @@
     await Promise.all([
       loadImage(EMBLEM_URL, PRELOAD_MS),
       loadImage(SEAL_URL, PRELOAD_MS),
+      deferredSheetsReady(),
     ]);
 
     await delay(40);

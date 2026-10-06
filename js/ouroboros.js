@@ -88,7 +88,13 @@
   // ── Ring image ──
   const ring = new Image();
   let ringReady = false;
-  ring.src = 'assets/ouroboros-photo.png?v=1';
+  let ringWebP = false;
+  try {
+    const probe = document.createElement('canvas');
+    probe.width = probe.height = 1;
+    ringWebP = probe.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  } catch (err) { /* PNG fallback */ }
+  ring.src = ringWebP ? 'assets/ouroboros-photo.webp?v=1' : 'assets/ouroboros-photo.png?v=1';
   ring.onload = () => {
     ringReady = true;
   };

@@ -593,6 +593,10 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     display: block;
     opacity: 1;
     background-image: url('../assets/home-corona-bg-desktop.png?v=6');
+    background-image: image-set(
+      url('../assets/home-corona-bg-desktop.webp?v=1') type('image/webp'),
+      url('../assets/home-corona-bg-desktop.png?v=6') type('image/png')
+    );
   }
 
   html.is-home .stage.stage--alive.stage--home-visible .stage__corona-bg {
@@ -703,6 +707,10 @@ html.is-home .stage.stage--alive .stage__corona-bg {
     display: block;
     opacity: 1;
     background-image: url('../assets/home-corona-bg-mobile.png?v=6');
+    background-image: image-set(
+      url('../assets/home-corona-bg-mobile.webp?v=1') type('image/webp'),
+      url('../assets/home-corona-bg-mobile.png?v=6') type('image/png')
+    );
   }
 
   html.is-home .stage.stage--alive.stage--home-visible .stage__corona-bg {

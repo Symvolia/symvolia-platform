@@ -27,23 +27,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=43">
+  <link rel="stylesheet" href="css/style.css?v=44">
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=42">
-  <link rel="stylesheet" href="css/void.css?v=61">
+  <link rel="stylesheet" href="css/void.css?v=61" media="print" onload="this.media='all'" data-defer-css>
   <link rel="stylesheet" href="css/cinematic-intro.css?v=89">
-  <link rel="preload" as="image" href="assets/symvolia-emblem-corona-hd.png?v=3">
+  <link rel="preload" as="image" href="assets/symvolia-emblem-corona-hd.webp?v=1" type="image/webp">
   <link rel="preload" as="image" href="assets/logo-seal.png?v=3">
-  <link rel="stylesheet" href="css/home-reveal.css?v=54">
+  <link rel="stylesheet" href="css/home-reveal.css?v=55">
   <link rel="stylesheet" href="css/ouroboros.css?v=38">
   <link rel="stylesheet" href="css/design-system.css?v=39">
-  <link rel="stylesheet" href="css/environment.css?v=39">
+  <link rel="stylesheet" href="css/environment.css?v=39" media="print" onload="this.media='all'" data-defer-css>
+  <noscript><link rel="stylesheet" href="css/void.css?v=61"><link rel="stylesheet" href="css/environment.css?v=39"></noscript>
   <link rel="stylesheet" href="css/responsive.css?v=39">
-  <style>html,body{background:#010101!important}</style>
+  <style>html,body{background:#010101!important}
+  /* void.css loads without blocking render: keep its layers out of sight until it is applied */
+  html:not(.css-ready) .void,html:not(.css-ready) .archive-flow,html:not(.css-ready) .archive-flow__label{display:none!important}</style>
   <script>
     (function () {
       var root = document.documentElement;
       root.classList.add('loading');
+      // Non-blocking sheets (data-defer-css): flag when all are applied.
+      var left = 0, flagged = false;
+      function flag() { if (!flagged) { flagged = true; root.classList.add('css-ready'); } }
+      document.addEventListener('DOMContentLoaded', function () {
+        var links = document.querySelectorAll('link[data-defer-css]');
+        left = links.length;
+        if (!left) return flag();
+        Array.prototype.forEach.call(links, function (l) {
+          var done = function () { if (--left <= 0) flag(); };
+          if (l.media === 'all') done();
+          else { l.addEventListener('load', done, { once: true }); l.addEventListener('error', done, { once: true }); }
+        });
+        window.setTimeout(flag, 4000);
+      });
       // Coming back from the dedicated Sound Archive page: no intro, no homepage —
       // we surface straight into the library, still veiled by the void.
       if (/[?&]from=archive/.test(window.location.search)) {
@@ -72,14 +89,17 @@
 
     <!-- Corona + seal layers — seal scales per viewport -->
     <div class="cine__emblem" aria-hidden="true">
-      <img
-        class="cine__emblem-bg"
-        src="assets/symvolia-emblem-corona-hd.png?v=3"
-        width="2400"
-        height="2400"
-        alt=""
-        decoding="async"
-      />
+      <picture>
+        <source srcset="assets/symvolia-emblem-corona-hd.webp?v=1" type="image/webp">
+        <img
+          class="cine__emblem-bg"
+          src="assets/symvolia-emblem-corona-hd.png?v=3"
+          width="2400"
+          height="2400"
+          alt=""
+          decoding="async"
+        />
+      </picture>
       <div class="cine__emblem-disc" aria-hidden="true"></div>
       <img
         class="cine__emblem-seal"
@@ -311,7 +331,7 @@
             <div class="stage__sigil" id="sigilCore" aria-hidden="true">
               <div class="stage__sigil-glow" aria-hidden="true"></div>
               <div class="stage__sigil-reveal">
-                    <img src="assets/logo-seal-home.png?v=1" alt="Symvolia" class="stage__sigil-img" width="1024" height="1024">
+                    <picture><source srcset="assets/logo-seal-home.webp?v=1" type="image/webp"><img src="assets/logo-seal-home.png?v=1" alt="Symvolia" class="stage__sigil-img" width="1024" height="1024"></picture>
               </div>
             </div>
 
@@ -474,14 +494,17 @@
     <section class="main__archive" id="archive" tabindex="-1">
       <div class="archive-portal archive-portal--sun reveal" data-reveal>
         <a class="archive-portal__btn" id="archivePortalBtn" href="archive.html">
-          <img
-            class="archive-portal__sun"
-            src="assets/archive-seal.png?v=1"
-            width="576"
-            height="1024"
-            alt=""
-            decoding="async"
-          >
+          <picture>
+            <source srcset="assets/archive-seal.webp?v=1" type="image/webp">
+            <img
+              class="archive-portal__sun"
+              src="assets/archive-seal.png?v=1"
+              width="576"
+              height="1024"
+              alt=""
+              decoding="async"
+            >
+          </picture>
           <span class="archive-portal__label">Sound<br>Archive</span>
         </a>
       </div>
@@ -542,13 +565,13 @@
   </video>
   <p class="archive-flow__label" id="archiveFlowLabel" hidden>Sound<br>Archive</p>
 
-  <script src="js/ouroboros.js?v=5" defer></script>
+  <script src="js/ouroboros.js?v=6" defer></script>
   <script src="js/void-blackhole.js?v=7" defer></script>
   <script src="js/archive-flow.js?v=8" defer></script>
   <script src="js/archive-ambient.js?v=1" defer></script>
-  <script src="js/main.js?v=45" defer></script>
-  <script src="js/environment.js?v=8" defer></script>
+  <script src="js/main.js?v=46" defer></script>
+  <script src="js/environment.js?v=9" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
-  <script src="js/cinematic-intro.js?v=27" defer></script>
+  <script src="js/cinematic-intro.js?v=28" defer></script>
 </body>
 </html>

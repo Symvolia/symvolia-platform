@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════════════════════
    Symvolia — Living Environment Orchestrator
    Opens the site as one cosmic continuum: eye → veil → ouroboros → CTA → dive.
-   Works with main.js via window.Symvolia and custom events from intro-eye.js.
+   Works with main.js via window.Symvolia and custom events from cinematic-intro.js.
    ══════════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';

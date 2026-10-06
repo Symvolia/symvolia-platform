@@ -1654,3 +1654,8 @@ html.is-archive-open .stage *,
 .main__title:focus {
   outline: none;
 }
+
+/* <picture> wrappers (WebP + PNG fallback) must not alter layout. */
+picture {
+  display: contents;
+}
