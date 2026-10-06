@@ -197,17 +197,16 @@
   // ── Render one frame ──
   let angle = 0;
   let lastTs = 0;
-  let startTs = 0;
+  let clock = 0; // animation time (ms); only advances while the loop runs
   let lastBurstCycle = -1;
 
   function frame(ts) {
-    if (!startTs) {
-      startTs = ts;
-      lastTs = ts;
-    }
-    const t = ts - startTs;
+    if (!lastTs) lastTs = ts; // first frame / first frame after resume: dt = 0
     const dt = Math.min(64, ts - lastTs);
     lastTs = ts;
+    // Accumulated clock (not wall time) → pausing never skips phases or snaps.
+    clock += dt;
+    const t = clock;
 
     // Advance rotation by integrating angular velocity (seamless, no snaps).
     angle += CONFIG.direction * velAt(t) * dt;
@@ -371,19 +370,71 @@
       drawStatic();
       return;
     }
-    startTs = 0;
+    clock = 0;
     lastTs = 0;
-    raf = requestAnimationFrame(frame);
+    sync();
   }
 
   function isAlive() {
     return stage.classList.contains('stage--alive');
   }
 
+  /* ── Visibility gating: draw only while the home sigil is actually on screen ── */
+  let canvasVisible = true; // until the IntersectionObserver says otherwise
+
+  function shouldRun() {
+    return started
+      && !reduced
+      && !document.hidden
+      && !stage.hidden
+      && document.documentElement.classList.contains('is-home')
+      && canvasVisible;
+  }
+
+  function pause() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    lastTs = 0; // next frame restarts with dt = 0 (no jump)
+  }
+
+  function resume() {
+    if (raf || !shouldRun()) return;
+    resize(); // layout may have changed while hidden
+    lastTs = 0;
+    raf = requestAnimationFrame(frame);
+  }
+
+  function sync() {
+    if (shouldRun()) resume();
+    else pause();
+  }
+
+  document.addEventListener('visibilitychange', sync);
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      const last = entries[entries.length - 1];
+      canvasVisible = !!(last && last.isIntersecting);
+      sync();
+    }).observe(canvas);
+  }
+
+  // Home entered / left (html.is-home) and stage hidden / shown.
+  new MutationObserver(sync).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+  new MutationObserver(sync).observe(stage, {
+    attributes: true,
+    attributeFilter: ['hidden'],
+  });
+
   window.addEventListener('resize', () => {
     resize();
     if (reduced && started) drawStatic();
   });
+
+  window.SymvoliaOuroboros = { pause, resume };
 
   if (isAlive()) {
     start();

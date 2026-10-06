@@ -83,6 +83,12 @@
     fadeTimers.set(el, timer);
   }
 
+  /* The ouroboros canvas loop only runs while the home sigil is on screen. */
+  function ouroboros(action) {
+    const api = window.SymvoliaOuroboros;
+    if (api && typeof api[action] === 'function') api[action]();
+  }
+
   function warmMedia(el) {
     if (!el) return;
     try {
@@ -337,6 +343,7 @@
         stage.removeAttribute('aria-hidden');
       }
       if (livingAwake) startStageAmbient();
+      ouroboros('resume');
     }
 
     if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.pause();
@@ -431,6 +438,7 @@
           stage.hidden = true;
           stage.setAttribute('aria-hidden', 'true');
         }
+        ouroboros('pause');
 
         const existing = document.getElementById('archiveInPlace');
         if (existing) existing.remove();
@@ -619,6 +627,7 @@
     setHomeChromeVisible(false);
     stage.hidden = true;
     stage.setAttribute('aria-hidden', 'true');
+    ouroboros('pause');
     if (enterCta) enterCta.classList.remove('is-active');
 
     main.hidden = false;
@@ -727,6 +736,7 @@
     awaken({ silent: true });
     if (!silent) playEnterSound();
     startStageAmbient();
+    ouroboros('resume');
 
     stage.classList.add('stage--alive', 'stage--home-enter');
     stage.classList.remove('stage--home-visible');
@@ -1057,6 +1067,7 @@
     stage.style.visibility = 'visible';
     stage.style.opacity = '0';
     setHomeChromeVisible(true);
+    ouroboros('resume');
 
     void stage.offsetWidth;
     requestAnimationFrame(() => {
@@ -1164,6 +1175,7 @@
       stage.classList.add('is-leaving');
       stage.hidden = true;
       stage.setAttribute('aria-hidden', 'true');
+      ouroboros('pause');
       if (tunnel) tunnel.classList.remove('is-active');
       document.documentElement.classList.remove('is-home', 'is-site-entering');
       main.removeAttribute('hidden');
