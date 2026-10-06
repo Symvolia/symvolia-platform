@@ -1,20 +1,16 @@
 /**
  * Symvolia — Sound Archive pages (the hub and every single passage).
- * Passage pages still emerge from / return through the void.
- * The Dark Sun hub uses its own descent instead of the alchemical veil.
+ * Passage links navigate natively. The Dark Sun hub keeps a short leave fade.
  */
 (function () {
   'use strict';
 
-  const voidPortal = document.getElementById('voidPortal');
-  const voidParticles = document.getElementById('voidParticles');
   const soundToggle = document.getElementById('soundToggle');
   const mainAmbient = document.getElementById('mainAmbient');
   const page = document.querySelector('.archive-page');
   const isSunHub = !!document.getElementById('darkSun');
   const hubAmbient = isSunHub && window.SymvoliaArchiveAmbient;
 
-  const VOID_MS = 2600;
   const HUB_LEAVE_MS = 880;
   const FADE_MS = 1400;
   const MUTE_KEY = 'symvolia-muted';
@@ -25,45 +21,9 @@
 
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── Void particles (shared markup with the main page) ── */
-  let particlesBuilt = false;
-
-  function buildVoidParticles() {
-    if (particlesBuilt || !voidParticles) return;
-
-    const frag = document.createDocumentFragment();
-
-    for (let i = 0; i < 30; i += 1) {
-      const particle = document.createElement('span');
-      particle.className = 'void__particle';
-
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 32 + Math.random() * 58;
-
-      particle.style.setProperty('--tx', `${(Math.cos(angle) * dist).toFixed(1)}vmax`);
-      particle.style.setProperty('--ty', `${(Math.sin(angle) * dist).toFixed(1)}vmax`);
-      particle.style.setProperty('--size', `${(3 + Math.random() * 6).toFixed(1)}px`);
-      particle.style.setProperty('--delay', `${Math.floor(Math.random() * 480)}ms`);
-
-      frag.appendChild(particle);
-    }
-
-    voidParticles.appendChild(frag);
-    particlesBuilt = true;
-  }
-
-  if (voidParticles) buildVoidParticles();
-
-  /* ── Arrival: drop the veil once it has dissolved ── */
-  if (voidPortal && !isSunHub) {
-    window.setTimeout(() => {
-      voidPortal.classList.remove('is-arriving');
-    }, reduced() ? 0 : VOID_MS);
-  }
-
-  /* ── Departure: dive back into the void, then hand over to the next page ── */
   let leaving = false;
 
+  /* Hub only: short fade before navigating into a passage. Passages use native links. */
   function leaveThrough(go) {
     if (leaving) return;
     leaving = true;
@@ -76,28 +36,7 @@
       return;
     }
 
-    if (!voidPortal || reduced()) {
-      go();
-      return;
-    }
-
-    if (page) page.classList.add('is-leaving');
-    if (mainAmbient) fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.74));
-
-    // Canvas black hole for every forward passage inside the archive.
-    if (window.SymvoliaVoid) {
-      window.SymvoliaVoid.start({
-        duration: VOID_MS,
-        interactive: true,
-        onMid: go,
-      });
-      return;
-    }
-
-    voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
-    void voidPortal.offsetWidth;
-    voidPortal.classList.add('is-active');
-    window.setTimeout(go, Math.round(VOID_MS * 0.74));
+    go();
   }
 
   function leaveTo(href) {
@@ -106,31 +45,17 @@
     });
   }
 
-  /* ── Return: a page restored from the back/forward cache comes back exactly
-     as it was left — sunk in the void, with every link already spent. It has to
-     be lifted out, or the reader lands on a black, unresponsive page. ── */
+  /* bfcache restore: clear leave state and restart ambient — no overlay. */
   window.addEventListener('pageshow', (e) => {
     if (!e.persisted) return;
-
     leaving = false;
     if (page) page.classList.remove('is-leaving');
-    if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
-
-    if (voidPortal && !isSunHub) {
-      voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
-      if (!reduced()) {
-        void voidPortal.offsetWidth;
-        voidPortal.classList.add('is-arriving');
-        window.setTimeout(() => voidPortal.classList.remove('is-arriving'), VOID_MS);
-      }
-    }
-
     startAmbient();
   });
 
-  // Forward moves inside the archive — hub → passages → next passage —
-  // travel through the black hole. The back arrow does not.
-  function bindVoidExits() {
+  function bindHubExits() {
+    if (!isSunHub) return;
+
     document.addEventListener('click', (e) => {
       if (e.defaultPrevented) return;
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
@@ -167,9 +92,9 @@
     }
   }
 
-  // The arrow goes straight back — no black hole, no delay. Within the archive
-  // it retraces history; leaving for the site it follows its written href,
-  // which carries the marker that skips the intro.
+  // The arrow goes straight back — no delay. Within the archive it retraces
+  // history; leaving for the site it follows its written href, which carries
+  // the marker that skips the intro.
   function bindBackLink() {
     const back = document.querySelector('.main__back');
     if (!back) return;
@@ -452,7 +377,7 @@
 
   bindSoundToggle();
   bindAmbientLifecycle();
-  bindVoidExits();
+  bindHubExits();
   bindBackLink();
   bindReveals();
   bindMailMenu();
