@@ -654,7 +654,6 @@
   }
 
   function resetArchive() {
-    if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
     if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
     if (main) main.classList.remove('is-void-sucked');
     const flow = document.getElementById('archiveFlow');
