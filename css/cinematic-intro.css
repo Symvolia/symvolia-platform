@@ -130,7 +130,7 @@ html.is-cine .sound-toggle {
 
 /* ── Emblem: corona field + responsive seal layer ── */
 .cine__emblem {
-  --emblem-field: max(100vw, 100vh);
+  --emblem-field: max(100vw, var(--vh100, 100vh));
   /* Calibrated to sun interior on 2400px master (rim ≈ 543px) */
   --emblem-seal-ratio: 0.456;
   --emblem-sun-inner-ratio: 0.468;
@@ -703,6 +703,19 @@ html.is-cine .sound-toggle {
   background: rgba(20, 14, 10, 0.55);
   box-shadow: 0 0 36px rgba(196, 146, 42, 0.16);
   outline: none;
+}
+
+/* Phones: no live backdrop blur on the Enter button — flat translucent fill. */
+@media (max-width: 820px), (pointer: coarse) {
+  .cine__enter {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(1, 1, 1, 0.62);
+  }
+  .cine__enter:hover,
+  .cine__enter:focus-visible {
+    background: rgba(20, 14, 10, 0.72);
+  }
 }
 
 .cine__enter-label--tap {

@@ -569,8 +569,8 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   position: fixed;
   left: 50%;
   top: calc(50% - var(--home-lift));
-  width: calc(var(--home-corona-iw) * max(100vw / var(--home-corona-iw), 100vh / var(--home-corona-ih)));
-  height: calc(var(--home-corona-ih) * max(100vw / var(--home-corona-iw), 100vh / var(--home-corona-ih)));
+  width: calc(var(--home-corona-iw) * max(100vw / var(--home-corona-iw), var(--vh100, 100vh) / var(--home-corona-ih)));
+  height: calc(var(--home-corona-ih) * max(100vw / var(--home-corona-iw), var(--vh100, 100vh) / var(--home-corona-ih)));
   transform: translate(-50%, -50%);
   z-index: 0;
   pointer-events: none;
@@ -585,7 +585,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 2560;
     --home-corona-ih: 1440;
-    --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 2560, 100vh / 1440));
+    --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 2560, var(--vh100, 100vh) / 1440));
     --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
   }
 
@@ -686,7 +686,7 @@ html.is-home .stage.stage--alive .stage__corona-bg {
   html.is-home .stage.stage--alive {
     --home-corona-iw: 1440;
     --home-corona-ih: 2560;
-    --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 1440, 100vh / 2560));
+    --home-disc: calc(2 * var(--home-disc-r) * max(100vw / 1440, var(--vh100, 100vh) / 2560));
     --home-rim: 0.4cm;
     --home-sigil: calc(var(--home-disc) - 2 * var(--home-rim));
     --home-lift: max(2.6cm, 7vh);

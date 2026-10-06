@@ -683,7 +683,16 @@
     enterSite('bio');
   }
 
+  /* One-shot reveal animations are done once the home has settled: drop their
+     compositing hints (mirrors _clearWillChange in the intro). */
+  function releaseHomeWillChange() {
+    stage.querySelectorAll('.eye__ball, .stage__sigil-reveal').forEach((el) => {
+      el.style.willChange = 'auto';
+    });
+  }
+
   function unlockLibraryNav() {
+    releaseHomeWillChange();
     libraryUnlocked = true;
     document.documentElement.classList.add('is-journey-cta');
     showEnterCta();

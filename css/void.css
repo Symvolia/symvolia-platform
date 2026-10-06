@@ -513,6 +513,21 @@ html.is-void-arrival .void,
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
+}
+
+/* Layer hints only while the hole is actually animating */
+.void.is-active .void__gradient,
+.void.is-active .void__vortex,
+.void.is-active .void__glow,
+.void.is-active .void__core,
+.void.is-closing .void__gradient,
+.void.is-closing .void__vortex,
+.void.is-closing .void__glow,
+.void.is-closing .void__core,
+.void.is-arriving .void__gradient,
+.void.is-arriving .void__vortex,
+.void.is-arriving .void__glow,
+.void.is-arriving .void__core {
   will-change: transform, opacity;
 }
 
@@ -625,8 +640,13 @@ html.is-void-arrival .void,
     var(--void-ember) 65%,
     transparent 100%);
   opacity: 0;
-  will-change: transform, opacity;
   box-shadow: 0 0 6px rgba(242, 193, 78, 0.6);
+}
+
+.void.is-active .void__particle,
+.void.is-closing .void__particle,
+.void.is-arriving .void__particle {
+  will-change: transform, opacity;
 }
 
 /* ── Dive: fall into the black hole ── */
@@ -778,5 +798,18 @@ html.is-void-arrival .void,
     transform: none !important;
     filter: none !important;
     opacity: 0 !important;
+  }
+}
+
+/* Phones: drop the heaviest paint effects (live backdrop blur, 34px blur layer). */
+@media (max-width: 820px), (pointer: coarse) {
+  .sound-toggle {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(6, 5, 4, 0.8);
+  }
+
+  .archive-portal__aura {
+    filter: none;
   }
 }
