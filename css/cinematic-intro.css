@@ -49,6 +49,48 @@ html.loading .scroll-progress {
   opacity: 0 !important;
 }
 
+/* Minimal loader — never leave the user on empty black */
+.boot-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: #010101;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 280ms ease, visibility 280ms linear;
+}
+
+html.loading .boot-loader {
+  opacity: 1;
+  visibility: visible;
+}
+
+.boot-loader__ring {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 235, 224, 0.22);
+  box-shadow:
+    0 0 0 1px rgba(1, 1, 1, 0.9) inset,
+    0 0 28px rgba(242, 235, 224, 0.08);
+  animation: bootPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes bootPulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.92); }
+  50% { opacity: 0.9; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-loader__ring {
+    animation: none;
+    opacity: 0.65;
+  }
+}
+
 html.is-cine .stage,
 html.is-cine .main,
 html.is-cine .scroll-progress {

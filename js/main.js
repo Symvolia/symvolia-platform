@@ -78,10 +78,21 @@
     fadeTimers.set(el, timer);
   }
 
+  function warmMedia(el) {
+    if (!el) return;
+    try {
+      if (el.preload !== 'auto') el.preload = 'auto';
+      if (typeof el.load === 'function') el.load();
+    } catch (err) {
+      /* ignore */
+    }
+  }
+
   function startStageAmbient() {
     if (!stageAmbient) return;
     if (!stageAmbient.paused && stageAmbient.volume > 0) return;
 
+    warmMedia(stageAmbient);
     stageAmbient.volume = 0;
     const p = stageAmbient.play();
     if (p !== undefined) {
@@ -90,6 +101,11 @@
     } else {
       fadeAudio(stageAmbient, STAGE_VOLUME, FADE_MS);
     }
+  }
+
+  function warmSiteAudio() {
+    warmMedia(mainAmbient);
+    warmMedia(enterSound);
   }
 
   function bindAmbientFallback() {
@@ -104,6 +120,7 @@
 
   function playEnterSound() {
     if (!enterSound) return;
+    warmSiteAudio();
     try {
       enterSound.currentTime = 0;
       enterSound.volume = ENTER_SOUND_VOLUME;
@@ -1065,7 +1082,17 @@
   const directEntry = document.documentElement.classList.contains('is-direct');
 
   bindSoundToggle();
-  if (!directEntry) startStageAmbient();
+  // Stage ambient waits for intro-complete (or direct entry) so boot stays light.
+  if (directEntry) startStageAmbient();
+  else {
+    window.addEventListener('symvolia:intro-complete', () => {
+      warmMedia(stageAmbient);
+      startStageAmbient();
+    }, { once: true });
+    window.addEventListener('symvolia:home-ready', () => {
+      warmSiteAudio();
+    }, { once: true });
+  }
   bindAmbientFallback();
   bindAmbientLifecycle();
   bindSectionNavigation();

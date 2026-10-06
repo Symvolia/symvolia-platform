@@ -6,6 +6,11 @@
   'use strict';
 
   const delay = (ms) => new Promise((r) => window.setTimeout(r, ms));
+  const SEAL_URL = 'assets/logo-seal.png?v=3';
+  const EMBLEM_URL = 'assets/symvolia-emblem-corona-hd.png?v=3';
+  const PRELOAD_MS = 2500;
+  const FAILSAFE_MS = 4000;
+  const INTRO_SEEN_KEY = 'symvolia-intro-seen';
 
   const reduced =
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,13 +41,31 @@
   let entered = false;
   let unlockSkip = false;
   let introT0 = 0;
+  let shortIntro = false;
 
-  const BRAND_AT_MS = 2000;
-  const ENTER_AT_MS = 3500;
+  try {
+    shortIntro = sessionStorage.getItem(INTRO_SEEN_KEY) === '1';
+  } catch (_) {
+    shortIntro = false;
+  }
+
+  const BRAND_AT_MS = shortIntro || reduced ? 80 : 2000;
+  const ENTER_AT_MS = shortIntro || reduced ? 520 : 3500;
 
   async function waitUntil(targetMs) {
     const wait = targetMs - (performance.now() - introT0);
     if (wait > 0) await delay(wait);
+  }
+
+  function loadImage(src, timeoutMs) {
+    return Promise.race([
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = img.onerror = () => resolve();
+        img.src = src;
+      }),
+      delay(timeoutMs),
+    ]);
   }
 
   const timeline = {
@@ -63,6 +86,7 @@
       this.destroyed = true;
       this.playing = false;
       if (this._noiseRaf) cancelAnimationFrame(this._noiseRaf);
+      this._noiseRaf = 0;
       this._clearWillChange();
       cleanup();
     },
@@ -72,8 +96,8 @@
         await phase0();
         introT0 = performance.now();
         if (this.destroyed) return;
-        if (reduced) {
-          await reducedPath();
+        if (reduced || shortIntro) {
+          await shortPath();
           return;
         }
         phaseEyeFlow();
@@ -132,7 +156,7 @@
   }
 
   function initNoise() {
-    if (!noiseCanvas || reduced) return;
+    if (!noiseCanvas || reduced || shortIntro) return;
     const ctx = noiseCanvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
@@ -153,7 +177,10 @@
     window.addEventListener('resize', resize, { passive: true });
 
     const tick = () => {
-      if (timeline.destroyed) return;
+      if (timeline.destroyed || !root.classList.contains('is-cine')) {
+        timeline._noiseRaf = 0;
+        return;
+      }
       frame += 1;
       if (frame % 4 === 0) {
         const img = ctx.createImageData(w, h);
@@ -173,33 +200,23 @@
     timeline._noiseRaf = requestAnimationFrame(tick);
   }
 
-  /* ── Phase 0 — preload into void ── */
+  /* ── Phase 0 — first-frame images only (no window.load gate) ── */
   async function phase0() {
     timeline.currentPhase = 0;
     root.classList.add('is-cine', 'loading');
     body.style.overflow = 'hidden';
 
-    await Promise.all(
-      ['assets/logo.png', 'assets/logo.svg', 'assets/logo-sigil.png', 'assets/logo-seal.png'].map(
-        (src) =>
-          new Promise((resolve) => {
-            const img = new Image();
-            img.onload = img.onerror = () => resolve();
-            img.src = src;
-          })
-      )
-    );
+    await Promise.all([
+      loadImage(EMBLEM_URL, PRELOAD_MS),
+      loadImage(SEAL_URL, PRELOAD_MS),
+    ]);
 
-    if (document.readyState !== 'complete') {
-      await new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
-    }
-
-    await delay(60);
+    await delay(40);
     root.classList.remove('loading');
     show(cine);
     cine.classList.add('is-shown');
     initNoise();
-    await delay(120);
+    await delay(shortIntro || reduced ? 40 : 100);
   }
 
   /** Eye opens in parallel — brand at 2s, enter at 3.5s from first frame shown. */
@@ -241,9 +258,9 @@
         animateTo(letter, {
           opacity: 1,
           transform: 'translate3d(0, 0, 0)',
-          duration: 480,
+          duration: shortIntro ? 280 : 480,
           easing: 'var(--ease-soft)',
-          delayMs: i * 32,
+          delayMs: shortIntro ? i * 18 : i * 32,
         })
       )
     );
@@ -261,7 +278,7 @@
     requestAnimationFrame(() => {
       enterBtn.classList.add('is-visible');
     });
-    await delay(820);
+    await delay(shortIntro ? 220 : 820);
 
     try {
       window.dispatchEvent(new CustomEvent('symvolia:intro-complete', { detail: { cine: true } }));
@@ -295,10 +312,11 @@
     await phaseEnterReady();
   }
 
-  async function reducedPath() {
-    cine.classList.add('cine--static', 'is-shown', 'is-brand', 'is-grain');
+  async function shortPath() {
+    cine.classList.add('is-shown', 'is-brand', 'is-grain');
+    if (reduced) cine.classList.add('cine--static');
     show(eye);
-    eye.classList.add('is-open', 'is-seal', 'is-settled');
+    eye.classList.add('is-open', 'is-seal', 'is-settled', 'is-breathing');
     if (vignette) {
       show(vignette);
       vignette.classList.add('is-shown');
@@ -316,6 +334,12 @@
     timeline.currentPhase = 5;
     unlockSkip = false;
     if (enterBtn) enterBtn.disabled = true;
+
+    try {
+      sessionStorage.setItem(INTRO_SEEN_KEY, '1');
+    } catch (_) {
+      /* */
+    }
 
     if (enterBtn) {
       enterBtn.classList.remove('is-visible');
@@ -439,10 +463,10 @@
   document.addEventListener('keydown', onSkipKey, true);
   bindCursor();
 
-  // Safety net — don't leave users stranded
+  // Safety net — short, because phase0 no longer waits on window.load
   window.setTimeout(() => {
     if (timeline.currentPhase < 4 && !timeline.destroyed) jumpToReady();
-  }, 12000);
+  }, FAILSAFE_MS);
 
   window.SymvoliaCine = timeline;
   timeline.play();
