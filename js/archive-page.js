@@ -238,7 +238,7 @@
     if (soundToggle) {
       soundToggle.classList.toggle('is-muted', muted);
       soundToggle.setAttribute('aria-pressed', String(!muted));
-      soundToggle.setAttribute('aria-label', muted ? 'Attiva audio' : 'Disattiva audio');
+      soundToggle.setAttribute('aria-label', muted ? 'Unmute audio' : 'Mute audio');
     }
 
     if (persist) {
@@ -363,7 +363,7 @@
         { label: 'Gmail', href: `https://mail.google.com/mail/?view=cm&fs=1&to=${enc}`, external: true },
         { label: 'Outlook', href: `https://outlook.live.com/mail/0/deeplink/compose?to=${enc}`, external: true },
         { label: 'App Mail', href: `mailto:${email}`, external: false },
-        { label: 'Copia indirizzo', action: 'copy' },
+        { label: 'Copy address', action: 'copy' },
       ];
 
       options.forEach((opt) => {
@@ -375,7 +375,7 @@
           item.addEventListener('click', async () => {
             try {
               await navigator.clipboard.writeText(email);
-              item.textContent = 'Copiato ✓';
+              item.textContent = 'Copied ✓';
               window.setTimeout(closeMenu, 700);
             } catch (err) {
               item.textContent = email;

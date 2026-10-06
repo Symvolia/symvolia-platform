@@ -1,5 +1,16 @@
 /* ─── Living symbol — centered mandala composition ─── */
 
+/* Self-hosted Elder Futhark glyphs (Noto Sans Runic, SIL OFL — see
+   assets/fonts/NotoSansRunic-OFL.txt) so the runes never render as tofu. */
+@font-face {
+  font-family: 'Symvolia Runic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/noto-sans-runic-runic-400-normal.woff2') format('woff2');
+  unicode-range: U+16A0-16FF;
+}
+
 .stage__living {
   position: absolute;
   inset: 0;
@@ -239,6 +250,7 @@
 }
 
 .living__rune {
+  font-family: 'Symvolia Runic', var(--font-elegant), serif;
   position: absolute;
   top: 50%;
   left: 50%;

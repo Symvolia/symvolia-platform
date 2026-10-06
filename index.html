@@ -11,12 +11,25 @@
   <link rel="canonical" href="https://symvolia.xyz/">
   <meta name="description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
   <title>Symvolia — The Echo of your Own Soul</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Symvolia">
+  <meta property="og:title" content="Symvolia — The Echo of your Own Soul">
+  <meta property="og:description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
+  <meta property="og:url" content="https://symvolia.xyz/">
+  <meta property="og:image" content="https://symvolia.xyz/assets/logo-seal-home.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="Symvolia seal">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Symvolia — The Echo of your Own Soul">
+  <meta name="twitter:description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
+  <meta name="twitter:image" content="https://symvolia.xyz/assets/logo-seal-home.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=42">
+  <link rel="stylesheet" href="css/style.css?v=43">
   <link rel="stylesheet" href="css/textures.css?v=38">
-  <link rel="stylesheet" href="css/alive.css?v=41">
+  <link rel="stylesheet" href="css/alive.css?v=42">
   <link rel="stylesheet" href="css/void.css?v=61">
   <link rel="stylesheet" href="css/cinematic-intro.css?v=89">
   <link rel="preload" as="image" href="assets/symvolia-emblem-corona-hd.png?v=3">
@@ -53,7 +66,7 @@
 
   <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollProgressBar"></div></div>
 
-  <div class="cine intro-scene" id="cineIntro" role="presentation">
+  <div class="cine intro-scene" id="cineIntro">
     <canvas class="eye__noise-layer" id="eyeNoise" aria-hidden="true"></canvas>
     <div class="cine__vignette" aria-hidden="true"></div>
 
@@ -199,9 +212,9 @@
       <div class="cine__mark" aria-hidden="true">
         <img src="assets/logo.png" alt="" width="64" height="64">
       </div>
-      <h1 class="cine__wordmark" aria-label="Symvolia">
+      <p class="cine__wordmark" role="img" aria-label="Symvolia">
         <span class="cine__letter">S</span><span class="cine__letter">Y</span><span class="cine__letter">M</span><span class="cine__letter">V</span><span class="cine__letter">O</span><span class="cine__letter">L</span><span class="cine__letter">I</span><span class="cine__letter">A</span>
-      </h1>
+      </p>
     </div>
 
     <button type="button" class="cine__enter" id="cineEnter" aria-label="Enter">
@@ -226,7 +239,7 @@
     }, 4000);
   </script>
 
-  <button type="button" class="sound-toggle" id="soundToggle" aria-label="Disattiva audio" aria-pressed="true" title="Audio on / off">
+  <button type="button" class="sound-toggle" id="soundToggle" aria-label="Mute audio" aria-pressed="true" title="Audio on / off">
     <svg class="sound-toggle__glyph sound-toggle__glyph--on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
       <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 8.5a5 5 0 0 1 0 7M18.8 6.2a8.2 8.2 0 0 1 0 11.6"/>
@@ -330,13 +343,13 @@
               <a class="stage__menu-item orbit-phrase--duo" href="#contact" data-enter="contact">OMNE<br class="orbit-br orbit-br--duo" aria-hidden="true">UNUM</a>
             </li>
             <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 0.5; --cy: -0.866; --d: 2">
-              <a class="stage__menu-item orbit-phrase--duo" href="https://soundcloud.com/symvolia/sets/track" target="_blank" rel="noopener noreferrer">SOLVE ET<br class="orbit-br orbit-br--duo" aria-hidden="true">COAGULA</a>
+              <a class="stage__menu-item orbit-phrase--duo" href="https://soundcloud.com/symvolia/sets/track" target="_blank" rel="noopener noreferrer">SOLVE ET<br class="orbit-br orbit-br--duo" aria-hidden="true">COAGULA<span class="visually-hidden"> (opens in a new tab)</span></a>
             </li>
             <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 0.5; --cy: 0.866; --d: 3">
               <a class="stage__menu-item orbit-phrase--duo" href="#archive" data-enter="archive">IN STERQUILINIIS<br class="orbit-br orbit-br--duo" aria-hidden="true">INVENITUR</a>
             </li>
             <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 1; --cy: 0; --d: 4">
-              <a class="stage__menu-item orbit-phrase--duo" id="podcastLink" href="https://soundcloud.com/symvolia/sets/podcast" target="_blank" rel="noopener noreferrer">NOSCE TE<br class="orbit-br orbit-br--duo" aria-hidden="true">IPSUM</a>
+              <a class="stage__menu-item orbit-phrase--duo" id="podcastLink" href="https://soundcloud.com/symvolia/sets/podcast" target="_blank" rel="noopener noreferrer">NOSCE TE<br class="orbit-br orbit-br--duo" aria-hidden="true">IPSUM<span class="visually-hidden"> (opens in a new tab)</span></a>
             </li>
             <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 0.5; --cy: -0.866; --d: 5">
               <a class="stage__menu-item orbit-phrase--duo" href="#bio" data-enter="bio">VISITA<br class="orbit-br orbit-br--duo" aria-hidden="true">INTERIORA TERRAE</a>
@@ -397,7 +410,7 @@
     </div>
 
     <header class="main__header reveal" data-reveal>
-      <button type="button" class="main__back" id="backBtn" aria-label="Torna indietro" title="Torna indietro">
+      <button type="button" class="main__back" id="backBtn" aria-label="Back" title="Back">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/>
         </svg>
@@ -533,7 +546,7 @@
   <script src="js/void-blackhole.js?v=7" defer></script>
   <script src="js/archive-flow.js?v=8" defer></script>
   <script src="js/archive-ambient.js?v=1" defer></script>
-  <script src="js/main.js?v=44" defer></script>
+  <script src="js/main.js?v=45" defer></script>
   <script src="js/environment.js?v=8" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
   <script src="js/cinematic-intro.js?v=27" defer></script>

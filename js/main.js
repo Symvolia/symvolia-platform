@@ -322,7 +322,7 @@
     if (soundToggle) {
       soundToggle.classList.toggle('is-muted', muted);
       soundToggle.setAttribute('aria-pressed', String(!muted));
-      soundToggle.setAttribute('aria-label', muted ? 'Attiva audio' : 'Disattiva audio');
+      soundToggle.setAttribute('aria-label', muted ? 'Unmute audio' : 'Mute audio');
     }
 
     try {
@@ -904,11 +904,9 @@
     document.body.classList.add('is-stage-alive');
     const living = document.getElementById('stageLiving');
     const sigil = document.getElementById('sigilCore');
-    const inscriptions = document.querySelector('.stage__inscriptions');
     const stageMenu = document.getElementById('stageMenu');
     if (living) living.setAttribute('aria-hidden', 'false');
     if (sigil) sigil.setAttribute('aria-hidden', 'false');
-    if (inscriptions) inscriptions.setAttribute('aria-hidden', 'false');
     if (stageMenu) stageMenu.removeAttribute('aria-hidden');
   }
 
@@ -1177,6 +1175,9 @@
       }
     });
 
+    // The runic inscriptions are decorative: never exposed to assistive tech.
+    if (inscriptions) inscriptions.setAttribute('aria-hidden', 'true');
+
     stage.querySelectorAll('.stage__menu-item').forEach((item) => {
       if (visible) {
         item.style.removeProperty('opacity');
@@ -1432,7 +1433,7 @@
         { label: 'Gmail', href: `https://mail.google.com/mail/?view=cm&fs=1&to=${enc}`, external: true },
         { label: 'Outlook', href: `https://outlook.live.com/mail/0/deeplink/compose?to=${enc}`, external: true },
         { label: 'App Mail', href: `mailto:${email}`, external: false },
-        { label: 'Copia indirizzo', action: 'copy' },
+        { label: 'Copy address', action: 'copy' },
       ];
     }
 
@@ -1473,7 +1474,7 @@
           item.addEventListener('click', async () => {
             try {
               await navigator.clipboard.writeText(email);
-              item.textContent = 'Copiato ✓';
+              item.textContent = 'Copied ✓';
               window.setTimeout(closeMenu, 700);
             } catch (err) {
               item.textContent = email;
