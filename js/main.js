@@ -647,26 +647,10 @@
       return;
     }
 
-    // Desktop: black-hole transition, then navigate (direct if unavailable).
-    let navigated = false;
-    const go = () => {
-      if (navigated) return;
-      navigated = true;
-      window.location.href = play;
-    };
-
-    if (window.SymvoliaVoid && !reducedMotion) {
-      fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.7));
-      const started = window.SymvoliaVoid.start({
-        duration: VOID_MS,
-        interactive: true,
-        onMid: go,
-      });
-      if (!started) go();
-      return;
-    }
-
-    go();
+    // Desktop: navigate immediately — film starts on archive.html via ?play=1
+    // (no black-hole / void delay before the film).
+    fadeAudio(mainAmbient, 0, FADE_MS);
+    window.location.href = play;
   }
 
   function resetArchive() {
