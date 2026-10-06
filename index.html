@@ -41,8 +41,8 @@
   <noscript><link rel="stylesheet" href="css/void.css?v=61"><link rel="stylesheet" href="css/environment.css?v=39"></noscript>
   <link rel="stylesheet" href="css/responsive.css?v=39">
   <style>html,body{background:#010101!important}
-  /* void.css loads without blocking render: keep its layers out of sight until it is applied */
-  html:not(.css-ready) .void,html:not(.css-ready) .archive-flow,html:not(.css-ready) .archive-flow__label{display:none!important}</style>
+  /* Deferred CSS (void keepers load async): hide film until sheets apply */
+  html:not(.css-ready) .archive-flow,html:not(.css-ready) .archive-flow__label{display:none!important}</style>
   <script>
     (function () {
       var root = document.documentElement;
@@ -62,9 +62,9 @@
         window.setTimeout(flag, 4000);
       });
       // Coming back from the dedicated Sound Archive page: no intro, no homepage —
-      // we surface straight into the library, still veiled by the void.
+      // surface straight into the library.
       if (/[?&]from=archive/.test(window.location.search)) {
-        root.classList.add('is-direct', 'is-void-arrival');
+        root.classList.add('is-direct');
       } else {
         // Deep link (#bio / #vision / #archive / #contact): remembered here,
         // honoured by main.js once the intro's Enter and the home have settled.
@@ -542,14 +542,6 @@
     </footer>
   </main>
 
-  <div class="void" id="voidPortal" aria-hidden="true">
-    <div class="void__gradient" aria-hidden="true"></div>
-    <div class="void__vortex" aria-hidden="true"></div>
-    <div class="void__glow" aria-hidden="true"></div>
-    <div class="void__particles" id="voidParticles" aria-hidden="true"></div>
-    <div class="void__core" aria-hidden="true"></div>
-  </div>
-
   <video
     class="archive-flow"
     id="archiveFlow"
@@ -567,7 +559,7 @@
   <script src="js/ouroboros.js?v=6" defer></script>
   <script src="js/archive-flow.js?v=8" defer></script>
   <script src="js/archive-ambient.js?v=1" defer></script>
-  <script src="js/main.js?v=50" defer></script>
+  <script src="js/main.js?v=51" defer></script>
   <script src="js/environment.js?v=9" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
   <script src="js/cinematic-intro.js?v=28" defer></script>

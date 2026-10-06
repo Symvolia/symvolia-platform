@@ -12,8 +12,6 @@
   const enterSound = document.getElementById('enterSound');
   const soundToggle = document.getElementById('soundToggle');
 
-  const voidPortal = document.getElementById('voidPortal');
-  const voidParticles = document.getElementById('voidParticles');
   const archivePortalBtn = document.getElementById('archivePortalBtn');
 
   const ARCHIVE_PAGE = 'archive.html';
@@ -35,8 +33,6 @@
   const ENTER_SOUND_VOLUME = 0.8;
   const FADE_MS = 1400;
   const CROSSFADE_MS = 500;
-
-  const VOID_MS = 3200;
 
   /* Deep link (#bio / #vision / #archive / #contact) captured in <head>. */
   let pendingTargetHash = SECTION_IDS.indexOf(window.__symvoliaTargetHash) !== -1
@@ -348,37 +344,8 @@
     }
   }
 
-  /* ── Void dive animation + Sound Archive portal ── */
+  /* ── Sound Archive portal ── */
   let voidBusy = false;
-  let particlesBuilt = false;
-
-  function buildVoidParticles() {
-    if (particlesBuilt || !voidParticles) return;
-
-    const count = 30;
-    const frag = document.createDocumentFragment();
-
-    for (let i = 0; i < count; i += 1) {
-      const particle = document.createElement('span');
-      particle.className = 'void__particle';
-
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 32 + Math.random() * 58;
-      const tx = Math.cos(angle) * dist;
-      const ty = Math.sin(angle) * dist;
-      const size = 3 + Math.random() * 6;
-
-      particle.style.setProperty('--tx', `${tx.toFixed(1)}vmax`);
-      particle.style.setProperty('--ty', `${ty.toFixed(1)}vmax`);
-      particle.style.setProperty('--size', `${size.toFixed(1)}px`);
-      particle.style.setProperty('--delay', `${Math.floor(Math.random() * 480)}ms`);
-
-      frag.appendChild(particle);
-    }
-
-    voidParticles.appendChild(frag);
-    particlesBuilt = true;
-  }
 
   /* Resolves when the stylesheet has loaded (or failed — never rejects). */
   function ensureSheet(href) {
@@ -654,8 +621,6 @@
   }
 
   function resetArchive() {
-    if (voidPortal) voidPortal.classList.remove('is-active', 'is-closing', 'is-arriving', 'void--canvas');
-    if (main) main.classList.remove('is-void-sucked');
     const flow = document.getElementById('archiveFlow');
     if (flow) {
       flow.classList.remove('is-playing', 'is-behind');
@@ -665,8 +630,7 @@
   }
 
   /* Coming back from the archive with the browser's own back gesture: the page
-     was frozen mid-dive, void wide open over it. Surface it again — otherwise
-     it reappears as a black screen where nothing answers. */
+     may have been frozen mid-dive. Reset film/portal state and resume audio. */
   window.addEventListener('pageshow', (e) => {
     if (!e.persisted) return;
 
@@ -684,17 +648,6 @@
     }
 
     resetArchive();
-
-    if (voidPortal && !prefersReducedMotion()) {
-      buildVoidParticles();
-      voidPortal.classList.add('is-arriving');
-      window.setTimeout(() => {
-        voidPortal.classList.remove('is-arriving');
-        document.documentElement.classList.remove('is-void-arrival');
-      }, VOID_MS);
-    } else {
-      document.documentElement.classList.remove('is-void-arrival');
-    }
 
     if (entered) fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
     else if (livingAwake) startStageAmbient();
@@ -725,7 +678,7 @@
   }
 
   /* Returning from the archive page: surface directly into the library,
-     skipping intro and homepage, with the void dissolving over it. */
+     skipping intro and homepage. */
   function enterLibraryDirect(targetId) {
     entered = true;
     libraryUnlocked = true;
@@ -761,18 +714,6 @@
     // Drop the ?from=archive marker without touching history depth.
     sectionPushed = false;
     writeHistory('replaceState', { symv: 'section', id: targetId }, `${HOME_PATH}#${targetId}`);
-
-    // Dissolve the arrival veil that covered the page swap.
-    if (voidPortal && !prefersReducedMotion()) {
-      buildVoidParticles();
-      voidPortal.classList.add('is-arriving');
-      window.setTimeout(() => {
-        voidPortal.classList.remove('is-arriving');
-        document.documentElement.classList.remove('is-void-arrival');
-      }, VOID_MS);
-    } else {
-      document.documentElement.classList.remove('is-void-arrival');
-    }
   }
 
   function awaken(opts) {
