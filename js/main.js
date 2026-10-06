@@ -19,7 +19,7 @@
   const SECTION_IDS = ['bio', 'vision', 'archive', 'contact'];
   /* Single source of truth for the archive stylesheets used by the in-place
      path. Keep these identical to the <link> versions in archive.html. */
-  const ARCHIVE_CSS = ['css/archive-page.css?v=9', 'css/archive-sun.css?v=17'];
+  const ARCHIVE_CSS = ['css/archive-page.css?v=10', 'css/archive-sun.css?v=17'];
   const ARCHIVE_PREFETCH_TIMEOUT_MS = 8000;
   const HUB_LEAVE_MS = 880;
 
@@ -614,8 +614,7 @@
       return;
     }
 
-    // Desktop: navigate immediately — film starts on archive.html via ?play=1
-    // (no black-hole / void delay before the film).
+    // Desktop: navigate immediately — film starts on archive.html via ?play=1.
     fadeAudio(mainAmbient, 0, FADE_MS);
     window.location.href = play;
   }

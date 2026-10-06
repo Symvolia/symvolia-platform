@@ -645,7 +645,7 @@ html.is-archive-page:not(.is-dark-sun) {
   color: rgba(206, 198, 186, 0.9);
 }
 
-/* ── Leaving: the page is pulled into the black hole ── */
+/* ── Leaving: short hub fade before navigating into a passage ── */
 
 .archive-page.is-leaving {
   opacity: 0;
