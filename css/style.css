@@ -1635,3 +1635,10 @@ html.is-archive-open .stage *,
 .stage[hidden] * {
   animation-play-state: paused !important;
 }
+
+/* Sections receive programmatic focus (tabindex=-1) after navigation. */
+.main section[tabindex="-1"]:focus,
+.main footer[tabindex="-1"]:focus,
+.main__title:focus {
+  outline: none;
+}

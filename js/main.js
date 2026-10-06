@@ -17,6 +17,8 @@
   const archivePortalBtn = document.getElementById('archivePortalBtn');
 
   const ARCHIVE_PAGE = 'archive.html';
+  const HOME_PATH = window.location.pathname;
+  const SECTION_IDS = ['bio', 'vision', 'archive', 'contact'];
   /* Single source of truth for the archive stylesheets used by the in-place
      path. Keep these identical to the <link> versions in archive.html. */
   const ARCHIVE_CSS = ['css/archive-page.css?v=9', 'css/archive-sun.css?v=17'];
@@ -36,6 +38,16 @@
 
   const VOID_MS = 3200;
 
+  /* Deep link (#bio / #vision / #archive / #contact) captured in <head>. */
+  let pendingTargetHash = SECTION_IDS.indexOf(window.__symvoliaTargetHash) !== -1
+    ? window.__symvoliaTargetHash
+    : null;
+  /* True when the current section entry sits on top of a home entry we pushed,
+     so browser Back (and our back arrow) can simply pop it. */
+  let sectionPushed = false;
+  /* Programmatic scrolls (glideTo / jumpTo) must not close the mail menu. */
+  let programmaticScrollUntil = 0;
+
   let entered = false;
   let livingAwake = false;
   let libraryUnlocked = false;
@@ -44,6 +56,12 @@
   let revealObserver = null;
   const fadeTimers = new WeakMap();
   const HOME_SETTLE_MS = 1400;
+
+  function writeHistory(mode, state, url) {
+    try {
+      if (history[mode]) history[mode](state, '', url);
+    } catch (err) { /* ignore */ }
+  }
 
   function prefersReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -456,12 +474,8 @@
 
     if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.pause();
 
-    try {
-      if (history.replaceState) {
-        const hash = entered ? '#archive' : '#home';
-        history.replaceState(null, '', `${window.location.pathname}${hash}`);
-      }
-    } catch (err) { /* ignore */ }
+    if (entered) writeHistory('replaceState', { symv: 'section', id: 'archive' }, `${HOME_PATH}#archive`);
+    else writeHistory('replaceState', { symv: 'home' }, `${HOME_PATH}#home`);
 
     voidBusy = false;
     return true;
@@ -517,7 +531,8 @@
     leaveArchiveToPage(url.href);
   }
 
-  function enterArchiveInPlace() {
+  function enterArchiveInPlace(opts) {
+    const fromHistory = !!(opts && opts.fromHistory);
     const video = document.getElementById('archiveFlow');
     if (video && window.SymvoliaArchiveFlow) {
       window.SymvoliaArchiveFlow.hold(video);
@@ -577,9 +592,7 @@
 
         if (attachMailTriggers) attachMailTriggers(shell);
 
-        try {
-          history.pushState({ archiveInPlace: true }, '', 'archive.html?landed=1');
-        } catch (err) { /* ignore */ }
+        if (!fromHistory) writeHistory('pushState', { archiveInPlace: true }, 'archive.html?landed=1');
 
         window.scrollTo(0, 0);
         fadeAudio(mainAmbient, 0, FADE_MS);
@@ -755,12 +768,9 @@
     window.setTimeout(() => scrollToSection(targetId, 'auto'), 320);
     window.setTimeout(() => scrollToSection(targetId, 'auto'), 900);
 
-    try {
-      // Drop the ?from=archive marker without touching history depth.
-      if (history.replaceState) {
-        history.replaceState(null, '', `${window.location.pathname}#${targetId}`);
-      }
-    } catch (err) { /* ignore */ }
+    // Drop the ?from=archive marker without touching history depth.
+    sectionPushed = false;
+    writeHistory('replaceState', { symv: 'section', id: targetId }, `${HOME_PATH}#${targetId}`);
 
     // Dissolve the arrival veil that covered the page swap.
     if (voidPortal && !prefersReducedMotion()) {
@@ -788,7 +798,7 @@
     // Archive dive is locked until the homepage sigil has settled.
     if (!libraryUnlocked) return;
     if (!livingAwake) awaken({ silent: false });
-    enterSite('bio');
+    enterSite('archive');
   }
 
   /* One-shot reveal animations are done once the home has settled: drop their
@@ -805,6 +815,14 @@
     document.documentElement.classList.add('is-journey-cta');
     showEnterCta();
     if (enterBtn) enterBtn.disabled = false;
+
+    // Deep link: once the home has settled, go straight to the requested section.
+    if (pendingTargetHash) {
+      const target = pendingTargetHash;
+      pendingTargetHash = null;
+      window.__symvoliaTargetHash = null;
+      enterSite(target);
+    }
   }
 
   /**
@@ -844,11 +862,10 @@
     stage.style.opacity = '1';
 
     window.scrollTo(0, 0);
-    try {
-      if (history.replaceState) history.replaceState(null, '', '#home');
-    } catch (err) {
-      /* */
-    }
+    sectionPushed = false;
+    // A requested deep link keeps its hash; otherwise normalise to #home.
+    if (pendingTargetHash) writeHistory('replaceState', { symv: 'home' }, window.location.href);
+    else writeHistory('replaceState', { symv: 'home' }, '#home');
 
     awaken({ silent: true });
     if (!silent) playEnterSound();
@@ -1039,6 +1056,7 @@
   let scrollAnim = 0;
 
   function jumpTo(top) {
+    programmaticScrollUntil = performance.now() + 200;
     if (scrollAnim) {
       window.cancelAnimationFrame(scrollAnim);
       scrollAnim = 0;
@@ -1065,6 +1083,7 @@
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
     const step = (now) => {
+      programmaticScrollUntil = performance.now() + 200;
       const t = Math.min(1, (now - t0) / span);
       const y = Math.round(start + delta * ease(t));
       try {
@@ -1083,6 +1102,18 @@
     const y = section.getBoundingClientRect().top + (window.scrollY || 0) - margin;
     const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     return Math.max(0, Math.min(Math.round(y), max));
+  }
+
+  function focusSection(id) {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    try {
+      el.focus({ preventScroll: true });
+    } catch (err) {
+      return false;
+    }
+    return true;
   }
 
   function scrollToSection(id, behavior) {
@@ -1113,12 +1144,9 @@
           window.SymvoliaEnv.pulseSectionVeil();
         }
         scrollToSection(id, reducedMotion ? 'auto' : 'smooth');
+        focusSection(id);
 
-        if (history.replaceState) {
-          history.replaceState(null, '', hash);
-        } else {
-          window.location.hash = hash;
-        }
+        writeHistory('replaceState', { symv: 'section', id }, hash);
 
         if (window.SymvoliaEnv && typeof window.SymvoliaEnv.setMood === 'function') {
           window.SymvoliaEnv.setMood(id);
@@ -1201,9 +1229,8 @@
     }, fadeMs);
 
     window.scrollTo(0, 0);
-    try {
-      if (history.replaceState) history.replaceState(null, '', '#home');
-    } catch (err) { /* */ }
+    sectionPushed = false;
+    writeHistory('replaceState', { symv: 'home' }, '#home');
 
     fadeAudio(mainAmbient, 0, FADE_MS);
     startStageAmbient();
@@ -1219,19 +1246,16 @@
     if (tunnel) tunnel.classList.remove('is-active');
   }
 
-  function enterSite(targetId = 'bio') {
+  function enterSite(targetId = 'bio', opts) {
+    const fromHistory = !!(opts && opts.fromHistory);
     // Critical: never dive to library until homepage has been revealed.
     if (!entered && !libraryUnlocked) return;
 
     if (entered) {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       scrollToSection(targetId, reducedMotion ? 'auto' : 'smooth');
-
-      if (history.replaceState) {
-        history.replaceState(null, '', `#${targetId}`);
-      } else {
-        window.location.hash = targetId;
-      }
+      focusSection(targetId);
+      writeHistory('replaceState', { symv: 'section', id: targetId }, `#${targetId}`);
 
       return;
     }
@@ -1278,12 +1302,18 @@
       if (!reducedMotion) stage.classList.add('is-fading');
       revealMainContent();
 
-      if (history.replaceState) {
-        history.replaceState(null, '', `#${targetId}`);
+      // home → site is a new history entry, so Back returns to the home.
+      if (fromHistory) {
+        writeHistory('replaceState', { symv: 'section', id: targetId }, `#${targetId}`);
+      } else {
+        writeHistory('pushState', { symv: 'section', id: targetId }, `#${targetId}`);
       }
+      sectionPushed = true;
 
-      const focusTarget = document.getElementById(targetId) || main.querySelector('.main__title');
-      if (focusTarget) focusTarget.focus({ preventScroll: true });
+      if (!focusSection(targetId)) {
+        const title = main.querySelector('.main__title');
+        if (title) title.focus({ preventScroll: true });
+      }
     }, revealDelay);
 
     window.setTimeout(() => {
@@ -1332,8 +1362,29 @@
   bindAmbientLifecycle();
   bindSectionNavigation();
   bindArchivePortal();
-  window.addEventListener('popstate', () => {
-    teardownArchiveInPlace();
+  window.addEventListener('popstate', (e) => {
+    // Archive opened in place: Back closes it and lands on the section/home below.
+    if (teardownArchiveInPlace()) return;
+
+    const st = e.state || {};
+
+    if (st.archiveInPlace) {
+      // Forward into an in-place archive whose shell was torn down.
+      if (entered) {
+        voidBusy = true;
+        enterArchiveInPlace({ fromHistory: true });
+      }
+      return;
+    }
+
+    if (st.symv === 'section') {
+      // Forward from home into a section.
+      if (!entered && libraryUnlocked) enterSite(st.id || 'bio', { fromHistory: true });
+      return;
+    }
+
+    // Home (or anything that is not a section): leave the site view, not the page.
+    if (entered && !document.getElementById('archiveInPlace')) returnToStage();
   });
   bindStageMenu();
   // Enter CTA is revealed by environment.js after the opening journey.
@@ -1345,7 +1396,10 @@
   }
 
   if (backBtn) {
-    backBtn.addEventListener('click', returnToStage);
+    backBtn.addEventListener('click', () => {
+      if (sectionPushed && history.state && history.state.symv === 'section') history.back();
+      else returnToStage();
+    });
   }
 
   document.addEventListener('keydown', (e) => {
@@ -1471,6 +1525,9 @@
       if (e.key === 'Escape') closeMenu();
     });
     window.addEventListener('resize', closeMenu);
-    window.addEventListener('scroll', closeMenu, true);
+    window.addEventListener('scroll', () => {
+      if (performance.now() < programmaticScrollUntil) return;
+      closeMenu();
+    }, true);
   }
 })();

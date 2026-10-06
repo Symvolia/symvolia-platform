@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=41">
+  <link rel="stylesheet" href="css/style.css?v=42">
   <link rel="stylesheet" href="css/textures.css?v=38">
   <link rel="stylesheet" href="css/alive.css?v=41">
   <link rel="stylesheet" href="css/void.css?v=61">
@@ -36,6 +36,10 @@
       if (/[?&]from=archive/.test(window.location.search)) {
         root.classList.add('is-direct', 'is-void-arrival');
       } else {
+        // Deep link (#bio / #vision / #archive / #contact): remembered here,
+        // honoured by main.js once the intro's Enter and the home have settled.
+        var hash = (window.location.hash || '').replace(/^#/, '');
+        if (/^(bio|vision|archive|contact)$/.test(hash)) window.__symvoliaTargetHash = hash;
         root.classList.add('is-intro', 'is-cine');
       }
     })();
@@ -406,7 +410,7 @@
       </nav>
     </header>
 
-    <section class="main__bio" id="bio">
+    <section class="main__bio" id="bio" tabindex="-1">
       <div class="main__bio-inner reveal" data-reveal>
         <div class="main__section-head">
           <h2 class="main__section-title">Bio</h2>
@@ -437,7 +441,7 @@
       </div>
     </section>
 
-    <section class="main__hero" id="vision">
+    <section class="main__hero" id="vision" tabindex="-1">
       <div class="main__hero-inner reveal" data-reveal>
         <h1 class="main__title" tabindex="-1">Sound as Passage</h1>
         <p class="main__lead">
@@ -454,7 +458,7 @@
       </div>
     </section>
 
-    <section class="main__archive" id="archive">
+    <section class="main__archive" id="archive" tabindex="-1">
       <div class="archive-portal archive-portal--sun reveal" data-reveal>
         <a class="archive-portal__btn" id="archivePortalBtn" href="archive.html">
           <img
@@ -470,7 +474,7 @@
       </div>
     </section>
 
-    <footer class="main__contact" id="contact">
+    <footer class="main__contact" id="contact" tabindex="-1">
       <div class="main__contact-inner reveal" data-reveal>
         <h2 class="main__section-title">Contact</h2>
         <p class="main__contact-lead">For collaborations, inquiries, and passage.</p>
@@ -529,7 +533,7 @@
   <script src="js/void-blackhole.js?v=7" defer></script>
   <script src="js/archive-flow.js?v=8" defer></script>
   <script src="js/archive-ambient.js?v=1" defer></script>
-  <script src="js/main.js?v=43" defer></script>
+  <script src="js/main.js?v=44" defer></script>
   <script src="js/environment.js?v=8" defer></script>
   <script src="js/design-system.js?v=1" defer></script>
   <script src="js/cinematic-intro.js?v=27" defer></script>
