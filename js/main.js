@@ -49,13 +49,119 @@
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  /* ── Volume control ──
+     iOS Safari ignores HTMLMediaElement.volume (read-only, always 1), so there
+     fades would silently do nothing. Where volume is not writable we route the
+     element through Web Audio (MediaElementSource → GainNode) and drive the
+     gain instead. The AudioContext is created / resumed inside the Enter tap. */
+  let volumeWritable = null;
+  let audioCtx = null;
+  const gainNodes = new WeakMap();
+
+  function canSetVolume() {
+    if (volumeWritable !== null) return volumeWritable;
+    try {
+      const probe = new Audio();
+      probe.volume = 0.5;
+      volumeWritable = Math.abs(probe.volume - 0.5) < 0.001;
+    } catch (err) {
+      volumeWritable = true;
+    }
+    return volumeWritable;
+  }
+
+  function ensureAudioContext() {
+    if (audioCtx) return audioCtx;
+    const Ctor = window.AudioContext || window.webkitAudioContext;
+    if (!Ctor) return null;
+    try {
+      audioCtx = new Ctor();
+    } catch (err) {
+      audioCtx = null;
+    }
+    return audioCtx;
+  }
+
+  function resumeAudioContext() {
+    if (!audioCtx || audioCtx.state === 'running') return;
+    try {
+      const p = audioCtx.resume();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (err) { /* ignore */ }
+  }
+
+  /* GainNode for an element, or null when plain .volume works / Web Audio fails. */
+  function gainFor(el) {
+    if (canSetVolume()) return null;
+    if (gainNodes.has(el)) return gainNodes.get(el);
+
+    const ctx = ensureAudioContext();
+    let node = null;
+    if (ctx) {
+      try {
+        const src = ctx.createMediaElementSource(el);
+        node = ctx.createGain();
+        node.gain.value = 0;
+        src.connect(node);
+        node.connect(ctx.destination);
+      } catch (err) {
+        node = null;
+      }
+    }
+    gainNodes.set(el, node);
+    return node;
+  }
+
+  function getVolume(el) {
+    const node = gainFor(el);
+    return node ? node.gain.value : el.volume;
+  }
+
+  function setVolume(el, value) {
+    const v = Math.min(1, Math.max(0, value));
+    const node = gainFor(el);
+    if (node) node.gain.value = v;
+    else el.volume = v;
+  }
+
+  /* Call synchronously from a user gesture (the Enter tap): grants playback to
+     the ambient / enter elements on iOS so the later fade-in is allowed. */
+  function unlockAudio() {
+    if (!canSetVolume()) {
+      ensureAudioContext();
+      resumeAudioContext();
+    }
+
+    [stageAmbient, mainAmbient, enterSound].forEach((el) => {
+      if (!el) return;
+      try {
+        el.muted = soundMuted;
+        gainFor(el); // route through Web Audio before it starts playing
+        const keepPlaying = el === stageAmbient;
+        if (keepPlaying) {
+          if (el.paused) setVolume(el, 0);
+        } else if (el.dataset.audioUnlocked === '1') {
+          return;
+        } else {
+          setVolume(el, 0);
+        }
+
+        el.dataset.audioUnlocked = '1';
+        const p = el.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+        if (!keepPlaying) el.pause();
+      } catch (err) { /* ignore */ }
+    });
+  }
+
   function fadeAudio(el, target, duration, onDone) {
     if (!el) return;
+    resumeAudioContext();
 
     const existing = fadeTimers.get(el);
     if (existing) window.clearInterval(existing);
 
-    const start = el.volume;
+    const start = getVolume(el);
     const delta = target - start;
     const steps = Math.max(1, Math.round(duration / 40));
     let step = 0;
@@ -69,12 +175,12 @@
       step += 1;
       const t = step / steps;
       const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-      el.volume = Math.min(1, Math.max(0, start + delta * eased));
+      setVolume(el, start + delta * eased);
 
       if (step >= steps) {
         window.clearInterval(timer);
         fadeTimers.delete(el);
-        el.volume = Math.min(1, Math.max(0, target));
+        setVolume(el, target);
         if (target === 0) el.pause();
         if (onDone) onDone();
       }
@@ -93,7 +199,11 @@
     if (!el) return;
     try {
       if (el.preload !== 'auto') el.preload = 'auto';
-      if (typeof el.load === 'function') el.load();
+      // Never reset an element that is playing or was unlocked by the tap.
+      if (el.paused && el.readyState === 0 && el.dataset.audioUnlocked !== '1'
+        && typeof el.load === 'function') {
+        el.load();
+      }
     } catch (err) {
       /* ignore */
     }
@@ -101,10 +211,10 @@
 
   function startStageAmbient() {
     if (!stageAmbient) return;
-    if (!stageAmbient.paused && stageAmbient.volume > 0) return;
+    if (!stageAmbient.paused && getVolume(stageAmbient) > 0) return;
 
     warmMedia(stageAmbient);
-    stageAmbient.volume = 0;
+    setVolume(stageAmbient, 0);
     const p = stageAmbient.play();
     if (p !== undefined) {
       p.then(() => fadeAudio(stageAmbient, STAGE_VOLUME, FADE_MS))
@@ -121,6 +231,7 @@
 
   function bindAmbientFallback() {
     const retry = () => {
+      unlockAudio(); // a gesture: grant playback (iOS) + resume Web Audio
       if (!entered) startStageAmbient();
     };
 
@@ -134,7 +245,7 @@
     warmSiteAudio();
     try {
       enterSound.currentTime = 0;
-      enterSound.volume = ENTER_SOUND_VOLUME;
+      setVolume(enterSound, ENTER_SOUND_VOLUME);
       const p = enterSound.play();
       if (p !== undefined) p.catch(() => {});
     } catch (err) {
@@ -153,12 +264,12 @@
   }
 
   function resumeAmbient() {
-    if (document.hidden || !document.hasFocus() || navigator.onLine === false) return;
+    if (document.hidden || navigator.onLine === false) return;
 
     const el = currentAmbient();
     if (!el || !el.paused) return;
 
-    if (el.volume === 0) el.volume = entered ? MAIN_VOLUME : STAGE_VOLUME;
+    if (getVolume(el) === 0) setVolume(el, entered ? MAIN_VOLUME : STAGE_VOLUME);
     const p = el.play();
     if (p !== undefined) p.catch(() => {});
   }
@@ -168,9 +279,6 @@
       if (document.hidden) suspendAmbient();
       else resumeAmbient();
     });
-
-    window.addEventListener('blur', suspendAmbient);
-    window.addEventListener('focus', resumeAmbient);
 
     window.addEventListener('offline', suspendAmbient);
     window.addEventListener('online', resumeAmbient);
@@ -636,7 +744,7 @@
     revealMainContent();
 
     if (mainAmbient) {
-      mainAmbient.volume = 0;
+      setVolume(mainAmbient, 0);
       const p = mainAmbient.play();
       if (p !== undefined) p.catch(() => {});
       fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
@@ -1137,7 +1245,7 @@
 
     fadeAudio(stageAmbient, 0, FADE_MS);
     if (mainAmbient) {
-      mainAmbient.volume = 0;
+      setVolume(mainAmbient, 0);
       const p = mainAmbient.play();
       if (p !== undefined) p.catch(() => {});
       fadeAudio(mainAmbient, MAIN_VOLUME, FADE_MS);
@@ -1199,6 +1307,7 @@
     enterSite,
     setAmbientLevel,
     startStageAmbient,
+    unlockAudio,
     isMuted: () => soundMuted,
     isAwake: () => livingAwake,
     isEntered: () => entered,

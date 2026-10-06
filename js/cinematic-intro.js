@@ -456,6 +456,15 @@
   if (enterBtn) {
     enterBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      // iOS: audio can only be unlocked synchronously inside the tap — before
+      // any await. The ambient is faded in later from enterHome().
+      try {
+        if (window.Symvolia && typeof window.Symvolia.unlockAudio === 'function') {
+          window.Symvolia.unlockAudio();
+        }
+      } catch (_) {
+        /* never block the intro on audio */
+      }
       phase5();
     });
   }
