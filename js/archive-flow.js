@@ -9,9 +9,19 @@
   'use strict';
 
   const REVEAL_AT = 5;
+  const FAILSAFE_EXTRA_MS = 850;   // film never reaches REVEAL_AT → reveal anyway
+  const STALL_CHECK_MS = 1200;     // video still not playing after this → stalled
+  const STALL_REVEAL_MS = 1500;    // shortened film when stalled (from tap)
 
   function reduced() {
     return w.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /* Phones / touch devices keep the current document (the <video> cannot be
+     restarted after a navigation on iOS), so they need the tap to start it. */
+  function needsGesture() {
+    return w.matchMedia('(pointer: coarse)').matches
+      || w.matchMedia('(max-width: 820px)').matches;
   }
 
   function arm(video) {
@@ -62,13 +72,26 @@
     tryPlay(video);
   }
 
+  /**
+   * opts.onStart  — called right after the tap starts the film
+   * opts.onReveal — called once the archive may surface
+   * opts.ready    — optional Promise (e.g. archive prefetch); the reveal never
+   *                 happens before it settles
+   * opts.revealAt — seconds into the film at which to reveal
+   */
   function play(video, opts) {
     const onReveal = opts && opts.onReveal;
     const onStart = opts && opts.onStart;
+    const ready = opts && opts.ready;
     const revealAt = (opts && opts.revealAt != null) ? opts.revealAt : REVEAL_AT;
 
     if (!video || reduced()) {
       if (typeof onStart === 'function') onStart();
+      if (ready && typeof ready.then === 'function') {
+        const go = () => { if (typeof onReveal === 'function') onReveal(); };
+        ready.then(go, go);
+        return;
+      }
       if (typeof onReveal === 'function') onReveal();
       return;
     }
@@ -82,26 +105,94 @@
     tryPlay(video);
 
     let revealed = false;
+    let timeReached = false;
+    let readyDone = !(ready && typeof ready.then === 'function');
+    let started = false;
+    let frameCb = 0;
+    let failSafe = 0;
+    let stallTimer = 0;
+    let stallReveal = 0;
+
+    const cleanup = () => {
+      w.clearTimeout(failSafe);
+      w.clearTimeout(stallTimer);
+      w.clearTimeout(stallReveal);
+      video.removeEventListener('timeupdate', onTimeUpdate);
+      video.removeEventListener('playing', onPlaying);
+      if (frameCb && typeof video.cancelVideoFrameCallback === 'function') {
+        try { video.cancelVideoFrameCallback(frameCb); } catch (err) { /* ignore */ }
+      }
+      frameCb = 0;
+    };
+
     const reveal = () => {
       if (revealed) return;
       revealed = true;
-      w.clearTimeout(failSafe);
-      w.clearInterval(poll);
+      cleanup();
       video.classList.add('is-behind');
       hold(video);
       if (typeof onReveal === 'function') onReveal();
     };
 
-    const poll = w.setInterval(() => {
-      if (video.currentTime >= revealAt) reveal();
-    }, 80);
+    const tryReveal = () => {
+      if (!revealed && timeReached && readyDone) reveal();
+    };
 
-    video.addEventListener('ended', reveal, { once: true });
-    video.addEventListener('error', reveal, { once: true });
-    const failSafe = w.setTimeout(reveal, Math.round((revealAt + 0.85) * 1000));
+    const reachTime = () => {
+      timeReached = true;
+      tryReveal();
+    };
+
+    function onPlaying() {
+      started = true;
+    }
+
+    function onTimeUpdate() {
+      if (video.currentTime > 0.05) started = true;
+      if (video.currentTime >= revealAt) reachTime();
+    }
+
+    if (ready && typeof ready.then === 'function') {
+      const done = () => {
+        readyDone = true;
+        tryReveal();
+      };
+      ready.then(done, done);
+    }
+
+    video.addEventListener('playing', onPlaying);
+
+    if (typeof video.requestVideoFrameCallback === 'function') {
+      const onFrame = (now, meta) => {
+        if (revealed) return;
+        started = true;
+        const t = meta && typeof meta.mediaTime === 'number' ? meta.mediaTime : video.currentTime;
+        if (t >= revealAt) {
+          reachTime();
+          return;
+        }
+        frameCb = video.requestVideoFrameCallback(onFrame);
+      };
+      frameCb = video.requestVideoFrameCallback(onFrame);
+    } else {
+      video.addEventListener('timeupdate', onTimeUpdate);
+    }
+
+    video.addEventListener('ended', reachTime, { once: true });
+    video.addEventListener('error', reachTime, { once: true });
+
+    // Film never gets to REVEAL_AT (stalled / throttled): do not wait forever.
+    failSafe = w.setTimeout(reachTime, Math.round(revealAt * 1000 + FAILSAFE_EXTRA_MS));
+
+    // Film has not even started after ~1.2 s (slow network): shorten it.
+    stallTimer = w.setTimeout(() => {
+      if (revealed || started || video.currentTime > 0.05) return;
+      w.clearTimeout(failSafe);
+      stallReveal = w.setTimeout(reachTime, Math.max(0, STALL_REVEAL_MS - STALL_CHECK_MS));
+    }, STALL_CHECK_MS);
 
     bindResume(video);
   }
 
-  w.SymvoliaArchiveFlow = { play, hold, prime, arm, tryPlay, REVEAL_AT };
+  w.SymvoliaArchiveFlow = { play, hold, prime, arm, tryPlay, needsGesture, REVEAL_AT };
 })(window);

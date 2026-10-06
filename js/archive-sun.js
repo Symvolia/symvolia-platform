@@ -166,9 +166,8 @@
     }
     revealArchive();
   } else if (mode === 'play') {
-    const needsGesture = window.matchMedia('(pointer: coarse)').matches
-      || window.matchMedia('(max-width: 820px)').matches;
-    if (!needsGesture) openArchive();
+    const flowApi = window.SymvoliaArchiveFlow;
+    if (!(flowApi && flowApi.needsGesture())) openArchive();
   }
 
   const img = world.querySelector('.dark-sun__img');

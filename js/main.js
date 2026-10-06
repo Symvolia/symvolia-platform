@@ -17,6 +17,11 @@
   const archivePortalBtn = document.getElementById('archivePortalBtn');
 
   const ARCHIVE_PAGE = 'archive.html';
+  /* Single source of truth for the archive stylesheets used by the in-place
+     path. Keep these identical to the <link> versions in archive.html. */
+  const ARCHIVE_CSS = ['css/archive-page.css?v=9', 'css/archive-sun.css?v=16'];
+  const ARCHIVE_PREFETCH_TIMEOUT_MS = 8000;
+  const HUB_LEAVE_MS = 880;
 
   if (!stage || !main) return;
 
@@ -180,6 +185,8 @@
       if (el) el.muted = muted;
     });
 
+    if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.setMuted(muted);
+
     if (soundToggle) {
       soundToggle.classList.toggle('is-muted', muted);
       soundToggle.setAttribute('aria-pressed', String(!muted));
@@ -241,62 +248,75 @@
     particlesBuilt = true;
   }
 
-  function runVoid(closing, onMid, onDone) {
-    if (!voidPortal || prefersReducedMotion()) {
-      if (onMid) onMid();
-      if (onDone) onDone();
-      return;
-    }
+  /* Resolves when the stylesheet has loaded (or failed — never rejects). */
+  function ensureSheet(href) {
+    return new Promise((resolve) => {
+      const path = href.split('?')[0];
+      let link = document.querySelector(`link[rel="stylesheet"][href*="${path}"]`);
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
 
-    // Dive into the archive uses the canvas black hole. Soft closing stays CSS.
-    if (!closing && window.SymvoliaVoid) {
-      window.SymvoliaVoid.start({
-        duration: VOID_MS,
-        interactive: true,
-        onMid() {
-          if (onMid) onMid();
-          window.setTimeout(() => {
-            if (window.SymvoliaVoid) window.SymvoliaVoid.stop();
-            if (onDone) onDone();
-          }, Math.round(VOID_MS * 0.26));
-        },
-      });
-      return;
-    }
+      if (link && link.sheet) {
+        finish();
+        return;
+      }
 
-    buildVoidParticles();
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        document.head.appendChild(link);
+      }
 
-    voidPortal.classList.remove('is-active', 'is-closing', 'void--canvas');
-    void voidPortal.offsetWidth; // restart animations
-    voidPortal.classList.add(closing ? 'is-closing' : 'is-active');
+      link.addEventListener('load', finish, { once: true });
+      link.addEventListener('error', finish, { once: true });
+      window.setTimeout(finish, ARCHIVE_PREFETCH_TIMEOUT_MS);
+    });
+  }
 
-    window.setTimeout(() => {
-      if (onMid) onMid();
-    }, Math.round(VOID_MS * 0.74));
+  /* Starts fetching archive.html and its stylesheets. The promise resolves
+     (never rejects) with { ok, html } once BOTH the markup and the CSS are in.
+     Cached so every caller shares one request. */
+  let archivePrefetch = null;
 
-    window.setTimeout(() => {
-      voidPortal.classList.remove('is-active', 'is-closing', 'void--canvas');
-      if (onDone) onDone();
-    }, VOID_MS);
+  function prefetchArchive() {
+    if (archivePrefetch) return archivePrefetch;
+
+    const htmlReq = Promise.race([
+      fetch(ARCHIVE_PAGE)
+        .then((res) => {
+          if (!res.ok) throw new Error('archive');
+          return res.text();
+        })
+        .catch(() => null),
+      new Promise((resolve) => window.setTimeout(() => resolve(null), ARCHIVE_PREFETCH_TIMEOUT_MS)),
+    ]);
+    const cssReq = Promise.all(ARCHIVE_CSS.map(ensureSheet));
+
+    archivePrefetch = Promise.all([htmlReq, cssReq]).then(([html]) => {
+      if (!html) archivePrefetch = null; // allow a retry next time
+      return { ok: !!html, html };
+    });
+
+    return archivePrefetch;
   }
 
   /* Sound Archive: the tap that opens it must also start the film.
      iOS will not restart a <video> after a navigation, so phones keep this
      document and bring the archive in over the looping film. */
-  function ensureSheet(href) {
-    const path = href.split('?')[0];
-    if (document.querySelector(`link[href*="${path}"]`)) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-  }
+  let archiveLeaving = false;
+  let attachMailTriggers = null; // set by setupMailMenu(); binds triggers in a new scope
 
   function teardownArchiveInPlace() {
     const shell = document.getElementById('archiveInPlace');
     if (!shell) return false;
 
     shell.remove();
+    archiveLeaving = false;
     document.documentElement.classList.remove('is-archive-open', 'is-archive-page', 'is-dark-sun');
     document.body.classList.remove('is-archive-open', 'archive-body', 'dark-sun-body');
 
@@ -319,7 +339,7 @@
       if (livingAwake) startStageAmbient();
     }
 
-    if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.stop();
+    if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.pause();
 
     try {
       if (history.replaceState) {
@@ -332,22 +352,68 @@
     return true;
   }
 
+  /* In-place archive: the shell is not a separate page, so its back arrow and
+     its links must not reload the document. */
+  function leaveArchiveInPlace() {
+    if (history.state && history.state.archiveInPlace) history.back();
+    else teardownArchiveInPlace();
+  }
+
+  function leaveArchiveToPage(href) {
+    if (archiveLeaving) return;
+    archiveLeaving = true;
+
+    const shell = document.getElementById('archiveInPlace');
+    if (shell) shell.classList.add('is-leaving');
+    if (window.SymvoliaArchiveAmbient) window.SymvoliaArchiveAmbient.fadeOut(HUB_LEAVE_MS);
+
+    window.setTimeout(() => {
+      window.location.href = href;
+    }, prefersReducedMotion() ? 0 : Math.round(HUB_LEAVE_MS * 0.82));
+  }
+
+  function onArchiveShellClick(e) {
+    if (e.defaultPrevented) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+    const link = e.target.closest && e.target.closest('a[href]');
+    if (!link) return;
+
+    if (link.classList.contains('main__back') || link.id === 'archiveReturn') {
+      e.preventDefault();
+      leaveArchiveInPlace();
+      return;
+    }
+
+    if (link.target === '_blank' || link.hasAttribute('download')) return;
+
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:')) return;
+
+    let url;
+    try {
+      url = new URL(href, window.location.href);
+    } catch (err) {
+      return;
+    }
+    if (url.origin !== window.location.origin) return;
+
+    e.preventDefault();
+    leaveArchiveToPage(url.href);
+  }
+
   function enterArchiveInPlace() {
     const video = document.getElementById('archiveFlow');
     if (video && window.SymvoliaArchiveFlow) {
       window.SymvoliaArchiveFlow.hold(video);
     }
 
-    ensureSheet('css/archive-page.css?v=9');
-    ensureSheet('css/archive-sun.css?v=16');
-
-    fetch('archive.html')
+    // HTML + CSS are fetched ahead of time; the shell is never inserted
+    // before its stylesheets are applied.
+    prefetchArchive()
       .then((res) => {
-        if (!res.ok) throw new Error('archive');
-        return res.text();
-      })
-      .then((html) => {
-        const doc = new DOMParser().parseFromString(html, 'text/html');
+        if (!res || !res.ok) throw new Error('archive');
+        const doc = new DOMParser().parseFromString(res.html, 'text/html');
         const inner = doc.querySelector('.dark-sun__earth-inner');
         const header = doc.querySelector('.archive-page__header');
         if (!inner) throw new Error('archive-markup');
@@ -384,11 +450,16 @@
         sun.appendChild(earth);
         shell.appendChild(sun);
 
+        shell.addEventListener('click', onArchiveShellClick);
+        archiveLeaving = false;
+
         if (video && video.parentNode) {
           video.parentNode.insertBefore(shell, video);
         } else {
           document.body.appendChild(shell);
         }
+
+        if (attachMailTriggers) attachMailTriggers(shell);
 
         try {
           history.pushState({ archiveInPlace: true }, '', 'archive.html?landed=1');
@@ -413,6 +484,10 @@
     if (voidBusy) return;
     voidBusy = true;
 
+    // Start the HTML + CSS download right away (also covers a tap that
+    // lands before the portal ever scrolled into view).
+    const archiveReady = prefetchArchive();
+
     let play = 'archive.html?play=1';
     try {
       const url = new URL(href || ARCHIVE_PAGE, window.location.href);
@@ -422,19 +497,40 @@
       play = url.pathname + url.search + url.hash;
     } catch (err) { /* ignore */ }
 
+    const flowApi = window.SymvoliaArchiveFlow;
     const flow = document.getElementById('archiveFlow');
-    const canFilm = flow && window.SymvoliaArchiveFlow && !prefersReducedMotion();
-    const needsGesture = window.matchMedia('(pointer: coarse)').matches
-      || window.matchMedia('(max-width: 820px)').matches;
+    const reducedMotion = prefersReducedMotion();
+    const canFilm = flow && flowApi && !reducedMotion;
 
-    if (canFilm && needsGesture) {
-      window.SymvoliaArchiveFlow.play(flow, {
+    // Phones: keep this document, play the film inside the tap.
+    if (canFilm && flowApi.needsGesture()) {
+      flowApi.play(flow, {
+        ready: archiveReady,
         onReveal: enterArchiveInPlace,
       });
       return;
     }
 
-    window.location.href = play;
+    // Desktop: black-hole transition, then navigate (direct if unavailable).
+    let navigated = false;
+    const go = () => {
+      if (navigated) return;
+      navigated = true;
+      window.location.href = play;
+    };
+
+    if (window.SymvoliaVoid && !reducedMotion) {
+      fadeAudio(mainAmbient, 0, Math.round(VOID_MS * 0.7));
+      const started = window.SymvoliaVoid.start({
+        duration: VOID_MS,
+        interactive: true,
+        onMid: go,
+      });
+      if (!started) go();
+      return;
+    }
+
+    go();
   }
 
   function resetArchive() {
@@ -454,6 +550,19 @@
      it reappears as a black screen where nothing answers. */
   window.addEventListener('pageshow', (e) => {
     if (!e.persisted) return;
+
+    // Back from a passage into the in-place archive: it is still open, and
+    // frozen mid-leave. Lift it and keep the film running behind it.
+    const openShell = document.getElementById('archiveInPlace');
+    if (openShell) {
+      openShell.classList.remove('is-leaving');
+      archiveLeaving = false;
+      voidBusy = false;
+      const film = document.getElementById('archiveFlow');
+      if (film && window.SymvoliaArchiveFlow) window.SymvoliaArchiveFlow.hold(film);
+      if (window.SymvoliaArchiveAmbient && !soundMuted) window.SymvoliaArchiveAmbient.play(0.5, FADE_MS);
+      return;
+    }
 
     resetArchive();
 
@@ -494,6 +603,7 @@
       const io = new IntersectionObserver((entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         window.SymvoliaArchiveFlow.prime(flow);
+        prefetchArchive();
         io.disconnect();
       }, { rootMargin: '200px' });
       io.observe(archivePortalBtn);
@@ -1129,9 +1239,6 @@
   setupMailMenu();
 
   function setupMailMenu() {
-    const triggers = document.querySelectorAll('.mail-trigger');
-    if (!triggers.length) return;
-
     const menu = document.createElement('div');
     menu.className = 'mail-menu';
     menu.setAttribute('role', 'menu');
@@ -1213,7 +1320,9 @@
       positionMenu(trigger);
     }
 
-    triggers.forEach((trigger) => {
+    function bindTrigger(trigger) {
+      if (trigger.dataset.mailBound === '1') return;
+      trigger.dataset.mailBound = '1';
       trigger.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1223,7 +1332,12 @@
           openMenu(trigger);
         }
       });
-    });
+    }
+
+    attachMailTriggers = (scope) => {
+      (scope || document).querySelectorAll('.mail-trigger').forEach(bindTrigger);
+    };
+    attachMailTriggers(document);
 
     document.addEventListener('click', (e) => {
       if (!menu.hidden && !menu.contains(e.target)) closeMenu();
