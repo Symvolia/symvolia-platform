@@ -6,3 +6,7 @@
 bin/
 assets/site-link-tunnel.txt
 
+
+# Editor
+.cursor/
+.vscode/
