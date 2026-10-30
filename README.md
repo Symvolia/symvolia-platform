@@ -1,63 +1,41 @@
 # Symvolia Platform
 
-Permanent site: **https://symvolia.xyz/**
+The official website of **Symvolia**, my music and sound-design project — live at **[symvolia.xyz](https://symvolia.xyz)**.
 
-Static HTML/CSS/JS — no build step.
+An immersive, cinematic site built without frameworks: a WebGL opening sequence, an audio-reactive interface and a browsable sound archive of albums, tracks, soundtracks and podcasts.
 
-## Opening portal
+## Highlights
 
-Cinematic **eye → seal** metamorphosis (~9–10s): Three.js + GSAP + Web Audio.
-No black cuts · no yellow aura ring. See `docs/PORTAL-PERFORMANCE.md`.
+- **Cinematic intro** — an "eye → seal" metamorphosis built with Three.js shaders, GSAP timelines and the Web Audio API
+- **Sound archive** — dedicated sections for albums, tracks, soundtracks, podcasts and poetic pieces, with an in-site player
+- **Performance work** — lossless WebP twins served through `<picture>` / `image-set()`, lazy media loading, notes in [`docs/PORTAL-PERFORMANCE.md`](docs/PORTAL-PERFORMANCE.md)
+- **Zero build step** — plain HTML, CSS and ES modules, deployed to GitHub Pages by a GitHub Actions workflow
 
-## Publish
+## Stack
 
-```bash
-./scripts/publish.sh "optional commit message"
+HTML · CSS · JavaScript (ES modules) · Three.js · GLSL · GSAP · Web Audio API · GitHub Actions · GitHub Pages
+
+## Structure
+
+```
+index.html, archive*.html   pages
+css/  js/  shaders/          styles, scripts, GLSL shaders
+assets/                      images, covers, audio, video
+docs/                        performance, DNS and operations notes
+scripts/                     local preview and publish helpers
 ```
 
-Pushes to GitHub; Actions deploys Pages in 1–2 minutes.
-
-> Custom domain: **symvolia.xyz** (`CNAME` in repo root).
-> At your registrar, set apex DNS to GitHub Pages (A/AAAA below), then confirm
-> the domain + HTTPS in GitHub → Settings → Pages.
-
-## Local preview
+## Run locally
 
 ```bash
 python3 -m http.server 8777
+# open http://localhost:8777
 ```
 
-## Temporary public link (tunnel)
+Pushing to `main` deploys automatically (`.github/workflows/pages.yml`). Publishing helpers, tunnels and caching/security notes are in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 
-```bash
-./scripts/show-url.sh
-./scripts/refresh-service.sh
-```
+## Author
 
-## Local service (runs without Cursor)
+**Nicolò Peruzzi (Symvolia)** — artist, sound designer & web developer · [npdevelopment.xyz](https://npdevelopment.xyz)
 
-```bash
-./scripts/install-service.sh
-./scripts/stop-site.sh
-```
-
-## Caching & security notes
-
-- **Cache-Control.** Static assets (`css/`, `js/`, `assets/`, fonts, audio, video)
-  should be served with long-lived caching, e.g.
-  `Cache-Control: public, max-age=31536000, immutable`, and be **content-hashed**
-  (`site.3f9a1c.css`) instead of relying on the manual `?v=N` query strings.
-  Keep HTML short-lived (`max-age=0, must-revalidate`) so a new deploy picks up the
-  new hashed filenames. GitHub Pages cannot set these headers — put Cloudflare (or
-  another CDN) in front of `symvolia.xyz` and add a cache rule / transform rule.
-- **Content-Security-Policy.** There is no CSP yet. A starting point (tighten after
-  testing; inline `<script>`/`<style>` blocks in `index.html` and `archive.html`
-  need hashes or nonces, or a `'unsafe-inline'` allowance until they are moved out):
-  `default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://www.youtube.com; frame-src https://www.youtube.com https://player.vimeo.com https://w.soundcloud.com; base-uri 'self'; object-src 'none'`.
-- **Images.** The big PNGs now have lossless WebP twins (`*.webp`, pixel-identical)
-  served through `<picture>` / `image-set()`. A lossy WebP/AVIF re-export would cut
-  another ~60–70 % but needs a visual check on the dark gradients (banding):
-  `home-corona-bg-desktop/mobile`, `symvolia-emblem-corona-hd`, `logo-seal`
-  (still PNG: it is also referenced from the SVG `<image>` in the intro eye),
-  `logo.png` (1.7 MB, shown at 64 px — export a 128 px version), `ouroboros-3d.png`.
-
+© Symvolia. Music, artwork and media in this repository are not licensed for reuse.
