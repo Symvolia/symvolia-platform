@@ -118,6 +118,39 @@ a{color:inherit}
 #bio h2{font-family:var(--cg);font-style:italic;font-weight:300;font-size:clamp(32px,8vw,54px);line-height:1.05;margin:10px 0 24px}
 #bio p{font-family:var(--cg);font-size:19px;line-height:1.6;color:rgba(232,227,218,.82);text-align:left;margin:0 0 16px}
 #bio p.lead{font-style:italic;color:var(--ink);text-align:center;font-size:22px}
+
+/* ───────────── RESPONSIVE — fluid from 320px phones to wide desktops ───────────── */
+:root{--gut:clamp(16px,3.2vw,44px);--lab:clamp(10px,.32vw + 8.6px,13px)}
+.scr{padding:calc(clamp(14px,2.4vh,28px) + var(--st)) calc(var(--gut) + var(--sr)) calc(clamp(14px,2.4vh,28px) + var(--sb)) calc(var(--gut) + var(--sl))}
+.lab{font-size:var(--lab)}
+#arch{grid-template-columns:100%;grid-template-rows:auto auto minmax(0,1fr) auto auto;row-gap:clamp(6px,1.2vh,14px)}
+.realms{overflow:visible;flex-wrap:wrap;justify-content:center;column-gap:clamp(14px,2.2vw,30px);row-gap:2px;margin-top:clamp(8px,1.8vh,18px)}
+.realms button{letter-spacing:clamp(.18em,.6vw,.34em);padding:6px 0}
+#dial{width:min(84vw,48vh,620px);align-self:center;justify-self:center}
+.info{min-height:0;width:100%}
+#iTitle{font-size:clamp(32px,min(9.5vw,7.5vh),92px);margin:clamp(6px,1.2vh,14px) 0}
+.bot{font-size:calc(var(--lab) - 1px)}
+@media (max-width:380px){ #hint{display:none} .bot{justify-content:space-between} }
+/* tablets portrait */
+@media (min-width:600px) and (orientation:portrait){ #dial{width:min(72vw,50vh,640px)} }
+/* desktop / landscape tablets: dial left, words right */
+@media (min-aspect-ratio:5/4) and (min-height:561px){
+  #arch{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;column-gap:clamp(24px,5vw,96px)}
+  .top,.realms,.bot{grid-column:1 / span 2}.realms{justify-self:center}
+  #dial{width:min(42vw,64vh,760px);justify-self:end;grid-row:3}
+  .info{justify-self:start;align-self:center;text-align:left;max-width:min(720px,46vw);grid-row:3}
+  #iTitle{font-size:clamp(40px,min(5.6vw,9vh),104px)}
+}
+/* phones in landscape / very short windows */
+@media (orientation:landscape) and (max-height:560px){
+  #arch{grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);column-gap:clamp(18px,4vw,56px);row-gap:4px}
+  .top{grid-column:1 / span 2}
+  .realms{grid-column:2;grid-row:2;justify-self:start;justify-content:flex-start;margin-top:0}
+  #dial{grid-column:1;grid-row:2 / span 2;width:min(78vh,44vw);justify-self:center;align-self:center}
+  .info{grid-column:2;grid-row:3;justify-self:start;align-self:center;text-align:left}
+  #iTitle{font-size:clamp(28px,11vh,64px)}
+  .bot{display:none}
+}
 </style>
 </head>
 <body>
