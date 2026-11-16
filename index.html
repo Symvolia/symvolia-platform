@@ -1,87 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#010101">
-  <link rel="icon" href="assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-  <link rel="canonical" href="https://symvolia.xyz/">
-  <meta name="description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
-  <title>Symvolia — The Echo of your Own Soul</title>
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Symvolia">
-  <meta property="og:title" content="Symvolia — The Echo of your Own Soul">
-  <meta property="og:description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
-  <meta property="og:url" content="https://symvolia.xyz/">
-  <meta property="og:image" content="https://symvolia.xyz/assets/logo-seal-home.png">
-  <meta property="og:image:width" content="1024">
-  <meta property="og:image:height" content="1024">
-  <meta property="og:image:alt" content="Symvolia seal">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Symvolia — The Echo of your Own Soul">
-  <meta name="twitter:description" content="Symvolia — Research and Exploration of the inner realms through the use of Sound. The Echo of your Own Soul.">
-  <meta name="twitter:image" content="https://symvolia.xyz/assets/logo-seal-home.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=45">
-  <link rel="stylesheet" href="css/textures.css?v=38">
-  <link rel="stylesheet" href="css/alive.css?v=42">
-  <link rel="stylesheet" href="css/cinematic-intro.css?v=89">
-  <link rel="preload" as="image" href="assets/symvolia-emblem-corona-hd.webp?v=1" type="image/webp">
-  <link rel="preload" as="image" href="assets/logo-seal.png?v=3">
-  <link rel="stylesheet" href="css/home-reveal.css?v=55">
-  <link rel="stylesheet" href="css/ouroboros.css?v=38">
-  <link rel="stylesheet" href="css/design-system.css?v=40">
-  <link rel="stylesheet" href="css/environment.css?v=39" media="print" onload="this.media='all'" data-defer-css>
-  <noscript><link rel="stylesheet" href="css/environment.css?v=39"></noscript>
-  <link rel="stylesheet" href="css/responsive.css?v=39">
-  <style>html,body{background:#010101!important}
-  /* Deferred CSS: hide film until sheets apply */
-  html:not(.css-ready) .archive-flow,html:not(.css-ready) .archive-flow__label{display:none!important}</style>
-  <script>
-    (function () {
-      var root = document.documentElement;
-      root.classList.add('loading');
-      // Non-blocking sheets (data-defer-css): flag when all are applied.
-      var left = 0, flagged = false;
-      function flag() { if (!flagged) { flagged = true; root.classList.add('css-ready'); } }
-      document.addEventListener('DOMContentLoaded', function () {
-        var links = document.querySelectorAll('link[data-defer-css]');
-        left = links.length;
-        if (!left) return flag();
-        Array.prototype.forEach.call(links, function (l) {
-          var done = function () { if (--left <= 0) flag(); };
-          if (l.media === 'all') done();
-          else { l.addEventListener('load', done, { once: true }); l.addEventListener('error', done, { once: true }); }
-        });
-        window.setTimeout(flag, 4000);
-      });
-      // Coming back from the dedicated Sound Archive page: no intro, no homepage —
-      // surface straight into the library.
-      if (/[?&]from=archive/.test(window.location.search)) {
-        root.classList.add('is-direct');
-      } else {
-        // Deep link (#bio / #vision / #archive / #contact): remembered here,
-        // honoured by main.js once the intro's Enter and the home have settled.
-        var hash = (window.location.hash || '').replace(/^#/, '');
-        if (/^(bio|vision|archive|contact)$/.test(hash)) window.__symvoliaTargetHash = hash;
-        root.classList.add('is-intro', 'is-cine');
-      }
-    })();
-  </script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Symvolia — Sound as Passage</title>
+<meta name="description" content="Symvolia — producer, DJ and live artist. Research and exploration of the inner realms through the use of sound.">
+<link rel="canonical" href="https://symvolia.xyz/">
+<meta property="og:title" content="Symvolia — Sound as Passage">
+<meta property="og:description" content="The Echo of your Own Soul. Releases, albums, podcasts, collaborations and soundtrack.">
+<meta property="og:image" content="https://symvolia.xyz/a/emblem.png">
+<meta property="og:url" content="https://symvolia.xyz/">
+<meta name="theme-color" content="#010101">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/cinematic-intro.css">
+<script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
+<style>
+:root{--vh100:100vh;--silver:#969088;--font-elegant:'Cormorant Garamond',serif}
+@supports (height:100dvh){:root{--vh100:100dvh}}
+html.is-cine #bg,html.is-cine #grain,html.is-cine .scr:not(.cine){opacity:0;pointer-events:none}
+@font-face{font-family:'Runic';src:url(a/runic.woff2) format('woff2');font-display:swap}
+:root{
+  --bone:#d8d0c4;--bone-a:rgba(200,190,178,.45);--bone-f:rgba(150,144,136,.18);--ash:#8a8074;--void:#010101;
+  --ease-open:cubic-bezier(.19,1,.22,1);--ease-blink:cubic-bezier(.34,.02,.14,1);--ease-breathe:cubic-bezier(.45,0,.55,1);--ease-requiem:cubic-bezier(.45,.03,.55,.97);
+  --ink:#c8beb2;--dim:rgba(150,144,136,.62);--faint:rgba(110,102,94,.28);
+  --cz:'Cormorant Garamond',Georgia,serif;--cg:'Cormorant Garamond',Georgia,serif;
+  --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#010101;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+#bg{position:fixed;inset:0;overflow:hidden;background:var(--void)}
+.bgl{position:absolute;inset:-12%;background:center/cover no-repeat;opacity:0;
+  filter:grayscale(1) blur(42px) brightness(.34) contrast(1.15);transform:scale(1.1);
+  transition:opacity 2.2s var(--ease-requiem),transform 32s linear}
+.bgl.on{opacity:1;transform:scale(1.24)}
+#bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 75% 65% at 50% 45%,transparent 0,rgba(1,1,1,.55) 70%,#010101 100%)}
+#grain{position:fixed;inset:-50%;pointer-events:none;opacity:.07;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(4) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+.scr{z-index:2}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.3s!important}}
+.lab{font-family:var(--cz);text-transform:uppercase;letter-spacing:.42em;font-size:11px;font-weight:400}
+.scr{position:fixed;inset:0;padding:calc(22px + var(--st)) calc(22px + var(--sr)) calc(22px + var(--sb)) calc(22px + var(--sl));
+  transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.7,.1,1),filter 1.2s}
+.off{opacity:0;pointer-events:none;filter:blur(12px)}
+
+/* ───────────── ARCHIVE ───────────── */
+#arch{display:grid;grid-template-rows:auto auto 1fr auto auto;justify-items:center}
+#arch.off{transform:scale(.92)}
+.top{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}.top .me{justify-self:center;letter-spacing:.8em;padding-left:.8em}.top #bioBtn{justify-self:end}
+.top .me{display:flex;align-items:center;gap:10px}
+.top .me img{width:26px;height:26px;clip-path:circle(46.5%)}
+.top button{color:var(--dim)}.top button:hover{color:var(--bone)}
+.realms{display:flex;gap:18px;margin-top:18px;max-width:100%;overflow-x:auto;scrollbar-width:none;padding:0 4px}.realms::-webkit-scrollbar{display:none}
+.realms button{flex:none;letter-spacing:.3em}
+.realms button{color:var(--dim);padding:6px 0 7px;border-bottom:1px solid transparent;transition:color .3s,border-color .3s}
+.realms button.on{color:var(--bone);border-color:var(--bone-a)}
+#dial{position:relative;align-self:center;width:min(80vw,46vh,440px);aspect-ratio:1;touch-action:none;cursor:grab}
+#dial:active{cursor:grabbing}
+#ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.runes-drift{transform-origin:50px 50px;animation:runesDrift 240s linear infinite}@keyframes runesDrift{to{transform:rotate(-360deg)}}
+@keyframes sealBreathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.012)}}
+#dialSeal{position:absolute;left:50%;top:50%;width:74%;transform:translate(-50%,-50%);opacity:1;animation:sealBreathe 9s var(--ease-breathe) infinite;pointer-events:none}
+#dial .it{position:absolute;left:50%;top:50%;width:15%;aspect-ratio:1;margin:-7.5% 0 0 -7.5%;border-radius:50%;overflow:hidden;
+  outline:1px solid var(--faint);outline-offset:3px;transition:width 1.1s var(--ease-open),margin 1.1s var(--ease-open),outline-color 1s,filter 1.2s;filter:grayscale(1) brightness(.55)}
+#dial .it img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+#dial .it.on{width:24%;margin:-12% 0 0 -12%;outline-color:var(--bone-a);filter:grayscale(1) brightness(.95)}
+.info{text-align:center;max-width:640px;min-height:150px;padding:0 6px}
+#iNum{color:var(--dim)}
+#iTitle{font-family:var(--cg);font-style:italic;font-weight:300;font-size:clamp(36px,9.5vw,74px);line-height:1;margin:12px 0 12px;
+  transition:opacity .9s var(--ease-breathe);cursor:pointer}
+#iTitle.swap{opacity:0}
+#iMeta{color:var(--dim)}
+#iOpen{color:var(--dim);margin-top:16px;display:inline-block;padding:6px 2px;border-bottom:1px solid var(--bone-a)}
+.bot{width:100%;display:flex;justify-content:space-between;align-items:center;color:var(--dim);margin-top:8px}
+#hint{transition:opacity 1.6s}#hint.gone{opacity:0}
+.runes{font-family:'Runic',serif;letter-spacing:.3em;font-size:13px}
+@media (min-width:960px) and (min-aspect-ratio:4/3){
+  #arch{grid-template-columns:1fr 1fr;grid-template-rows:auto auto 1fr auto;column-gap:4vw}
+  .top,.realms,.bot{grid-column:1 / span 2}.realms{justify-self:center}
+  #dial{width:min(40vw,62vh);justify-self:end}
+  .info{justify-self:start;align-self:center;text-align:left}
+}
+
+/* ───────────── OVERLAYS ───────────── */
+.sheet{background:rgba(1,1,1,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:5;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;user-select:text;-webkit-user-select:text}
+.sheet .x{position:fixed;right:calc(18px + var(--sr));top:calc(18px + var(--st));width:38px;height:38px;border-radius:50%;
+  border:1px solid var(--faint);font-size:13px;z-index:2;background:rgba(1,1,1,.6)}
+.sheet .in{max-width:620px;margin:0 auto;padding:40px 4px 60px;text-align:center}
+#rCover{width:min(70vw,340px);aspect-ratio:1;object-fit:cover;filter:grayscale(1);box-shadow:0 30px 80px #000;
+  margin:20px auto 34px;display:block}
+#rVideo{display:none;width:min(100%,880px);aspect-ratio:16/9;background:#000;margin:20px auto 34px;box-shadow:0 30px 80px #000}
+#rTitle{font-family:var(--cg);font-style:italic;font-weight:300;font-size:clamp(38px,9vw,70px);line-height:1}
+#rMeta{color:var(--dim);margin:14px 0 26px}
+
+.pl{display:flex;align-items:center;gap:14px;max-width:420px;margin:0 auto 28px}
+#pPlay{color:var(--ink);width:28px;height:28px;display:grid;place-items:center}
+.pbar{flex:1;height:2px;background:var(--faint);position:relative;cursor:pointer}
+#pFill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--bone)}
+#pTime{color:var(--dim);font-size:9px;letter-spacing:.15em;min-width:82px;text-align:right}
+#rList li.can{cursor:pointer}#rList li.can:hover,#rList li.on{color:var(--bone)}
+#rList{list-style:none;text-align:left;margin:0 auto 30px;max-width:420px;border-top:1px solid var(--faint)}
+#rList li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--faint);font-family:var(--cg);font-size:19px}
+#rList li span:last-child{font-family:var(--cz);font-size:10px;letter-spacing:.2em;color:var(--dim);align-self:center}
+.cta{display:inline-block;color:var(--ink);text-decoration:none;border:1px solid var(--bone-a);padding:14px 26px 14px 30px;margin:6px}
+.cta:hover{border-color:var(--bone);color:var(--ink)}
+#bio .eye{width:100%;max-width:620px;display:block;margin:24px auto 30px;mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
+#bio h2{font-family:var(--cg);font-style:italic;font-weight:300;font-size:clamp(32px,8vw,54px);line-height:1.05;margin:10px 0 24px}
+#bio p{font-family:var(--cg);font-size:19px;line-height:1.6;color:rgba(232,227,218,.82);text-align:left;margin:0 0 16px}
+#bio p.lead{font-style:italic;color:var(--ink);text-align:center;font-size:22px}
+</style>
 </head>
-<body class="esoteric-surface">
+<body>
+<div id="bg"><div class="bgl"></div><div class="bgl"></div></div><div id="grain"></div>
 
-  <div class="boot-loader" id="bootLoader" aria-hidden="true">
-    <div class="boot-loader__ring"></div>
-  </div>
-
-  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollProgressBar"></div></div>
-
+<!-- ═════════ THRESHOLD ═════════ -->
   <div class="cine intro-scene" id="cineIntro">
     <canvas class="eye__noise-layer" id="eyeNoise" aria-hidden="true"></canvas>
     <div class="cine__vignette" aria-hidden="true"></div>
@@ -245,322 +287,260 @@
     <div class="cine__cursor" id="cineCursor" aria-hidden="true"></div>
   </div>
 
-  <noscript>
-    <style>
-      html.loading, html.is-cine { overflow: auto !important; }
-      .cine { display: none !important; }
-      .stage, .sound-toggle { visibility: visible !important; opacity: 1 !important; }
-    </style>
-  </noscript>
-  <script>
-    window.setTimeout(function () {
-      document.documentElement.classList.remove('loading');
-    }, 4000);
-  </script>
 
-  <button type="button" class="sound-toggle" id="soundToggle" aria-label="Mute audio" aria-pressed="true" title="Audio on / off">
-    <svg class="sound-toggle__glyph sound-toggle__glyph--on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
-      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 8.5a5 5 0 0 1 0 7M18.8 6.2a8.2 8.2 0 0 1 0 11.6"/>
-    </svg>
-    <svg class="sound-toggle__glyph sound-toggle__glyph--off" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
-      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/>
-    </svg>
-  </button>
 
-  <audio id="stageAmbient" preload="none" loop src="assets/audio/atmos-dark-1.m4a?v=1" aria-hidden="true"></audio>
-  <audio id="mainAmbient" preload="none" loop src="assets/audio/ancient-chants-live.m4a?v=1" aria-hidden="true"></audio>
-  <audio id="enterSound" preload="none" src="assets/audio/enter-transition.m4a?v=1" aria-hidden="true"></audio>
+<!-- ═════════ ARCHIVE ═════════ -->
+<section id="arch" class="scr off">
+  <div class="top lab"><span></span><span class="me">Symvolia</span><button id="bioBtn" class="lab">Bio</button></div>
+  <nav class="realms lab" id="realms"></nav>
+  <div id="dial" aria-label="Turn the seal to choose">
+    <svg id="ring" viewBox="0 0 100 100"></svg>
+    <picture><source srcset="a/emblem.webp" type="image/webp"><img id="dialSeal" src="a/emblem.png" alt="Symvolia"></picture>
+  </div>
+  <div class="info">
+    <div class="lab" id="iNum"></div>
+    <div id="iTitle"></div>
+    <div class="lab" id="iMeta"></div>
+    <button class="lab" id="iOpen">Enter the passage</button>
+  </div>
+  <div class="bot lab"><span class="runes">ᛋᛁᛗᚢᛟᛚᛁᚨ</span><span id="hint">Turn the seal</span><span>MMXXVI</span></div>
+</section>
 
-  <section class="stage stage--requiem esoteric-panel" id="stage" aria-label="Homepage — Symvolia seal">
-    <div id="home" class="stage__home-anchor" aria-hidden="true"></div>
-    <div class="stage__depth" aria-hidden="true"></div>
-    <div class="stage__pulse" aria-hidden="true"></div>
-    <div class="stage__haze" aria-hidden="true"></div>
-    <div class="stage__grain" aria-hidden="true"></div>
-    <div class="stage__sub" aria-hidden="true"></div>
-    <div class="stage__waveform" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="stage__tunnel" id="tunnel" aria-hidden="true"></div>
-    <div class="stage__vignette" aria-hidden="true"></div>
-    <div class="stage__void-fill" aria-hidden="true"></div>
-    <div class="stage__corona-bg" aria-hidden="true"></div>
+<!-- ═════════ RELEASE ═════════ -->
+<section id="rel" class="scr sheet off">
+  <button class="x" data-close>✕</button>
+  <div class="in">
+    <img id="rCover" alt="">
+    <video id="rVideo" controls playsinline preload="none"></video>
+    <div id="rTitle"></div>
+    <div class="lab" id="rMeta"></div>
+    <div class="pl" id="pl"><button id="pPlay" aria-label="Play / pause"><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5" width="2" height="9" fill="currentColor"/><rect x="8" y="1.5" width="2" height="9" fill="currentColor"/></svg></button><div class="pbar" id="pBar"><i id="pFill"></i></div><span class="lab" id="pTime"></span></div>
+    <ul id="rList"></ul>
+    <div id="rLinks"></div>
+  </div>
+</section>
 
-    <div class="stage__menu" id="stageMenu">
-      <div class="stage__sigil-wrap">
-        <div class="stage__sigil-disc" aria-hidden="true"></div>
-    <div class="stage__composition" id="composition">
-      <div class="stage__living" id="stageLiving" aria-hidden="true">
-        <div class="living__cross">
-          <div class="living__axis living__axis--h" aria-hidden="true"></div>
-          <div class="living__axis living__axis--v" aria-hidden="true"></div>
-              <div class="living__ouroboros" aria-hidden="true">
-            <canvas class="living__ouroboros-canvas" id="ouroborosCanvas" aria-hidden="true"></canvas>
-          </div>
-        </div>
-      </div>
+<!-- ═════════ BIO ═════════ -->
+<section id="bio" class="scr sheet off">
+  <button class="x" data-close>✕</button>
+  <div class="in">
+    <div class="lab" style="color:var(--bone)">Bio</div>
+    <h2>The one behind the sound</h2>
+    <p class="lead">Research and Exploration of the inner realms through the use of Sound.</p>
+    <p>Symvolia is a Producer, DJ and Live Artist born and raised in North-Italy. His project is focused on the remembrance of our origins through the use of sounds.</p>
+    <p>In constant exploration of the vast world of electronic music, his research is based on finding the soundscape that remember what our ego is trying to hide. Between the noise of the modern society that close the listening of our true needs, the silences become the territory in which we find our true selves.</p>
+    <p>By merging ritual atmosphere and cinematic elements, broken beats, experimental textures and ancient drums into industrial music, he has found his vision; a space where the listener can face himself.</p>
+    <p class="lead">The sound, with his power, can be a catalyst to a new ascension of our soul. Not just ours, but everyone’s.</p>
+    <div class="lab" style="color:var(--dim);margin:34px 0 14px">For collaborations, inquiries, and passage</div>
+    <a class="cta lab" href="https://www.instagram.com/symvolia/" target="_blank" rel="noopener">Instagram</a>
+    <a class="cta lab" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener">SoundCloud</a>
+    <a class="cta lab" href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener">Bandcamp</a>
+  </div>
+</section>
 
-      <div class="stage__inscriptions" aria-hidden="true">
-        <div class="living__script living__script--runes">
-          <span class="living__rune" style="--a: 20deg">ᚠ</span>
-          <span class="living__rune" style="--a: 60deg">ᚢ</span>
-          <span class="living__rune" style="--a: 100deg">ᚦ</span>
-          <span class="living__rune" style="--a: 140deg">ᚨ</span>
-          <span class="living__rune" style="--a: 180deg">ᚱ</span>
-          <span class="living__rune" style="--a: 220deg">ᚲ</span>
-          <span class="living__rune" style="--a: 260deg">ᚷ</span>
-          <span class="living__rune" style="--a: 300deg">ᚹ</span>
-          <span class="living__rune" style="--a: 340deg">ᚺ</span>
-        </div>
-      </div>
+<script>
+/* ══════════════════════ THE ARCHIVE ══════════════════════ */
+const SC='https://soundcloud.com/';
+const REALMS={
+  Releases:[
+    {t:"Ancestral Call",m:"2022 · Single · 4:17",c:"a/ancestral-call.jpg",l:[["SoundCloud",SC+"symvolia/haine-call-of-war"]]},
+    {t:"In Aeternum",m:"2024 · Glanz + Elend · 5:48",c:"a/in-aeternum.jpg",l:[["SoundCloud",SC+"technomusicfresh/tmfpremiere-symvolia-in-aeternum-glanz-elend"],["61 Hymns · Bandcamp","https://glanzundelend.bandcamp.com/album/61-hymns-for-the-children-of-mynas-tearing-of-the-temple-charity-va-002"]]},
+    {t:"Bleeding Eyes",m:"2024 · Single · 4:47",c:"a/bleeding-eyes.jpg",l:[["SoundCloud",SC+"symvolia/symvolia-bleeding-eyes"]]},
+    {t:"The March To Oblivion",m:"2024 · Single · 5:33",c:"a/march-oblivion.jpg",l:[["SoundCloud",SC+"symvolia/the-march-to-oblivion"]]},
+  ],
+  Albums:[
+    {t:"Nibiru",m:"2024 · EP · Capital Corpse",c:"a/nibiru.jpg",
+     tr:[["Chain Of Sorrow","6:24","a/au/n01-chain.mp3"],["Syntropy","4:13","a/au/n02-syntropy.mp3"],["Entropy","6:24","a/au/n03-entropy.mp3"],["The Liturgy Of A Dying Star","6:05","a/au/n04-liturgy.mp3"]],
+     l:[["SoundCloud",SC+"symvolia/sets/nibiru-ep-symvolia"],["Bandcamp","https://capitalcorpse.bandcamp.com/album/nibiru-ep"]]},
+    {t:"Catharsis",m:"2026 · EP · VūMantra Records",c:"a/catharsis.jpg",
+     tr:[["Letter to a Lost Soul","2:51","a/au/c01-letter.mp3"],["Ancient Summoning","5:36","a/au/c02-ancient.mp3"],["Initiation","7:20","a/au/c03-initiation.mp3"],["Adverse Entities","6:56","a/au/c04-adverse.mp3"],["Nyima","5:56","a/au/c05-nyima.mp3"],["Ancient Summoning — Nigh/T\\mare Remix","7:28","a/au/c06-ancient-rmx.mp3"],["Initiation — 2+2=5 Remix","5:29","a/au/c07-initiation-rmx.mp3"],["Adverse Entities — Cranya Remix","5:44","a/au/c08-adverse-rmx.mp3"],["Nyima — Zeitreise Remix","6:56","a/au/c09-nyima-rmx.mp3"]],
+     l:[["SoundCloud",SC+"symvolia/sets/catharsis-ep"],["Bandcamp","https://vumantra.bandcamp.com/album/catharsis"]]},
+  ],
+  Podcast:[
+    {t:"Sacred Front Series",m:"10.07.2026 · 1:02:50",c:"a/pod-sacred-front.jpg",l:[["SoundCloud",SC+"symvolia/symvolia-lost-in-ether"]]},
+    {t:"Eternal Delight",m:"10.07.2026 · 1:02:53",c:"a/pod-hkcr.jpg",l:[["SoundCloud",SC+"hkcrlive/eternal-delight-w-symvolia-10072026-2"]]},
+    {t:"Hypnotic Mental Set",m:"20.02.2026 · 1:01:52",c:"a/pod-hypnotic.jpg",l:[["SoundCloud",SC+"symvolia/hypnotic-mental-set-live"]]},
+    {t:"Vūdcast 064",m:"VūMantra Records · 1:04:48",c:"a/pod-vudcast.jpg",l:[["SoundCloud",SC+"vumantra/symvolia-vudcast_064"]]},
+    {t:"TEOCHAO Podcast #089",m:"Teoria Chaosu · 1:02:02",c:"a/pod-teochao.jpg",l:[["SoundCloud",SC+"teoriachaosupodcast/teochao-podcast-089-symvolia"]]},
+    {t:"The Twelve Prophets 051",m:"The Twelve Prophets · 1:02:34",c:"a/pod-twelve-prophets.jpg",l:[["SoundCloud",SC+"thetwelveprophets/the-twelve-prophets-podcast-051-symvolia"]]},
+    {t:"KRIIK Podcast 009",m:"CREAK · 54:58",c:"a/pod-kriik.jpg",l:[["SoundCloud",SC+"kriikstudio/kriikpd009-symvolia"]]},
+    {t:"Chronicles Records 014",m:"Chronicles Records · 1:02:06",c:"a/pod-chronicles.jpg",l:[["SoundCloud",SC+"chroniclesrecords/symvolia-chronicles-records-0-14"]]},
+  ],
+  Collaborations:[
+    {t:"Huldra",m:"ft. Poetic Beingness · 9:20",c:"a/huldra.jpg",l:[["SoundCloud",SC+"symvolia/huldra"],["Bandcamp","https://symvolia.bandcamp.com/"]]},
+    {t:"Stone by Stone",m:"Live · Sadistic Circus, Tokyo 2024 · 25:36",c:"a/stone-by-stone.jpg",l:[["SoundCloud",SC+"symvolia/stone-by-stone-live-exhibition"],["Videoclip · Vimeo","https://vimeo.com/1081943249"]]},
+  ],
+  Soundtrack:[
+    {t:"Oppenheimer",m:"Symvolia Rework · 5:20",c:"a/video/oppenheimer-poster.jpg",video:"a/video/oppenheimer-rework.mp4",
+     l:[["Vimeo","https://vimeo.com/1133774775"]]},
+  ],
+};
+const ROMAN=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+// podcasts get a slow pulse each, tuned on a pentatonic of A
+/* AUDIO — every item plays its own real file.
+   au : preview file in a/ (e.g. "a/bleeding-eyes.mp3"), at : start second of the preview.
+   Album tracks can carry their own file as a 3rd value: ["Nyima","5:56","a/nyima.mp3"].
+   Items without au fall back to Symvolia's atmosphere (a/atmos.mp3). */
+const AUDIO={
+  "Bleeding Eyes":{au:"a/au/bleeding-eyes.mp3"},
+  "The March To Oblivion":{au:"a/au/march-oblivion.mp3"},
+  "In Aeternum":{au:"a/au/in-aeternum.mp3"},
+  "Stone by Stone":{au:"a/au/stone-by-stone.mp3"},
+  "Ancestral Call":{au:"a/au/ancestral-call.mp3"},
+  "Catharsis":{au:"a/au/c02-ancient.mp3"},
+  "Nibiru":{au:"a/au/n01-chain.mp3"},
+  "Sacred Front Series":{au:"a/au/pod-sacred-front.mp3"},
+};
+Object.values(REALMS).flat().forEach(it=>{const a=AUDIO[it.t];if(a){it.au=a.au;it.at=a.at;}});
 
-      <div class="eye eye--requiem" id="eye">
-        <div class="eye__halo" aria-hidden="true"></div>
-        <div class="eye__socket">
-          <div class="eye__orbit" aria-hidden="true"></div>
-          <div class="eye__ball">
-            <div class="eye__sclera">
-              <div class="eye__sclera-depth" aria-hidden="true"></div>
-            </div>
+/* ══════════════════════ ATMOSPHERE — blurred, silent cover light ══════════════════════ */
+const layers=[...document.querySelectorAll('.bgl')];let li=0;const cache={};
+function img(src){if(cache[src])return cache[src];const i=new Image();i.decoding='async';i.src=src;cache[src]=i;return i;}
+function setBg(src){
+  const im=img(src);const go=()=>{const next=layers[1-li],prev=layers[li];
+    next.style.backgroundImage=`url("${src}")`;next.classList.remove('on');void next.offsetWidth;next.classList.add('on');prev.classList.remove('on');li=1-li;};
+  im.complete&&im.naturalWidth?go():im.addEventListener('load',go,{once:true});
+}
 
-            <div class="stage__sigil" id="sigilCore" aria-hidden="true">
-              <div class="stage__sigil-glow" aria-hidden="true"></div>
-              <div class="stage__sigil-reveal">
-                    <picture><source srcset="assets/logo-seal-home.webp?v=1" type="image/webp"><img src="assets/logo-seal-home.png?v=1" alt="Symvolia" class="stage__sigil-img" width="1024" height="1024"></picture>
-              </div>
-            </div>
+/* ══════════════════════ SOUND — real files only ══════════════════════ */
+let ctx,master,an,fb,bed,bedG,bedLP;
+const decks=[];let deck=0,playSrc=null,playTimer=null;
+function wire(el){const g=ctx.createGain();g.gain.value=0;try{ctx.createMediaElementSource(el).connect(g);}catch(e){}g.connect(master);return g;}
+function initAudio(){
+  if(ctx)return;ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=2.5;
+  master=ctx.createGain();master.gain.value=.9;master.connect(comp);comp.connect(ctx.destination);
+  bed=new Audio('a/atmos.mp3');bed.loop=true;bed.preload='auto';
+  bedLP=ctx.createBiquadFilter();bedLP.type='lowpass';bedLP.frequency.value=700;bedG=ctx.createGain();bedG.gain.value=0;
+  try{ctx.createMediaElementSource(bed).connect(bedLP);}catch(e){}bedLP.connect(bedG);bedG.connect(master);
+  for(let k=0;k<2;k++){const el=new Audio();el.preload='auto';el.loop=true;decks.push({el,g:wire(el)});}
+}
+function fade(g,v,tc){const t=ctx.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.setTargetAtTime(v,t,tc||.25);}
+// play an item's own file (crossfade); without a file, Symvolia's atmosphere carries the space
+function playItem(it,immediate){
+  if(!ctx)return;if(ctx.state==='suspended')ctx.resume();
+  clearTimeout(playTimer);
+  const go=()=>{
+    const src=it.au||null;if(src===playSrc)return;playSrc=src;
+    const old=decks[deck];fade(old.g,0,.3);setTimeout(()=>{if(decks[deck]!==old)old.el.pause();},1400);
+    if(!src){fade(bedG,.75,.6);return;}
+    fade(bedG,.0,.5);deck=1-deck;const d=decks[deck];
+    d.el.src=src;const start=()=>{try{d.el.currentTime=it.at||0;}catch(e){}
+      d.el.play().catch(()=>{});fade(d.g,1,.35);};
+    d.el.readyState>=1?start():d.el.addEventListener('loadedmetadata',start,{once:true});
+  };
+  immediate?go():playTimer=setTimeout(go,260); // while scrubbing, wait for the dial to settle
+}
+function nowEl(){return playSrc?decks[deck].el:bed;}
 
-            <div class="eye__iris">
-              <div class="eye__iris-base" aria-hidden="true"></div>
-              <div class="eye__iris-depth" aria-hidden="true"></div>
-              <div class="eye__iris-rays" aria-hidden="true"></div>
-              <div class="eye__iris-ring" aria-hidden="true"></div>
-              <div class="eye__cornea" aria-hidden="true"></div>
-            </div>
-            <div class="eye__shine eye__shine--main" aria-hidden="true"></div>
-            <div class="eye__shine eye__shine--soft" aria-hidden="true"></div>
-          </div>
-          <div class="eye__shutter" aria-hidden="true"></div>
-        </div>
-          </div>
-        </div>
+/* ══════════════════════ THRESHOLD — hold the seal ══════════════════════ */
+const $=id=>document.getElementById(id);
+// bridge for the original symvolia.xyz intro (js/cinematic-intro.js)
+let entered=false;
+window.Symvolia={
+  unlockAudio(){ // synchronous inside the tap (iOS)
+    initAudio();ctx.resume();
+    try{new Audio('a/enter.mp3').play().catch(()=>{});}catch(e){}
+    if(bed)bed.play().catch(()=>{});
+  },
+  enterHome(){
+    if(entered)return;entered=true;
+    if(bedG){const t=ctx.currentTime;bedG.gain.setTargetAtTime(.7,t,1.5);bedLP.frequency.setTargetAtTime(9000,t,2);}
+    document.body.style.overflow='hidden';
+    $('arch').classList.remove('off');setRealm('Releases');
+  }
+};
 
-        <nav class="stage__orbit" aria-label="Alchemical inscriptions">
-          <ul class="stage__orbit-list">
-            <!-- Six clock marks 60° apart: 11 · 9 · 7 on the left, 1 · 3 · 5 on
-                 the right. --sx / --cy are sin/cos of each angle, so the items
-                 trace the seal's circle; each is anchored by its inner edge and
-                 therefore never crosses onto the sigil. -->
-            <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 0.5; --cy: 0.866; --d: 0">
-              <a class="stage__menu-item orbit-phrase--duo" href="#vision" data-enter="vision">QUOD SUPERIUS<br class="orbit-br orbit-br--duo" aria-hidden="true">SICUT INFERIUS</a>
-            </li>
-            <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 1; --cy: 0; --d: 1">
-              <a class="stage__menu-item orbit-phrase--duo" href="#contact" data-enter="contact">OMNE<br class="orbit-br orbit-br--duo" aria-hidden="true">UNUM</a>
-            </li>
-            <li class="stage__orbit-item stage__orbit-item--left" style="--sx: 0.5; --cy: -0.866; --d: 2">
-              <a class="stage__menu-item orbit-phrase--duo" href="https://soundcloud.com/symvolia/sets/track" target="_blank" rel="noopener noreferrer">SOLVE ET<br class="orbit-br orbit-br--duo" aria-hidden="true">COAGULA<span class="visually-hidden"> (opens in a new tab)</span></a>
-            </li>
-            <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 0.5; --cy: 0.866; --d: 3">
-              <a class="stage__menu-item orbit-phrase--duo" href="#archive" data-enter="archive">IN STERQUILINIIS<br class="orbit-br orbit-br--duo" aria-hidden="true">INVENITUR</a>
-            </li>
-            <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 1; --cy: 0; --d: 4">
-              <a class="stage__menu-item orbit-phrase--duo" id="podcastLink" href="https://soundcloud.com/symvolia/sets/podcast" target="_blank" rel="noopener noreferrer">NOSCE TE<br class="orbit-br orbit-br--duo" aria-hidden="true">IPSUM<span class="visually-hidden"> (opens in a new tab)</span></a>
-            </li>
-            <li class="stage__orbit-item stage__orbit-item--right" style="--sx: 0.5; --cy: -0.866; --d: 5">
-              <a class="stage__menu-item orbit-phrase--duo" href="#bio" data-enter="bio">VISITA<br class="orbit-br orbit-br--duo" aria-hidden="true">INTERIORA TERRAE</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+/* ══════════════════════ THE DIAL ══════════════════════ */
+const dial=$('dial'),ring=$('ring');
+// runic ring, drifting as on symvolia.xyz (home-runes-drift)
+(function(){const runes='ᛋᛁᛗᚢᛟᛚᛁᚨ · ᛋᛟᚢᚾᛞ · ᚨᛋ · ᛈᚨᛋᛋᚨᚷᛖ · ';
+  ring.innerHTML=`<defs><path id="rp" d="M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+  <g id="ringG"><circle cx="50" cy="50" r="41" fill="none" stroke="rgba(150,144,136,.22)" stroke-width=".18"/>
+  <g class="runes-drift"><text font-family="Runic" font-size="2.6" fill="rgba(150,144,136,.42)" letter-spacing=".9">
+  <textPath href="#rp" textLength="282">${runes.repeat(3)}</textPath></text></g></g>`;})();
+const ringG=document.getElementById('ringG');
+let realm='Releases',items=[],nodes=[],rot=0,rotT=0,act=-1;
+function setRealm(name){
+  realm=name;$('realms').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.r===name));
+  nodes.forEach(n=>n.remove());items=REALMS[name];
+  nodes=items.map((it,i)=>{const d=document.createElement('button');d.className='it';d.innerHTML=`<img src="${it.c}" alt="">`;
+    d.setAttribute('aria-label',it.t);d.addEventListener('click',()=>{if(dragMoved)return;if(i===act)openRel(i);else turnTo(i);});dial.appendChild(d);img(it.c);return d;});
+  act=-1;rot=rotT=0;turnTo(0,true);
+}
+Object.keys(REALMS).forEach(r=>{const b=document.createElement('button');b.className='lab';b.textContent=r;b.dataset.r=r;b.onclick=()=>setRealm(r);$('realms').appendChild(b);});
+const step=()=>Math.PI*2/items.length;
+function turnTo(i,force){
+  // choose the shortest rotation so that item i sits at the top
+  const target=-i*step();let d=target-rotT;d=Math.atan2(Math.sin(d),Math.cos(d));rotT+=d;select(i,force);
+}
+function select(i,force){
+  if(i===act&&!force)return;act=i;const it=items[i];
+  nodes.forEach((n,k)=>n.classList.toggle('on',k===i));
+  const T=$('iTitle');T.classList.add('swap');
+  setTimeout(()=>{$('iNum').textContent=ROMAN[i]+' · '+realm;T.textContent=it.t;$('iMeta').textContent=it.m;T.classList.remove('swap');},180);
+  setBg(it.c);playItem(it,!dragging);
+}
+function layout(){
+  const N=items.length;
+  nodes.forEach((n,i)=>{const a=rot+i*step()-Math.PI/2,R=41;
+    n.style.transform=`translate(${Math.cos(a)*R/15*100}%,${Math.sin(a)*R/15*100}%)`;
+    if(n.classList.contains('on'))n.style.transform=`translate(${Math.cos(a)*R/24*100}%,${Math.sin(a)*R/24*100}%)`;});
+  ringG.setAttribute('transform',`rotate(${rot*180/Math.PI} 50 50)`);
+}
+// drag to turn
+let dragging=false,dragMoved=false,lastA=0,vel=0;
+const angAt=e=>{const r=dial.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2));};
+dial.addEventListener('pointerdown',e=>{dragging=true;dragMoved=false;lastA=angAt(e);vel=0;});
+addEventListener('pointermove',e=>{if(!dragging)return;const a=angAt(e);let d=a-lastA;d=Math.atan2(Math.sin(d),Math.cos(d));lastA=a;
+  if(Math.abs(d)>.01||dragMoved){dragMoved=true;$('hint').classList.add('gone');rotT+=d;rot=rotT;vel=d;
+  const i=((Math.round(-rotT/step())%items.length)+items.length)%items.length;select(i);}});
+addEventListener('pointerup',e=>{if(!dragging)return;dragging=false;
+  if(!dragMoved){if(e.target.closest&&e.target.closest('.it'))return; // the button's own click handles it
+    const r=dial.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+    if(Math.hypot(dx,dy)<r.width*.3)openRel(act);return;}
+  const i=((Math.round(-rotT/step())%items.length)+items.length)%items.length;rotT=Math.round(rotT/step())*step();select(i);
+  setTimeout(()=>dragMoved=false,60);});
+// swipe / keys
+addEventListener('keydown',e=>{if($('arch').classList.contains('off'))return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')turnTo((act+1)%items.length);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')turnTo((act-1+items.length)%items.length);
+  if(e.key==='Enter')openRel(act);if(e.key==='Escape')closeAll();});
+$('iTitle').onclick=()=>openRel(act);$('iOpen').onclick=()=>openRel(act);
 
-    <div class="stage__footer">
-      <p class="stage__tagline" aria-live="polite">
-        <span>The Echo of your Own Soul</span>
-      </p>
+/* ══════════════════════ SHEETS ══════════════════════ */
+function openRel(i){const it=items[i];$('rCover').src=it.c;
+  const v=$('rVideo');$('rCover').style.display=it.video?'none':'';v.style.display=it.video?'block':'none';
+  if(it.video){if(v.getAttribute('src')!==it.video){v.src=it.video;}v.poster=it.c;}else{v.pause();}$('rTitle').textContent=it.t;$('rMeta').textContent=realm+' · '+it.m;
+  $('rList').innerHTML=(it.tr||[]).map((x,k)=>`<li class="${x[2]?'can':''}" data-k="${k}"><span>${ROMAN[k]} — ${x[0]}</span><span>${x[1]}</span></li>`).join('');
+  $('rList').style.display=it.tr?'':'none';
+  $('rList').querySelectorAll('li.can').forEach(li=>li.onclick=()=>{const x=it.tr[+li.dataset.k];
+    $('rList').querySelectorAll('li').forEach(l=>l.classList.toggle('on',l===li));playItem({au:x[2],at:x[3]},true);});
+  $('pl').style.display=(it.au||(it.tr||[]).some(x=>x[2]))?'':'none';$('pPlay').innerHTML=IC_PA;
+  $('rLinks').innerHTML=it.l.map(([n,h])=>`<a class="cta lab" href="${h}" target="_blank" rel="noopener">${n} →</a>`).join('');
+  $('rel').scrollTop=0;$('rel').classList.remove('off');}
+$('rVideo').addEventListener('play',()=>{if(!ctx)return;fade(bedG,0,.4);decks.forEach(d=>{fade(d.g,0,.3);d.el.pause();});playSrc=null;});
+$('rVideo').addEventListener('pause',()=>{if(ctx)fade(bedG,.7,1.2);});
+const IC_PA='<svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5" width="2" height="9" fill="currentColor"/><rect x="8" y="1.5" width="2" height="9" fill="currentColor"/></svg>',IC_PL='<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 1.5 10.5 6 2.5 10.5Z" fill="currentColor"/></svg>';
+const fmt=x=>isFinite(x)?Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0'):'–';
+$('pPlay').onclick=()=>{const el=nowEl();if(el.paused){el.play();$('pPlay').innerHTML=IC_PA;}else{el.pause();$('pPlay').textContent='▶';}};
+$('pBar').onclick=e=>{const el=nowEl(),r=e.currentTarget.getBoundingClientRect();if(isFinite(el.duration))el.currentTime=(e.clientX-r.left)/r.width*el.duration;};
+function closeAll(){$('rVideo').pause();$('rel').classList.add('off');$('bio').classList.add('off');}
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
+$('bioBtn').onclick=()=>{$('bio').scrollTop=0;$('bio').classList.remove('off');};
 
-      <div class="stage__enter" id="enterCta">
-        <button type="button" class="stage__enter-btn" id="enterBtn" aria-label="Enter the Archive">
-          <span class="stage__enter-label--desk">Enter the Archive</span>
-          <span class="stage__enter-label--tap">Enter the Archive</span>
-        </button>
-        <span class="stage__enter-hint">or press Enter</span>
-      </div>
 
-      <nav class="stage__social" aria-label="Social links">
-        <a class="stage__social-link" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener noreferrer" aria-label="SoundCloud">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c0-.057-.045-.1-.09-.1m-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.06.045.093.09.093.06 0 .09-.037.09-.093l.24-1.308-.24-1.332c0-.057-.045-.09-.09-.09m1.83-1.229c-.061 0-.12.045-.12.104l-.21 2.563.225 2.458c0 .06.045.104.119.104.061 0 .105-.044.119-.104l.24-2.458-.24-2.563c-.014-.06-.062-.104-.121-.104m.945-.089c-.075 0-.135.06-.15.135l-.193 2.64.21 2.544c.016.077.075.138.149.138.075 0 .135-.061.15-.15l.24-2.532-.24-2.623c0-.075-.06-.135-.135-.135m1.155.36c-.006-.09-.075-.149-.159-.149-.09 0-.158.06-.164.149l-.217 2.43.2 2.563c0 .09.075.157.159.157.074 0 .148-.068.148-.158l.227-2.563-.227-2.442m.809-1.709c-.101 0-.18.09-.18.194l-.21 3.855.187 2.563c0 .09.08.179.18.179.107 0 .18-.08.18-.18l.209-2.563-.209-3.855c0-.104-.074-.187-.18-.187m.899-.914c-.104 0-.194.089-.194.194l-.21 4.784.194 2.548c0 .12.089.194.209.194.104 0 .193-.089.193-.209l.211-2.533-.211-4.784c0-.105-.089-.194-.192-.194m.989-.226c-.12 0-.209.104-.209.225l-.194 5.005.194 2.518c0 .12.089.225.209.225.119 0 .209-.104.209-.225l.225-2.518-.225-5.005c0-.121-.09-.225-.211-.225m1.245.045c0-.135-.105-.24-.24-.24-.119 0-.24.105-.24.24l-.194 5.184.194 2.503c.016.135.121.24.256.24.135 0 .24-.105.24-.24l.209-2.503-.225-5.184m.749-.914c-.15 0-.255.12-.255.255l-.18 6.098.18 2.473c0 .149.12.254.255.254s.24-.12.255-.27l.209-2.457-.209-6.098c-.016-.148-.135-.253-.271-.253m1.005.166c-.164 0-.284.135-.284.285l-.18 5.746.18 2.443c0 .149.135.284.285.284.149 0 .284-.135.284-.299l.194-2.428-.194-5.746c0-.165-.135-.285-.285-.285m1.184-.945c-.045-.03-.105-.044-.164-.044-.061 0-.121.014-.164.044-.091.045-.15.135-.15.24l-.18 6.75.164 2.428c0 .18.15.314.33.314.164 0 .314-.135.314-.329l.18-2.428-.18-6.735c0-.135-.075-.24-.196-.285m9.481 3.474c-.494 0-.96.104-1.395.284-.285-3.284-3.028-5.858-6.383-5.858-.824 0-1.634.166-2.354.435-.283.104-.36.21-.36.42v11.245c0 .225.166.39.375.42h9.517c1.888 0 3.42-1.53 3.42-3.42s-1.53-3.435-3.42-3.435"/>
-          </svg>
-        </a>
-        <a class="stage__social-link" href="https://www.instagram.com/symvolia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0m0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324M12 16a4 4 0 110-8 4 4 0 010 8m6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881"/>
-          </svg>
-        </a>
-        <a class="stage__social-link" href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener noreferrer" aria-label="Bandcamp">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M0 18.75l7.437-13.5H24l-7.437 13.5H0z"/>
-          </svg>
-        </a>
-        <button type="button" class="stage__social-link mail-trigger" data-email="symvolia@gmail.com" aria-label="Email" aria-haspopup="true" aria-expanded="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M2.5 5.5h19v13h-19z"/>
-            <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 6.2l9 6.3 9-6.3"/>
-          </svg>
-        </button>
-      </nav>
-    </div>
-  </section>
-
-  <main class="main esoteric-panel" id="main" hidden>
-    <div class="main__grain" aria-hidden="true"></div>
-    <div class="main__sub" aria-hidden="true"></div>
-    <div class="main__depth" aria-hidden="true"></div>
-    <div class="main__waveform" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-
-    <header class="main__header reveal" data-reveal>
-      <button type="button" class="main__back" id="backBtn" aria-label="Back" title="Back">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/>
-        </svg>
-      </button>
-      <nav class="main__nav" aria-label="Primary">
-        <a href="#bio">Bio</a>
-        <a href="#vision">Vision</a>
-        <a href="#archive">Archive</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
-
-    <section class="main__bio" id="bio" tabindex="-1">
-      <div class="main__bio-inner reveal" data-reveal>
-        <div class="main__section-head">
-          <h2 class="main__section-title">Bio</h2>
-          <p class="main__section-sub">The one behind the sound</p>
-        </div>
-        <div class="main__bio-body">
-          <p>
-            Symvolia is a Producer, DJ and Live Artist born and raised in North-Italy.
-            His project is focused on the remembrance of our origins through the use of sounds.
-            In constant exploration of the vast world of electronic music, his research is based
-            on finding the soundscape that remember what our ego is trying to hide.
-          </p>
-          <p>
-            Between the noise of the modern society that close the listening of our true needs,
-            the silences become the territory in which we find our true selves.
-            If all of us can listen deeply and openly to ourselves, we are able to return to our origin.
-          </p>
-          <p>
-            By merging ritual atmosphere and cinematic elements, broken beats, experimental textures
-            and ancient drums into industrial music, he has found his vision; a space where the listener
-            can face himself.
-          </p>
-          <p>
-            The sound, with his power, can be a catalyst to a new ascension of our soul.
-            Not just ours, but everyone&rsquo;s.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="main__hero" id="vision" tabindex="-1">
-      <div class="main__hero-inner reveal" data-reveal>
-        <h1 class="main__title" tabindex="-1">Sound as Passage</h1>
-        <p class="main__lead">
-          Research and Exploration of the inner realms through the use of Sound.
-        </p>
-        <div class="main__manifesto">
-          <p>
-            Symvolia treats music as a medium for inner exploration — sculpting soundscapes
-            that weave orchestral depth, raw noise, and the resonance of ancient drums.
-            Guided by ritual energy and cinematic darkness, each work invites the listener
-            to surrender the senses and descend toward the essence of the true self.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="main__archive" id="archive" tabindex="-1">
-      <div class="archive-portal archive-portal--sun reveal" data-reveal>
-        <a class="archive-portal__btn" id="archivePortalBtn" href="archive.html">
-          <picture>
-            <source srcset="assets/archive-seal.webp?v=1" type="image/webp">
-            <img
-              class="archive-portal__sun"
-              src="assets/archive-seal.png?v=1"
-              width="576"
-              height="1024"
-              alt=""
-              decoding="async"
-            >
-          </picture>
-          <span class="archive-portal__label">Sound<br>Archive</span>
-        </a>
-      </div>
-    </section>
-
-    <footer class="main__contact" id="contact" tabindex="-1">
-      <div class="main__contact-inner reveal" data-reveal>
-        <h2 class="main__section-title">Contact</h2>
-        <p class="main__contact-lead">For collaborations, inquiries, and passage.</p>
-        <nav class="main__social" aria-label="Social links">
-          <a class="main__social-link" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener noreferrer" aria-label="SoundCloud">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path fill="currentColor" d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c0-.057-.045-.1-.09-.1m-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.06.045.093.09.093.06 0 .09-.037.09-.093l.24-1.308-.24-1.332c0-.057-.045-.09-.09-.09m1.83-1.229c-.061 0-.12.045-.12.104l-.21 2.563.225 2.458c0 .06.045.104.119.104.061 0 .105-.044.119-.104l.24-2.458-.24-2.563c-.014-.06-.062-.104-.121-.104m.945-.089c-.075 0-.135.06-.15.135l-.193 2.64.21 2.544c.016.077.075.138.149.138.075 0 .135-.061.15-.15l.24-2.532-.24-2.623c0-.075-.06-.135-.135-.135m1.155.36c-.006-.09-.075-.149-.159-.149-.09 0-.158.06-.164.149l-.217 2.43.2 2.563c0 .09.075.157.159.157.074 0 .148-.068.148-.158l.227-2.563-.227-2.442m.809-1.709c-.101 0-.18.09-.18.194l-.21 3.855.187 2.563c0 .09.08.179.18.179.107 0 .18-.08.18-.18l.209-2.563-.209-3.855c0-.104-.074-.187-.18-.187m.899-.914c-.104 0-.194.089-.194.194l-.21 4.784.194 2.548c0 .12.089.194.209.194.104 0 .193-.089.193-.209l.211-2.533-.211-4.784c0-.105-.089-.194-.192-.194m.989-.226c-.12 0-.209.104-.209.225l-.194 5.005.194 2.518c0 .12.089.225.209.225.119 0 .209-.104.209-.225l.225-2.518-.225-5.005c0-.121-.09-.225-.211-.225m1.245.045c0-.135-.105-.24-.24-.24-.119 0-.24.105-.24.24l-.194 5.184.194 2.503c.016.135.121.24.256.24.135 0 .24-.105.24-.24l.209-2.503-.225-5.184m.749-.914c-.15 0-.255.12-.255.255l-.18 6.098.18 2.473c0 .149.12.254.255.254s.24-.12.255-.27l.209-2.457-.209-6.098c-.016-.148-.135-.253-.271-.253m1.005.166c-.164 0-.284.135-.284.285l-.18 5.746.18 2.443c0 .149.135.284.285.284.149 0 .284-.135.284-.299l.194-2.428-.194-5.746c0-.165-.135-.285-.285-.285m1.184-.945c-.045-.03-.105-.044-.164-.044-.061 0-.121.014-.164.044-.091.045-.15.135-.15.24l-.18 6.75.164 2.428c0 .18.15.314.33.314.164 0 .314-.135.314-.329l.18-2.428-.18-6.735c0-.135-.075-.24-.196-.285m9.481 3.474c-.494 0-.96.104-1.395.284-.285-3.284-3.028-5.858-6.383-5.858-.824 0-1.634.166-2.354.435-.283.104-.36.21-.36.42v11.245c0 .225.166.39.375.42h9.517c1.888 0 3.42-1.53 3.42-3.42s-1.53-3.435-3.42-3.435"/>
-            </svg>
-          </a>
-          <a class="main__social-link" href="https://www.instagram.com/symvolia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0m0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324M12 16a4 4 0 110-8 4 4 0 010 8m6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881"/>
-            </svg>
-          </a>
-          <a class="main__social-link" href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener noreferrer" aria-label="Bandcamp">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path fill="currentColor" d="M0 18.75l7.437-13.5H24l-7.437 13.5H0z"/>
-            </svg>
-          </a>
-          <button type="button" class="main__social-link mail-trigger" data-email="symvolia@gmail.com" aria-label="Email" aria-haspopup="true" aria-expanded="false">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M2.5 5.5h19v13h-19z"/>
-              <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 6.2l9 6.3 9-6.3"/>
-            </svg>
-          </button>
-        </nav>
-        <p class="main__footer-note">Symvolia · Verona, Italy</p>
-      </div>
-    </footer>
-  </main>
-
-  <video
-    class="archive-flow"
-    id="archiveFlow"
-    muted
-    playsinline
-    webkit-playsinline
-    loop
-    preload="metadata"
-    aria-hidden="true"
-  >
-    <source src="assets/archive-flow.mp4?v=1" type="video/mp4">
-  </video>
-  <p class="archive-flow__label" id="archiveFlowLabel" hidden>Sound<br>Archive</p>
-
-  <script src="js/ouroboros.js?v=6" defer></script>
-  <script src="js/archive-flow.js?v=8" defer></script>
-  <script src="js/archive-ambient.js?v=1" defer></script>
-  <script src="js/main.js?v=52" defer></script>
-  <script src="js/environment.js?v=9" defer></script>
-  <script src="js/design-system.js?v=1" defer></script>
-  <script src="js/cinematic-intro.js?v=28" defer></script>
+/* ══════════════════════ LOOP — only while something moves ══════════════════════ */
+let last=performance.now();
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(!dragging)rot+=(rotT-rot)*Math.min(1,dt*3.2);
+  if(items.length)layout();
+  if(!$('rel').classList.contains('off')&&playSrc){const el=nowEl();$('pFill').style.width=(el.currentTime/el.duration*100||0)+'%';$('pTime').textContent=fmt(el.currentTime)+' / '+fmt(el.duration);}
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+<script src="js/cinematic-intro.js"></script>
 </body>
 </html>
