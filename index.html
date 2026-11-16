@@ -181,6 +181,19 @@ a{color:inherit}
   .top .me{font-size:15px}.realms button{font-size:12px;padding:4px 0}
 }
 @media (max-height:620px) and (orientation:portrait){ #dial{width:min(90vw,48vh)} #iTitle{font-size:clamp(34px,10vw,48px)} }
+
+/* ───────────── RHYTHM — tabs tucked under the name, even spacing everywhere ───────────── */
+.realms{margin-top:clamp(2px,.6vh,8px)}
+.realms button{padding:5px 0 6px}
+#arch{row-gap:0}
+#arch > #dial{margin:clamp(10px,2.4vh,28px) 0}
+.info{margin-bottom:clamp(8px,2vh,24px)}
+@media (orientation:portrait){
+  #arch{grid-template-rows:auto auto minmax(0,1fr) auto auto}
+  #dial{align-self:center}
+}
+@media (min-aspect-ratio:5/4) and (min-height:561px){ #arch > #dial{margin:0} .info{margin-bottom:0} }
+@media (orientation:landscape) and (max-height:560px){ #arch > #dial{margin:0} .info{margin-bottom:0} .realms{margin-top:0} }
 </style>
 </head>
 <body>
