@@ -16,9 +16,19 @@
 <meta name="color-scheme" content="dark">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="a/fonts/cormorant-garamond-latin-300-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="a/fonts/unifrakturcook-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:300;font-display:swap;src:url(a/fonts/cormorant-garamond-latin-300-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:400;font-display:swap;src:url(a/fonts/cormorant-garamond-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:400;font-display:swap;src:url(a/fonts/cormorant-garamond-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:300;font-display:swap;src:url(a/fonts/cormorant-garamond-latin-300-italic.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:400;font-display:swap;src:url(a/fonts/cormorant-garamond-latin-400-italic.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:300;font-display:swap;src:url(a/fonts/cormorant-garamond-latin-ext-300-italic.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(a/fonts/space-mono-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'UnifrakturCook';font-style:normal;font-weight:700;font-display:swap;src:url(a/fonts/unifrakturcook-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(a/fonts/space-mono-latin-400-normal.woff2) format('woff2')}
+</style>
 <link rel="stylesheet" href="css/cinematic-intro.css?v=20261116b">
 <script>document.documentElement.classList.add('loading','is-intro','is-cine');</script>
 <style>
@@ -221,10 +231,95 @@ h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
 #copyMail{min-height:44px;padding:12px 4px}
 .enter,.cta{min-height:44px}
 @media (hover:none){#iTitle{cursor:default}}
+/* ───────────── PROVA: 40% reference — blackletter, mono labels, red pulse, liquid glitch ───────────── */
+:root{--red:#e8445c;--red-a:rgba(232,68,92,.6);--mono:'Space Mono',ui-monospace,monospace;--goth:'UnifrakturCook','Cormorant Garamond',serif}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.lab{font-family:var(--mono);letter-spacing:.3em;font-size:calc(var(--lab) - 1px)}
+#iTitle,#rTitle{font-family:var(--goth);font-style:normal;font-weight:700;letter-spacing:.01em}
+#iTitle{font-size:clamp(34px,min(10vw,8vh),96px)}
+@media (min-aspect-ratio:5/4) and (min-height:561px){#iTitle{font-size:clamp(42px,min(5.8vw,9.5vh),110px)}}
+@media (orientation:landscape) and (max-height:560px){#iTitle{font-size:clamp(28px,11vh,62px)}}
+.realms button.on{color:var(--red);border-color:var(--red-a)}
+#iNum{color:var(--red)}
+#iNum::before{content:"● ";font-size:.8em}
+#dial .it.on{outline-color:var(--red-a)}
+#iOpen:hover{color:var(--red);border-color:var(--red-a)}
+#pFill{background:var(--red)}
+#rList li.on,#rList li.can:hover{color:var(--red)}
+.cta:hover{border-color:var(--red);color:var(--red)}
+.cine__enter{border-color:rgba(232,68,92,.6)!important;color:#e8445c!important;font-family:var(--mono)!important}
+/* title glitch on every change */
+#iTitle.glitch{animation:tglitch .42s steps(2) 1}
+@keyframes tglitch{0%{transform:translate(0);clip-path:inset(0)}20%{transform:translate(-3px,1px);clip-path:inset(12% 0 48% 0);color:var(--red)}
+ 40%{transform:translate(4px,-1px);clip-path:inset(55% 0 8% 0)}60%{transform:translate(-2px,0);clip-path:inset(30% 0 30% 0);color:var(--ink)}100%{transform:none;clip-path:inset(0)}}
+
+/* ───────────── FILL — larger header & elements that use the whole screen ───────────── */
+:root{--lab:clamp(12px,.3vw + 10.8px,15px)}
+.top .me{font-size:clamp(15px,1.1vw + 11px,22px);letter-spacing:.7em;padding-left:.7em;color:var(--ink)}
+#bioBtn{font-size:clamp(12px,.4vw + 10.5px,15px)}
+.realms button{font-size:clamp(12px,.35vw + 10.6px,15px);padding:8px 0}
+#arch{grid-template-rows:auto auto minmax(0,1fr) auto auto;row-gap:clamp(4px,1vh,14px)}
+#dial{width:min(94vw,54vh,760px)}
+#dial .it{width:16%;margin:-8% 0 0 -8%}
+#dial .it.on{width:23%;margin:-11.5% 0 0 -11.5%}
+#iTitle{font-size:clamp(40px,min(12.5vw,8.2vh),104px)}
+#iNum,#iMeta{font-size:clamp(11px,.3vw + 10px,14px)}
+#iOpen{font-size:clamp(12px,.3vw + 10.8px,15px);margin-top:clamp(10px,1.6vh,20px)}
+.bot{font-size:clamp(11px,.25vw + 10px,13px)}.runes{font-size:clamp(14px,.4vw + 12px,18px)}
+@media (min-width:600px) and (orientation:portrait){ #dial{width:min(82vw,54vh,760px)} }
+@media (min-aspect-ratio:5/4) and (min-height:561px){
+  #dial{width:min(46vw,70vh,820px)}
+  #iTitle{font-size:clamp(46px,min(6.4vw,10.5vh),128px)}
+}
+@media (orientation:landscape) and (max-height:560px){
+  #dial{width:min(84vh,46vw)} #iTitle{font-size:clamp(30px,12vh,70px)}
+  .top .me{font-size:15px}.realms button{font-size:12px;padding:4px 0}
+}
+@media (max-height:620px) and (orientation:portrait){ #dial{width:min(90vw,48vh)} #iTitle{font-size:clamp(34px,10vw,48px)} }
+
+#dial{max-width:100%}
+@media (orientation:portrait){#dial{width:min(94vw,calc(var(--vh100) - 360px - 15vw),760px);min-width:180px}}
+/* ───────────── RHYTHM — tabs tucked under the name, even spacing everywhere ───────────── */
+.realms{margin-top:clamp(2px,.6vh,8px)}
+.realms button{padding:5px 0 6px}
+#arch{row-gap:0}
+#arch > #dial{margin:clamp(10px,2.4vh,28px) 0}
+.info{margin-bottom:clamp(8px,2vh,24px)}
+@media (orientation:portrait){
+  #arch{grid-template-rows:auto auto minmax(0,1fr) auto auto}
+  #dial{align-self:center}
+}
+@media (min-aspect-ratio:5/4) and (min-height:561px){ #arch > #dial{margin:0} .info{margin-bottom:0} }
+@media (orientation:landscape) and (max-height:560px){ #arch > #dial{margin:0} .info{margin-bottom:0} .realms{margin-top:0} }
+
+/* ───────────── GUIDELINES — contrast, focus, touch targets ───────────── */
+:root{--dim:rgba(170,163,154,.86)}
+h1.me,h2#iTitle{margin:0;font-weight:inherit}
+h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
+:focus{outline:none}
+:focus-visible{outline:1px solid var(--bone);outline-offset:5px;border-radius:2px}
+#dial .it:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+#bioBtn{padding:15px 10px;margin:-15px -10px}
+.realms button{min-height:44px;padding:12px 2px 10px}
+.realms{row-gap:0}
+#iOpen{min-height:44px;padding:12px 4px}
+.sheet .x{width:44px;height:44px}
+#pPlay{width:44px;height:44px}
+#copyMail{min-height:44px;padding:12px 4px}
+.enter,.cta{min-height:44px}
+@media (hover:none){#iTitle{cursor:default}}
+
+@media (prefers-reduced-motion:reduce){#iTitle.glitch{animation:none}}
+#iNum::before{content:"● "}
+
+@media (orientation:landscape) and (max-height:560px){
+  #iTitle{font-size:clamp(24px,min(9vh,5.2vw),54px);line-height:1.02}
+  .info{align-self:end;padding-bottom:4px}
+}
 </style>
 </head>
 <body>
-<div id="bg"><div class="bgl"></div><div class="bgl"></div></div><div id="grain"></div>
+<div id="bg"><canvas id="gl" aria-hidden="true"></canvas></div><div id="grain"></div>
 
 <!-- ═════════ THRESHOLD ═════════ -->
 <main id="app">
@@ -502,14 +597,42 @@ const AUDIO={
 };
 Object.values(REALMS).flat().forEach(it=>{const a=AUDIO[it.t];if(a){it.au=a.au;it.at=a.at;}});
 
-/* ══════════════════════ ATMOSPHERE — blurred, silent cover light ══════════════════════ */
-const layers=[...document.querySelectorAll('.bgl')];let li=0;const cache={};
-function img(src){if(cache[src])return cache[src];const i=new Image();i.decoding='async';i.src=src;cache[src]=i;return i;}
-function setBg(src){
-  const im=img(src);const go=()=>{const next=layers[1-li],prev=layers[li];
-    next.style.backgroundImage=`url("${src}")`;next.classList.remove('on');void next.offsetWidth;next.classList.add('on');prev.classList.remove('on');li=1-li;};
-  im.complete&&im.naturalWidth?go():im.addEventListener('load',go,{once:true});
-}
+/* ══════════════════════ ATMOSPHERE — cover + liquid glitch (from the reference, at 40%) ══════════════════════ */
+const cv=document.getElementById('gl'),gl=cv.getContext('webgl',{antialias:false});
+const FS=`precision highp float;uniform vec2 uR,uTR;uniform float uT,uG,uLv,uF;uniform sampler2D uTex;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float h1(float x){return fract(sin(x*91.3)*47453.5);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.03+1.7;a*=.5;}return v;}
+void main(){vec2 uv=gl_FragCoord.xy/uR;float t=uT*.06,g=clamp(uG,0.,1.);
+ vec2 w=vec2(fbm(uv*4.+t*5.),fbm(uv*4.+3.1-t*5.))-.5;float m=smoothstep(.38,.72,fbm(uv*2.4+vec2(t*3.,-t*2.)));
+ uv+=w*(g*.26*m+.006);float row=floor(uv.y*48.);uv.x+=step(.92,h1(row+floor(uT*14.)))*g*(h1(row*3.1+floor(uT*14.))-.5)*.12;
+ float ar=uR.x/uR.y,ta=uTR.x/uTR.y;vec2 s=ar>ta?vec2(1.,ta/ar):vec2(ar/ta,1.);vec2 u=(uv-.5)*s*.9*(1.-.06*uF)+.5;u.y=1.-u.y;
+ vec3 c=texture2D(uTex,u).rgb;float L=smoothstep(.03,.97,dot(c,vec3(.299,.587,.114)));
+ vec3 col=vec3(L)*vec3(.84,.81,.77)*.36;
+ float z=.5+.5*sin((L+w.x*.8)*90.+uT*3.);vec3 iri=mix(vec3(.05),vec3(.86,.83,.78),z);iri=mix(iri,vec3(.83,.13,.23)*z,.25);
+ col=mix(col,iri*(.25+L*.6),g*m*.75);col.r+=g*.06*(fbm(uv*28.+t*18.)-.5);
+ col*=1.+uLv*.25;col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)*.06;gl_FragColor=vec4(col,1.);}`;
+function sh(t,src){const o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o;}
+const P=gl.createProgram();gl.attachShader(P,sh(gl.VERTEX_SHADER,'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));gl.attachShader(P,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(P);gl.useProgram(P);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+const U={};['uR','uTR','uT','uG','uLv','uF','uTex'].forEach(k=>U[k]=gl.getUniformLocation(P,k));
+const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);[gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.CLAMP_TO_EDGE));
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,1,1,0,gl.RGB,gl.UNSIGNED_BYTE,new Uint8Array([2,2,2]));
+let TW=1,TH=1,G=0,pend=null,born=performance.now(),nextBurst=4;const RS=Math.min(devicePixelRatio||1,2)*.5;
+function rsz(){cv.width=Math.round(innerWidth*RS);cv.height=Math.round(innerHeight*RS);gl.viewport(0,0,cv.width,cv.height);}addEventListener('resize',rsz);rsz();
+const cache={};function img(src){if(cache[src])return cache[src];const i=new Image();i.src=src;cache[src]=i;return i;}
+function setBg(src){const im=img(src);G=matchMedia('(prefers-reduced-motion: reduce)').matches?0:1;const go=()=>{pend=im;};im.complete&&im.naturalWidth?go():im.addEventListener('load',go,{once:true});
+  const T=document.getElementById('iTitle');T.classList.remove('glitch');void T.offsetWidth;T.classList.add('glitch');}
+let an2=null,fb2=null,lv=0,t0=performance.now(),lt=t0;
+function glLoop(now){const T=(now-t0)/1000,dt=Math.min(.05,(now-lt)/1000);lt=now;
+  if(pend){G=Math.max(G,.9);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,pend);TW=pend.naturalWidth;TH=pend.naturalHeight;window.__bgSrc=pend.src;pend=null;born=now;}
+  if(T>nextBurst&&!document.hidden&&!matchMedia('(prefers-reduced-motion: reduce)').matches){G=Math.max(G,.35+Math.random()*.3);nextBurst=T+6+Math.random()*7;}
+  if(typeof ctx!=='undefined'&&ctx&&!an2){an2=ctx.createAnalyser();an2.fftSize=128;fb2=new Uint8Array(an2.frequencyBinCount);try{master.connect(an2);}catch(e){}}
+  let l=0;if(an2){an2.getByteFrequencyData(fb2);for(let i=1;i<10;i++)l+=fb2[i];l/=9*255;}lv+=(l-lv)*.2;
+  G*=Math.pow(.22,dt);
+  gl.uniform2f(U.uR,cv.width,cv.height);gl.uniform2f(U.uTR,TW,TH);gl.uniform1f(U.uT,T);gl.uniform1f(U.uG,G);gl.uniform1f(U.uLv,lv);gl.uniform1f(U.uF,Math.min(1,(now-born)/30000));
+  gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(glLoop);}
+requestAnimationFrame(glLoop);
 
 /* ══════════════════════ SOUND — real files only ══════════════════════ */
 let ctx,master,an,fb,bed,bedG,bedLP;
