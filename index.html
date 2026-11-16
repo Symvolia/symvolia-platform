@@ -550,9 +550,13 @@ addEventListener('pointerup',e=>{if(!dragging)return;dragging=false;
   setTimeout(()=>dragMoved=false,60);});
 // swipe / keys
 addEventListener('keydown',e=>{if($('arch').classList.contains('off'))return;
+  const sheetOpen=!$('rel').classList.contains('off')||!$('bio').classList.contains('off');
+  if(sheetOpen){if(e.key==='Escape')closeAll();return;}
   if(e.key==='ArrowRight'||e.key==='ArrowDown')turnTo((act+1)%items.length);
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')turnTo((act-1+items.length)%items.length);
   if(e.key==='Enter')openRel(act);if(e.key==='Escape')closeAll();});
+let wheelLock=0;dial.addEventListener('wheel',e=>{e.preventDefault();const now=performance.now();if(now<wheelLock||Math.abs(e.deltaY)<4)return;wheelLock=now+420;
+  turnTo(((act+(e.deltaY>0?1:-1))%items.length+items.length)%items.length);},{passive:false});
 $('iTitle').onclick=()=>openRel(act);$('iOpen').onclick=()=>openRel(act);
 
 /* ══════════════════════ SHEETS ══════════════════════ */
