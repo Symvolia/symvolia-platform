@@ -173,8 +173,8 @@ a{color:inherit}
 .realms button{font-size:clamp(12px,.35vw + 10.6px,15px);padding:8px 0}
 #arch{grid-template-rows:auto auto minmax(0,1fr) auto auto;row-gap:clamp(4px,1vh,14px)}
 #dial{width:min(94vw,54vh,760px)}
-#dial .it{width:17%;margin:-8.5% 0 0 -8.5%}
-#dial .it.on{width:26%;margin:-13% 0 0 -13%}
+#dial .it{width:16%;margin:-8% 0 0 -8%}
+#dial .it.on{width:23%;margin:-11.5% 0 0 -11.5%}
 #iTitle{font-size:clamp(40px,min(12.5vw,8.2vh),104px)}
 #iNum,#iMeta{font-size:clamp(11px,.3vw + 10px,14px)}
 #iOpen{font-size:clamp(12px,.3vw + 10.8px,15px);margin-top:clamp(10px,1.6vh,20px)}
@@ -190,6 +190,8 @@ a{color:inherit}
 }
 @media (max-height:620px) and (orientation:portrait){ #dial{width:min(90vw,48vh)} #iTitle{font-size:clamp(34px,10vw,48px)} }
 
+#dial{max-width:100%}
+@media (orientation:portrait){#dial{width:min(94vw,calc(var(--vh100) - 360px - 15vw),760px);min-width:180px}}
 /* ───────────── RHYTHM — tabs tucked under the name, even spacing everywhere ───────────── */
 .realms{margin-top:clamp(2px,.6vh,8px)}
 .realms button{padding:5px 0 6px}
@@ -570,7 +572,7 @@ const dial=$('dial'),ring=$('ring');
 // runic ring, drifting as on symvolia.xyz (home-runes-drift)
 (function(){const runes='ᛋᛁᛗᚢᛟᛚᛁᚨ · ᛋᛟᚢᚾᛞ · ᚨᛋ · ᛈᚨᛋᛋᚨᚷᛖ · ';
   ring.innerHTML=`<defs><path id="rp" d="M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
-  <g id="ringG"><circle cx="50" cy="50" r="41" fill="none" stroke="rgba(150,144,136,.22)" stroke-width=".18"/>
+  <g id="ringG"><circle cx="50" cy="50" r="38" fill="none" stroke="rgba(150,144,136,.22)" stroke-width=".18"/>
   <g class="runes-drift"><text font-family="Runic" font-size="2.6" fill="rgba(150,144,136,.42)" letter-spacing=".9">
   <textPath href="#rp" textLength="282">${runes.repeat(3)}</textPath></text></g></g>`;})();
 const ringG=document.getElementById('ringG');
@@ -597,9 +599,9 @@ function select(i,force){
 }
 function layout(){
   const N=items.length;
-  nodes.forEach((n,i)=>{const a=rot+i*step()-Math.PI/2,R=41;
-    n.style.transform=`translate(${Math.cos(a)*R/17*100}%,${Math.sin(a)*R/17*100}%)`;
-    if(n.classList.contains('on'))n.style.transform=`translate(${Math.cos(a)*R/26*100}%,${Math.sin(a)*R/26*100}%)`;});
+  nodes.forEach((n,i)=>{const a=rot+i*step()-Math.PI/2,R=38;
+    n.style.transform=`translate(${Math.cos(a)*R/16*100}%,${Math.sin(a)*R/16*100}%)`;
+    if(n.classList.contains('on'))n.style.transform=`translate(${Math.cos(a)*R/23*100}%,${Math.sin(a)*R/23*100}%)`;});
   ringG.setAttribute('transform',`rotate(${rot*180/Math.PI} 50 50)`);
 }
 // drag to turn
