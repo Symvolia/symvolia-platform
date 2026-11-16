@@ -68,7 +68,10 @@ a{color:inherit}
 #ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .runes-drift{transform-origin:50px 50px;animation:runesDrift 240s linear infinite}@keyframes runesDrift{to{transform:rotate(-360deg)}}
 @keyframes sealBreathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.012)}}
-#dialSeal{position:absolute;left:50%;top:50%;width:74%;transform:translate(-50%,-50%);opacity:1;animation:sealBreathe 9s var(--ease-breathe) infinite;pointer-events:none}
+#dialSealBox{position:absolute;inset:13%;pointer-events:none;animation:sealBreathe2 9s var(--ease-breathe) infinite;transform-origin:50% 50%}
+#dialSealBox picture{display:block;width:100%;height:100%}
+#dialSeal{display:block;width:100%;height:100%;object-fit:contain}
+@keyframes sealBreathe2{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
 #dial .it{position:absolute;left:50%;top:50%;width:15%;aspect-ratio:1;margin:-7.5% 0 0 -7.5%;border-radius:50%;overflow:hidden;
   outline:1px solid var(--faint);outline-offset:3px;transition:width 1.1s var(--ease-open),margin 1.1s var(--ease-open),outline-color 1s,filter 1.2s;filter:grayscale(1) brightness(.55)}
 #dial .it img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
@@ -331,7 +334,7 @@ a{color:inherit}
   <nav class="realms lab" id="realms"></nav>
   <div id="dial" aria-label="Turn the seal to choose">
     <svg id="ring" viewBox="0 0 100 100"></svg>
-    <picture><source srcset="a/emblem.webp?v=20261116b" type="image/webp"><img id="dialSeal" src="a/emblem.png?v=20261116b" alt="Symvolia"></picture>
+    <div id="dialSealBox"><picture><source srcset="a/emblem.webp?v=20261116b" type="image/webp"><img id="dialSeal" src="a/emblem.png?v=20261116b" alt="Symvolia" width="900" height="900"></picture></div>
   </div>
   <div class="info">
     <div class="lab" id="iNum"></div>
