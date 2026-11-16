@@ -190,9 +190,10 @@ html.is-cine .sound-toggle {
   z-index: 2;
   width: calc(var(--emblem-field) * var(--emblem-seal-ratio) + 0.4cm);
   height: calc(var(--emblem-field) * var(--emblem-seal-ratio) + 0.4cm);
+  /* the seal artwork sits 1.32% low inside its own image: compensate so it is truly centred in the pupil */
   transform: translate(
-    calc(-50% + var(--emblem-seal-nudge-x)),
-    calc(-50% + var(--emblem-seal-nudge-y))
+    calc(-50% + var(--emblem-seal-nudge-x) - 0.05%),
+    calc(-50% + var(--emblem-seal-nudge-y) - 1.32%)
   );
   object-fit: contain;
   object-position: center center;
