@@ -194,12 +194,30 @@ a{color:inherit}
 }
 @media (min-aspect-ratio:5/4) and (min-height:561px){ #arch > #dial{margin:0} .info{margin-bottom:0} }
 @media (orientation:landscape) and (max-height:560px){ #arch > #dial{margin:0} .info{margin-bottom:0} .realms{margin-top:0} }
+
+/* ───────────── GUIDELINES — contrast, focus, touch targets ───────────── */
+:root{--dim:rgba(170,163,154,.86)}
+h1.me,h2#iTitle{margin:0;font-weight:inherit}
+h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
+:focus{outline:none}
+:focus-visible{outline:1px solid var(--bone);outline-offset:5px;border-radius:2px}
+#dial .it:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+#bioBtn{padding:15px 10px;margin:-15px -10px}
+.realms button{min-height:44px;padding:12px 2px 10px}
+.realms{row-gap:0}
+#iOpen{min-height:44px;padding:12px 4px}
+.sheet .x{width:44px;height:44px}
+#pPlay{width:44px;height:44px}
+#copyMail{min-height:44px;padding:12px 4px}
+.enter,.cta{min-height:44px}
+@media (hover:none){#iTitle{cursor:default}}
 </style>
 </head>
 <body>
 <div id="bg"><div class="bgl"></div><div class="bgl"></div></div><div id="grain"></div>
 
 <!-- ═════════ THRESHOLD ═════════ -->
+<main id="app">
   <div class="cine intro-scene" id="cineIntro">
     <canvas class="eye__noise-layer" id="eyeNoise" aria-hidden="true"></canvas>
     <div class="cine__vignette" aria-hidden="true"></div>
@@ -354,7 +372,7 @@ a{color:inherit}
       </p>
     </div>
 
-    <button type="button" class="cine__enter" id="cineEnter" aria-label="Enter">
+    <button type="button" class="cine__enter" id="cineEnter">
       <span class="cine__enter-label--desk">Enter</span>
       <span class="cine__enter-label--tap">Tap to Enter</span>
     </button>
@@ -367,27 +385,27 @@ a{color:inherit}
 
 <!-- ═════════ ARCHIVE ═════════ -->
 <section id="arch" class="scr off">
-  <div class="top lab"><span></span><span class="me">Symvolia</span><button id="bioBtn" class="lab">Bio</button></div>
-  <nav class="realms lab" id="realms"></nav>
+  <header class="top lab"><span></span><h1 class="me">Symvolia</h1><button id="bioBtn" class="lab" aria-haspopup="dialog" aria-controls="bio">Bio</button></header>
+  <nav class="realms lab" id="realms" aria-label="Archive sections"></nav>
   <div id="dial" aria-label="Turn the seal to choose">
     <svg id="ring" viewBox="0 0 100 100"></svg>
     <div id="dialSealBox"><picture><source srcset="a/emblem.webp?v=20261116b" type="image/webp"><img id="dialSeal" src="a/emblem.png?v=20261116b" alt="Symvolia" width="900" height="900"></picture></div>
   </div>
-  <div class="info">
+  <div class="info" aria-live="polite">
     <div class="lab" id="iNum"></div>
-    <div id="iTitle"></div>
+    <h2 id="iTitle">Releases</h2>
     <div class="lab" id="iMeta"></div>
     <button class="lab" id="iOpen">Enter the passage</button>
   </div>
-  <div class="bot lab"><span class="runes">ᛋᛁᛗᚢᛟᛚᛁᚨ</span><span id="hint">Turn the seal</span><span>MMXXVI</span></div>
+  <footer class="bot lab"><span class="runes" aria-hidden="true">ᛋᛁᛗᚢᛟᛚᛁᚨ</span><span id="hint">Turn the seal</span><span>MMXXVI</span></footer>
 </section>
 
 <!-- ═════════ RELEASE ═════════ -->
-<section id="rel" class="scr sheet off">
-  <button class="x" data-close>✕</button>
+<section id="rel" class="scr sheet off" role="dialog" aria-modal="true" aria-label="Release">
+  <button class="x" data-close aria-label="Close">✕</button>
   <div class="in">
     <img id="rCover" alt="">
-    <video id="rVideo" controls playsinline preload="none"></video>
+    <video id="rVideo" controls playsinline preload="none" aria-label="Oppenheimer — Symvolia Rework"></video>
     <div id="rTitle"></div>
     <div class="lab" id="rMeta"></div>
     <div class="pl" id="pl"><button id="pPlay" aria-label="Play / pause"><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5" width="2" height="9" fill="currentColor"/><rect x="8" y="1.5" width="2" height="9" fill="currentColor"/></svg></button><div class="pbar" id="pBar"><i id="pFill"></i></div><span class="lab" id="pTime"></span></div>
@@ -397,11 +415,11 @@ a{color:inherit}
 </section>
 
 <!-- ═════════ BIO ═════════ -->
-<section id="bio" class="scr sheet off">
-  <button class="x" data-close>✕</button>
+<section id="bio" class="scr sheet off" role="dialog" aria-modal="true" aria-labelledby="bioTitle">
+  <button class="x" data-close aria-label="Close">✕</button>
   <div class="in">
     <div class="lab" style="color:var(--bone)">Bio</div>
-    <h2>The one behind the sound</h2>
+    <h2 id="bioTitle">The one behind the sound</h2>
     <p class="lead">Research and Exploration of the inner realms through the use of Sound.</p>
     <p>Symvolia is a Producer, DJ and Live Artist born and raised in North-Italy. His project is focused on the remembrance of our origins through the use of sounds.</p>
     <p>In constant exploration of the vast world of electronic music, his research is based on finding the soundscape that remember what our ego is trying to hide. Between the noise of the modern society that close the listening of our true needs, the silences become the territory in which we find our true selves.</p>
@@ -413,11 +431,12 @@ a{color:inherit}
     <a class="cta lab" href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener">Bandcamp</a>
     <div class="mail">
       <a class="cta lab" href="mailto:symvolia@gmail.com?subject=Symvolia%20%E2%80%94%20">Write an email</a>
-      <div class="mail__row"><span class="mail__addr">symvolia@gmail.com</span><button class="lab" id="copyMail">Copy</button></div>
+      <div class="mail__row"><span class="mail__addr">symvolia@gmail.com</span><button class="lab" id="copyMail" aria-live="polite">Copy</button></div>
     </div>
   </div>
 </section>
 
+</main>
 <script>
 /* ══════════════════════ THE ARCHIVE ══════════════════════ */
 const SC='https://soundcloud.com/';
@@ -549,7 +568,7 @@ const dial=$('dial'),ring=$('ring');
 const ringG=document.getElementById('ringG');
 let realm='Releases',items=[],nodes=[],rot=0,rotT=0,act=-1;
 function setRealm(name){
-  realm=name;$('realms').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.r===name));
+  realm=name;$('realms').querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.r===name);b.setAttribute('aria-current',b.dataset.r===name?'true':'false');});
   nodes.forEach(n=>n.remove());items=REALMS[name];
   nodes=items.map((it,i)=>{const d=document.createElement('button');d.className='it';d.innerHTML=`<img src="${it.c}" alt="">`;
     d.setAttribute('aria-label',it.t);d.addEventListener('click',()=>{if(dragMoved)return;if(i===act)openRel(i);else turnTo(i);});dial.appendChild(d);img(it.c);return d;});
@@ -600,7 +619,7 @@ let wheelLock=0;dial.addEventListener('wheel',e=>{e.preventDefault();const now=p
 $('iTitle').onclick=()=>openRel(act);$('iOpen').onclick=()=>openRel(act);
 
 /* ══════════════════════ SHEETS ══════════════════════ */
-function openRel(i){const it=items[i];$('rCover').src=it.c;
+function openRel(i){const it=items[i];$('rCover').src=it.c;$('rCover').alt=it.t+' — cover';$('rel').setAttribute('aria-label',it.t);lastFocus=document.activeElement;setTimeout(()=>$('rel').querySelector('.x').focus({preventScroll:true}),60);
   const v=$('rVideo');$('rCover').style.display=it.video?'none':'';v.style.display=it.video?'block':'none';
   if(it.video){if(v.getAttribute('src')!==it.video){v.src=it.video;}v.poster=it.c;}else{v.pause();}$('rTitle').textContent=it.t;$('rMeta').textContent=realm+' · '+it.m;
   $('rList').innerHTML=(it.tr||[]).map((x,k)=>`<li class="${x[2]?'can':''}" data-k="${k}"><span>${ROMAN[k]} — ${x[0]}</span><span>${x[1]}</span></li>`).join('');
@@ -616,10 +635,11 @@ const IC_PA='<svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5"
 const fmt=x=>isFinite(x)?Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0'):'–';
 $('pPlay').onclick=()=>{const el=nowEl();if(el.paused){el.play();$('pPlay').innerHTML=IC_PA;}else{el.pause();$('pPlay').textContent='▶';}};
 $('pBar').onclick=e=>{const el=nowEl(),r=e.currentTarget.getBoundingClientRect();if(isFinite(el.duration))el.currentTime=(e.clientX-r.left)/r.width*el.duration;};
-function closeAll(){$('rVideo').pause();$('rel').classList.add('off');$('bio').classList.add('off');}
+let lastFocus=null;
+function closeAll(){setTimeout(()=>{try{(lastFocus&&document.contains(lastFocus)?lastFocus:$('iOpen')).focus({preventScroll:true})}catch(e){}},50);$('rVideo').pause();$('rel').classList.add('off');$('bio').classList.add('off');}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
 $('copyMail').onclick=async()=>{try{await navigator.clipboard.writeText('symvolia@gmail.com');$('copyMail').textContent='Copied';}catch(e){$('copyMail').textContent='Select & copy';}setTimeout(()=>$('copyMail').textContent='Copy',2200);};
-$('bioBtn').onclick=()=>{$('bio').scrollTop=0;$('bio').classList.remove('off');};
+$('bioBtn').onclick=()=>{lastFocus=$('bioBtn');setTimeout(()=>$('bio').querySelector('.x').focus({preventScroll:true}),60);$('bio').scrollTop=0;$('bio').classList.remove('off');};
 
 
 /* ══════════════════════ LOOP — only while something moves ══════════════════════ */
