@@ -10,7 +10,10 @@
 <meta property="og:description" content="The Echo of your Own Soul. Releases, albums, podcasts, collaborations and soundtrack.">
 <meta property="og:image" content="https://symvolia.xyz/a/emblem.png">
 <meta property="og:url" content="https://symvolia.xyz/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#010101">
+<meta name="color-scheme" content="dark">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +34,7 @@ html.is-cine #bg,html.is-cine #grain,html.is-cine .scr:not(.cine){opacity:0;poin
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark}
 html,body{height:100%;background:#010101;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased;
   -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -46,11 +50,13 @@ a{color:inherit}
   animation:grain 1.2s steps(4) infinite}
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
 .scr{z-index:2}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.3s!important}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important;transition-duration:.3s!important}#grain{animation:none!important}}
 .lab{font-family:var(--cz);text-transform:uppercase;letter-spacing:.42em;font-size:11px;font-weight:400}
 .scr{position:fixed;inset:0;padding:calc(22px + var(--st)) calc(22px + var(--sr)) calc(22px + var(--sb)) calc(22px + var(--sl));
-  transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.7,.1,1),filter 1.2s}
-.off{opacity:0;pointer-events:none;filter:blur(12px)}
+  transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.7,.1,1),filter 1.2s,visibility 0s}
+/* hidden screens leave the tab order and the accessibility tree once they have faded */
+.off{opacity:0;pointer-events:none;filter:blur(12px);visibility:hidden;
+  transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.7,.1,1),filter 1.2s,visibility 0s 1.2s}
 
 /* ───────────── ARCHIVE ───────────── */
 #arch{display:grid;grid-template-rows:auto auto 1fr auto auto;justify-items:center}
@@ -94,7 +100,7 @@ a{color:inherit}
 }
 
 /* ───────────── OVERLAYS ───────────── */
-.sheet{background:rgba(1,1,1,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:5;overflow-y:auto;
+.sheet{background:rgba(1,1,1,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:5;overflow-y:auto;overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;user-select:text;-webkit-user-select:text}
 .sheet .x{position:fixed;right:calc(18px + var(--sr));top:calc(18px + var(--st));width:38px;height:38px;border-radius:50%;
   border:1px solid var(--faint);font-size:13px;z-index:2;background:rgba(1,1,1,.6)}
@@ -109,11 +115,13 @@ a{color:inherit}
 #pPlay{color:var(--ink);width:28px;height:28px;display:grid;place-items:center}
 .pbar{flex:1;height:2px;background:var(--faint);position:relative;cursor:pointer}
 #pFill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--bone)}
-#pTime{color:var(--dim);font-size:9px;letter-spacing:.15em;min-width:82px;text-align:right}
+#pTime{color:var(--dim);font-size:11px;letter-spacing:.15em;min-width:82px;text-align:right;font-variant-numeric:tabular-nums}
+.pbar{touch-action:none}.pbar::before{content:"";position:absolute;inset:-10px 0}
 #rList li.can{cursor:pointer}#rList li.can:hover,#rList li.on{color:var(--bone)}
 #rList{list-style:none;text-align:left;margin:0 auto 30px;max-width:420px;border-top:1px solid var(--faint)}
-#rList li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--faint);font-family:var(--cg);font-size:19px}
-#rList li span:last-child{font-family:var(--cz);font-size:10px;letter-spacing:.2em;color:var(--dim);align-self:center}
+#rList li{border-bottom:1px solid var(--faint);font-family:var(--cg);font-size:19px}
+#rList li>button,#rList li>div{width:100%;display:flex;justify-content:space-between;gap:12px;padding:12px 0;text-align:left}
+#rList li span:last-child{font-variant-numeric:tabular-nums;font-family:var(--cz);font-size:10px;letter-spacing:.2em;color:var(--dim);align-self:center}
 .cta{display:inline-block;color:var(--ink);text-decoration:none;border:1px solid var(--bone-a);padding:14px 26px 14px 30px;margin:6px}
 .cta:hover{border-color:var(--bone);color:var(--ink)}
 #bio .eye{width:100%;max-width:620px;display:block;margin:24px auto 30px;mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);
@@ -388,7 +396,7 @@ h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
   <header class="top lab"><span></span><h1 class="me">Symvolia</h1><button id="bioBtn" class="lab" aria-haspopup="dialog" aria-controls="bio">Bio</button></header>
   <nav class="realms lab" id="realms" aria-label="Archive sections"></nav>
   <div id="dial" aria-label="Turn the seal to choose">
-    <svg id="ring" viewBox="0 0 100 100"></svg>
+    <svg id="ring" viewBox="0 0 100 100" aria-hidden="true"></svg>
     <div id="dialSealBox"><picture><source srcset="a/emblem.webp?v=20261116b" type="image/webp"><img id="dialSeal" src="a/emblem.png?v=20261116b" alt="Symvolia" width="900" height="900"></picture></div>
   </div>
   <div class="info" aria-live="polite">
@@ -408,7 +416,7 @@ h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
     <video id="rVideo" controls playsinline preload="none" aria-label="Oppenheimer — Symvolia Rework"></video>
     <div id="rTitle"></div>
     <div class="lab" id="rMeta"></div>
-    <div class="pl" id="pl"><button id="pPlay" aria-label="Play / pause"><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5" width="2" height="9" fill="currentColor"/><rect x="8" y="1.5" width="2" height="9" fill="currentColor"/></svg></button><div class="pbar" id="pBar"><i id="pFill"></i></div><span class="lab" id="pTime"></span></div>
+    <div class="pl" id="pl"><button type="button" id="pPlay" aria-label="Pause"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1.5" width="2" height="9" fill="currentColor"/><rect x="8" y="1.5" width="2" height="9" fill="currentColor"/></svg></button><div class="pbar" id="pBar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="pFill"></i></div><span class="lab" id="pTime"></span></div>
     <ul id="rList"></ul>
     <div id="rLinks"></div>
   </div>
@@ -421,10 +429,10 @@ h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
     <div class="lab" style="color:var(--bone)">Bio</div>
     <h2 id="bioTitle">The one behind the sound</h2>
     <p class="lead">Research and Exploration of the inner realms through the use of Sound.</p>
-    <p>Symvolia is a Producer, DJ and Live Artist born and raised in North-Italy. His project is focused on the remembrance of our origins through the use of sounds.</p>
-    <p>In constant exploration of the vast world of electronic music, his research is based on finding the soundscape that remember what our ego is trying to hide. Between the noise of the modern society that close the listening of our true needs, the silences become the territory in which we find our true selves.</p>
-    <p>By merging ritual atmosphere and cinematic elements, broken beats, experimental textures and ancient drums into industrial music, he has found his vision; a space where the listener can face himself.</p>
-    <p class="lead">The sound, with his power, can be a catalyst to a new ascension of our soul. Not just ours, but everyone’s.</p>
+    <p>Symvolia is a Producer, DJ and Live Artist born and raised in Northern Italy. His project is focused on the remembrance of our origins through the use of sound.</p>
+    <p>In constant exploration of the vast world of electronic music, his research is based on finding the soundscape that remembers what our ego is trying to hide. Amid the noise of a modern society that drowns out our true needs, silence becomes the territory in which we find our true selves.</p>
+    <p>By merging ritual atmosphere and cinematic elements, broken beats, experimental textures and ancient drums into industrial music, he has found his vision: a space where listeners can face themselves.</p>
+    <p class="lead">Sound, with its power, can be a catalyst for a new ascension of our soul. Not just ours, but everyone’s.</p>
     <div class="lab" style="color:var(--dim);margin:34px 0 14px">For collaborations, inquiries, and passage</div>
     <a class="cta lab" href="https://www.instagram.com/symvolia/" target="_blank" rel="noopener">Instagram</a>
     <a class="cta lab" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener">SoundCloud</a>
@@ -613,7 +621,9 @@ addEventListener('keydown',e=>{if($('arch').classList.contains('off'))return;
   if(sheetOpen){if(e.key==='Escape')closeAll();return;}
   if(e.key==='ArrowRight'||e.key==='ArrowDown')turnTo((act+1)%items.length);
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')turnTo((act-1+items.length)%items.length);
-  if(e.key==='Enter')openRel(act);if(e.key==='Escape')closeAll();});
+  // a focused control keeps its own Enter; arrows still turn the seal
+  const onControl=e.target.closest&&e.target.closest('button,a,input,textarea,select,[role=slider]');
+  if(e.key==='Enter'&&!onControl)openRel(act);if(e.key==='Escape')closeAll();});
 let wheelLock=0;dial.addEventListener('wheel',e=>{e.preventDefault();const now=performance.now();if(now<wheelLock||Math.abs(e.deltaY)<4)return;wheelLock=now+420;
   turnTo(((act+(e.deltaY>0?1:-1))%items.length+items.length)%items.length);},{passive:false});
 $('iTitle').onclick=()=>openRel(act);$('iOpen').onclick=()=>openRel(act);
@@ -622,24 +632,30 @@ $('iTitle').onclick=()=>openRel(act);$('iOpen').onclick=()=>openRel(act);
 function openRel(i){const it=items[i];$('rCover').src=it.c;$('rCover').alt=it.t+' — cover';$('rel').setAttribute('aria-label',it.t);lastFocus=document.activeElement;setTimeout(()=>$('rel').querySelector('.x').focus({preventScroll:true}),60);
   const v=$('rVideo');$('rCover').style.display=it.video?'none':'';v.style.display=it.video?'block':'none';
   if(it.video){if(v.getAttribute('src')!==it.video){v.src=it.video;}v.poster=it.c;}else{v.pause();}$('rTitle').textContent=it.t;$('rMeta').textContent=realm+' · '+it.m;
-  $('rList').innerHTML=(it.tr||[]).map((x,k)=>`<li class="${x[2]?'can':''}" data-k="${k}"><span>${ROMAN[k]} — ${x[0]}</span><span>${x[1]}</span></li>`).join('');
+  $('rList').innerHTML=(it.tr||[]).map((x,k)=>{const inner=`<span>${ROMAN[k]} — ${x[0]}</span><span>${x[1]}</span>`;
+    return x[2]?`<li class="can" data-k="${k}"><button type="button" aria-label="Play ${x[0]}">${inner}</button></li>`:`<li><div>${inner}</div></li>`;}).join('');
   $('rList').style.display=it.tr?'':'none';
   $('rList').querySelectorAll('li.can').forEach(li=>li.onclick=()=>{const x=it.tr[+li.dataset.k];
-    $('rList').querySelectorAll('li').forEach(l=>l.classList.toggle('on',l===li));playItem({au:x[2],at:x[3]},true);});
-  $('pl').style.display=(it.au||(it.tr||[]).some(x=>x[2]))?'':'none';$('pPlay').innerHTML=IC_PA;
+    $('rList').querySelectorAll('li').forEach(l=>l.classList.toggle('on',l===li));playItem({au:x[2],at:x[3]},true);setPlayIcon(true);});
+  $('pl').style.display=(it.au||(it.tr||[]).some(x=>x[2]))?'':'none';setPlayIcon(true);
   $('rLinks').innerHTML=it.l.map(([n,h])=>`<a class="cta lab" href="${h}" target="_blank" rel="noopener">${n} →</a>`).join('');
-  $('rel').scrollTop=0;$('rel').classList.remove('off');}
+  $('rel').scrollTop=0;$('rel').classList.remove('off');$('arch').inert=true;}
 $('rVideo').addEventListener('play',()=>{if(!ctx)return;fade(bedG,0,.4);decks.forEach(d=>{fade(d.g,0,.3);d.el.pause();});playSrc=null;});
 $('rVideo').addEventListener('pause',()=>{if(ctx)fade(bedG,.7,1.2);});
 const IC_PA='<svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5" width="2" height="9" fill="currentColor"/><rect x="8" y="1.5" width="2" height="9" fill="currentColor"/></svg>',IC_PL='<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 1.5 10.5 6 2.5 10.5Z" fill="currentColor"/></svg>';
 const fmt=x=>isFinite(x)?Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0'):'–';
-$('pPlay').onclick=()=>{const el=nowEl();if(el.paused){el.play();$('pPlay').innerHTML=IC_PA;}else{el.pause();$('pPlay').textContent='▶';}};
+function setPlayIcon(playing){$('pPlay').innerHTML=playing?IC_PA:IC_PL;$('pPlay').setAttribute('aria-label',playing?'Pause':'Play');}
+$('pPlay').onclick=()=>{const el=nowEl();if(el.paused){el.play().catch(()=>{});setPlayIcon(true);}else{el.pause();setPlayIcon(false);}};
+$('pBar').addEventListener('keydown',e=>{const el=nowEl();if(!isFinite(el.duration))return;
+  const d={ArrowRight:5,ArrowUp:5,ArrowLeft:-5,ArrowDown:-5,PageUp:30,PageDown:-30}[e.key];
+  if(d!=null){e.preventDefault();el.currentTime=Math.min(el.duration,Math.max(0,el.currentTime+d));}
+  else if(e.key==='Home'){e.preventDefault();el.currentTime=0;}else if(e.key==='End'){e.preventDefault();el.currentTime=el.duration-1;}});
 $('pBar').onclick=e=>{const el=nowEl(),r=e.currentTarget.getBoundingClientRect();if(isFinite(el.duration))el.currentTime=(e.clientX-r.left)/r.width*el.duration;};
 let lastFocus=null;
-function closeAll(){setTimeout(()=>{try{(lastFocus&&document.contains(lastFocus)?lastFocus:$('iOpen')).focus({preventScroll:true})}catch(e){}},50);$('rVideo').pause();$('rel').classList.add('off');$('bio').classList.add('off');}
+function closeAll(){setTimeout(()=>{try{(lastFocus&&document.contains(lastFocus)?lastFocus:$('iOpen')).focus({preventScroll:true})}catch(e){}},50);$('rVideo').pause();$('rel').classList.add('off');$('bio').classList.add('off');$('arch').inert=false;}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
 $('copyMail').onclick=async()=>{try{await navigator.clipboard.writeText('symvolia@gmail.com');$('copyMail').textContent='Copied';}catch(e){$('copyMail').textContent='Select & copy';}setTimeout(()=>$('copyMail').textContent='Copy',2200);};
-$('bioBtn').onclick=()=>{lastFocus=$('bioBtn');setTimeout(()=>$('bio').querySelector('.x').focus({preventScroll:true}),60);$('bio').scrollTop=0;$('bio').classList.remove('off');};
+$('bioBtn').onclick=()=>{lastFocus=$('bioBtn');setTimeout(()=>$('bio').querySelector('.x').focus({preventScroll:true}),60);$('bio').scrollTop=0;$('bio').classList.remove('off');$('arch').inert=true;};
 
 
 /* ══════════════════════ LOOP — only while something moves ══════════════════════ */
@@ -648,7 +664,8 @@ function frame(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(!dragging)rot+=(rotT-rot)*Math.min(1,dt*3.2);
   if(items.length)layout();
-  if(!$('rel').classList.contains('off')&&playSrc){const el=nowEl();$('pFill').style.width=(el.currentTime/el.duration*100||0)+'%';$('pTime').textContent=fmt(el.currentTime)+' / '+fmt(el.duration);}
+  if(!$('rel').classList.contains('off')&&playSrc){const el=nowEl(),pc=el.currentTime/el.duration*100||0;$('pFill').style.width=pc+'%';$('pTime').textContent=fmt(el.currentTime)+' / '+fmt(el.duration);
+    $('pBar').setAttribute('aria-valuenow',Math.round(pc));$('pBar').setAttribute('aria-valuetext',$('pTime').textContent);}
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
