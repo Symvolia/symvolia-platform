@@ -157,6 +157,30 @@ a{color:inherit}
   #iTitle{font-size:clamp(28px,11vh,64px)}
   .bot{display:none}
 }
+
+/* ───────────── FILL — larger header & elements that use the whole screen ───────────── */
+:root{--lab:clamp(12px,.3vw + 10.8px,15px)}
+.top .me{font-size:clamp(15px,1.1vw + 11px,22px);letter-spacing:.7em;padding-left:.7em;color:var(--ink)}
+#bioBtn{font-size:clamp(12px,.4vw + 10.5px,15px)}
+.realms button{font-size:clamp(12px,.35vw + 10.6px,15px);padding:8px 0}
+#arch{grid-template-rows:auto auto minmax(0,1fr) auto auto;row-gap:clamp(4px,1vh,14px)}
+#dial{width:min(94vw,54vh,760px)}
+#dial .it{width:17%;margin:-8.5% 0 0 -8.5%}
+#dial .it.on{width:26%;margin:-13% 0 0 -13%}
+#iTitle{font-size:clamp(40px,min(12.5vw,8.2vh),104px)}
+#iNum,#iMeta{font-size:clamp(11px,.3vw + 10px,14px)}
+#iOpen{font-size:clamp(12px,.3vw + 10.8px,15px);margin-top:clamp(10px,1.6vh,20px)}
+.bot{font-size:clamp(11px,.25vw + 10px,13px)}.runes{font-size:clamp(14px,.4vw + 12px,18px)}
+@media (min-width:600px) and (orientation:portrait){ #dial{width:min(82vw,54vh,760px)} }
+@media (min-aspect-ratio:5/4) and (min-height:561px){
+  #dial{width:min(46vw,70vh,820px)}
+  #iTitle{font-size:clamp(46px,min(6.4vw,10.5vh),128px)}
+}
+@media (orientation:landscape) and (max-height:560px){
+  #dial{width:min(84vh,46vw)} #iTitle{font-size:clamp(30px,12vh,70px)}
+  .top .me{font-size:15px}.realms button{font-size:12px;padding:4px 0}
+}
+@media (max-height:620px) and (orientation:portrait){ #dial{width:min(90vw,48vh)} #iTitle{font-size:clamp(34px,10vw,48px)} }
 </style>
 </head>
 <body>
@@ -534,8 +558,8 @@ function select(i,force){
 function layout(){
   const N=items.length;
   nodes.forEach((n,i)=>{const a=rot+i*step()-Math.PI/2,R=41;
-    n.style.transform=`translate(${Math.cos(a)*R/15*100}%,${Math.sin(a)*R/15*100}%)`;
-    if(n.classList.contains('on'))n.style.transform=`translate(${Math.cos(a)*R/24*100}%,${Math.sin(a)*R/24*100}%)`;});
+    n.style.transform=`translate(${Math.cos(a)*R/17*100}%,${Math.sin(a)*R/17*100}%)`;
+    if(n.classList.contains('on'))n.style.transform=`translate(${Math.cos(a)*R/26*100}%,${Math.sin(a)*R/26*100}%)`;});
   ringG.setAttribute('transform',`rotate(${rot*180/Math.PI} 50 50)`);
 }
 // drag to turn
