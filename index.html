@@ -115,6 +115,9 @@ a{color:inherit}
 .cta:hover{border-color:var(--bone);color:var(--ink)}
 #bio .eye{width:100%;max-width:620px;display:block;margin:24px auto 30px;mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
+.mail{margin-top:26px}.mail__row{margin-top:14px;display:flex;justify-content:center;align-items:center;gap:16px}
+.mail__addr{font-family:var(--cg);font-size:20px;color:var(--ink);user-select:all;-webkit-user-select:all}
+#copyMail{color:var(--dim);border-bottom:1px solid var(--faint);padding:4px 2px}#copyMail:hover{color:var(--ink)}
 #bio h2{font-family:var(--cg);font-style:italic;font-weight:300;font-size:clamp(32px,8vw,54px);line-height:1.05;margin:10px 0 24px}
 #bio p{font-family:var(--cg);font-size:19px;line-height:1.6;color:rgba(232,227,218,.82);text-align:left;margin:0 0 16px}
 #bio p.lead{font-style:italic;color:var(--ink);text-align:center;font-size:22px}
@@ -368,6 +371,10 @@ a{color:inherit}
     <a class="cta lab" href="https://www.instagram.com/symvolia/" target="_blank" rel="noopener">Instagram</a>
     <a class="cta lab" href="https://soundcloud.com/symvolia" target="_blank" rel="noopener">SoundCloud</a>
     <a class="cta lab" href="https://symvolia.bandcamp.com/" target="_blank" rel="noopener">Bandcamp</a>
+    <div class="mail">
+      <a class="cta lab" href="mailto:symvolia@gmail.com?subject=Symvolia%20%E2%80%94%20">Write an email</a>
+      <div class="mail__row"><span class="mail__addr">symvolia@gmail.com</span><button class="lab" id="copyMail">Copy</button></div>
+    </div>
   </div>
 </section>
 
@@ -465,6 +472,13 @@ function playItem(it,immediate){
   immediate?go():playTimer=setTimeout(go,260); // while scrubbing, wait for the dial to settle
 }
 function nowEl(){return playSrc?decks[deck].el:bed;}
+// leaving the site (tab hidden, app switched, page closed): sound stops, and comes back on return
+let wasPlaying=[];
+function haltAll(){if(!ctx)return;wasPlaying=[bed,...decks.map(d=>d.el)].filter(el=>el&&!el.paused);
+  wasPlaying.forEach(el=>el.pause());const v=document.getElementById('rVideo');if(v&&!v.paused)v.pause();ctx.suspend().catch(()=>{});}
+function wakeAll(){if(!ctx||!wasPlaying.length)return;ctx.resume().catch(()=>{});wasPlaying.forEach(el=>el.play().catch(()=>{}));wasPlaying=[];}
+document.addEventListener('visibilitychange',()=>document.hidden?haltAll():wakeAll());
+addEventListener('pagehide',haltAll);addEventListener('pageshow',e=>{if(e.persisted)wakeAll();});
 
 /* ══════════════════════ THRESHOLD — hold the seal ══════════════════════ */
 const $=id=>document.getElementById(id);
@@ -560,6 +574,7 @@ $('pPlay').onclick=()=>{const el=nowEl();if(el.paused){el.play();$('pPlay').inne
 $('pBar').onclick=e=>{const el=nowEl(),r=e.currentTarget.getBoundingClientRect();if(isFinite(el.duration))el.currentTime=(e.clientX-r.left)/r.width*el.duration;};
 function closeAll(){$('rVideo').pause();$('rel').classList.add('off');$('bio').classList.add('off');}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
+$('copyMail').onclick=async()=>{try{await navigator.clipboard.writeText('symvolia@gmail.com');$('copyMail').textContent='Copied';}catch(e){$('copyMail').textContent='Select & copy';}setTimeout(()=>$('copyMail').textContent='Copy',2200);};
 $('bioBtn').onclick=()=>{$('bio').scrollTop=0;$('bio').classList.remove('off');};
 
 
