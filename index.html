@@ -316,6 +316,15 @@ h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
   #iTitle{font-size:clamp(24px,min(9vh,5.2vw),54px);line-height:1.02}
   .info{align-self:end;padding-bottom:4px}
 }
+
+/* header wordmark in the same blackletter as the titles */
+.top h1.me{font-family:var(--goth);font-weight:700;text-transform:none;letter-spacing:.02em;padding-left:0;
+  font-size:clamp(30px,2.4vw + 16px,50px);line-height:1;color:var(--bone);text-shadow:0 0 18px rgba(0,0,0,.55)}
+@media (orientation:landscape) and (max-height:560px){.top h1.me{font-size:clamp(22px,7vh,32px)}}
+
+.cine__wordmark{font-family:'UnifrakturCook','Cormorant Garamond',serif!important;font-weight:700!important;text-transform:none!important;letter-spacing:.02em!important;font-size:clamp(3rem,13vw,4.6rem)!important;line-height:1}
+@media (min-width:641px){.cine__wordmark{font-size:clamp(3.4rem,6.4vw,5rem)!important}}
+@media (orientation:landscape) and (max-height:560px){.cine__wordmark{font-size:clamp(2.4rem,11vh,3.4rem)!important}}
 </style>
 </head>
 <body>
@@ -473,7 +482,7 @@ h1.me{font-size:clamp(15px,1.1vw + 11px,22px)}
         <img src="assets/logo.png" alt="" width="64" height="64">
       </div>
       <p class="cine__wordmark" role="img" aria-label="Symvolia">
-        <span class="cine__letter">S</span><span class="cine__letter">Y</span><span class="cine__letter">M</span><span class="cine__letter">V</span><span class="cine__letter">O</span><span class="cine__letter">L</span><span class="cine__letter">I</span><span class="cine__letter">A</span>
+        <span class="cine__letter">S</span><span class="cine__letter">y</span><span class="cine__letter">m</span><span class="cine__letter">v</span><span class="cine__letter">o</span><span class="cine__letter">l</span><span class="cine__letter">i</span><span class="cine__letter">a</span>
       </p>
     </div>
 
